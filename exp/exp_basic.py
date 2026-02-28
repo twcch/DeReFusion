@@ -1,7 +1,9 @@
 import os
 import torch
 import importlib
-import pkgutil  
+import pkgutil
+import torch
+import torch.nn as nn
 
 # Just put your model files under models/ folder
 # e.g., models/Transformer.py, models/LSTM.py, etc.
@@ -23,31 +25,47 @@ class Exp_Basic(object):
         self.model = self._build_model().to(self.device)
 
     def _scan_models_directory(self):
-        """
-        Automatically scan all .py files in the models folder
-        """
-        model_map = {}
-        models_dir = 'models'
+        """遞迴掃描 models/ 資料夾及所有子資料夾，將所有 nn.Module 子類別註冊到 model_dict"""
+        model_dict = {}
+        models_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'models')
 
-        # Iterate through all files in 'models' directory
-        if os.path.exists(models_dir):
-            for filename in os.listdir(models_dir):
-                # Ignore __init__.py and non-.py files
-                if filename.endswith('.py') and filename != '__init__.py':
-                    # Remove .py extension to get module name
-                    module_name = filename[:-3]
-                    
-                    # Build full import path
-                    full_path = f"{models_dir}.{module_name}"
-                    
-                    # loading dict: {'Transformer': 'models.Transformer'}
-                    model_map[module_name] = full_path
-        
-        return model_map
+        for root, dirs, files in os.walk(models_dir):
+            # 跳過 __pycache__
+            dirs[:] = [d for d in dirs if d != '__pycache__']
+
+            for filename in files:
+                if not filename.endswith('.py') or filename.startswith('__'):
+                    continue
+
+                # 計算相對於 models/ 的模組路徑
+                # 例如 models/sota/attention.py -> models.sota.attention
+                rel_path = os.path.relpath(os.path.join(root, filename), os.path.dirname(models_dir))
+                module_path = rel_path.replace(os.sep, '.')[:-3]  # 去掉 .py
+
+                try:
+                    module = importlib.import_module(module_path)
+                except Exception as e:
+                    print(f'Warning: 無法載入模組 {module_path}: {e}')
+                    continue
+
+                for attr_name in dir(module):
+                    attr = getattr(module, attr_name)
+                    if (inspect.isclass(attr)
+                            and issubclass(attr, nn.Module)
+                            and attr is not nn.Module):
+                        model_dict[attr_name] = attr
+
+        return model_dict
 
     def _build_model(self):
-        raise NotImplementedError
-        return None
+        if self.args.model not in self.model_dict:
+            raise ValueError(
+                f"模型 '{self.args.model}' 找不到。可用模型: {list(self.model_dict.keys())}"
+            )
+        model = self.model_dict[self.args.model].Model(self.args).float()
+        if self.args.use_multi_gpu and self.args.use_gpu:
+            model = nn.DataParallel(model, device_ids=self.args.device_ids)
+        return model
 
     def _acquire_device(self):
         if self.args.use_gpu and self.args.gpu_type == 'cuda':
