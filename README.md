@@ -31,7 +31,7 @@ pip install -r requirements.txt
 
 ## Contributing Policy
 
-Please note that FinTSLib is maintained strictly for my personal research and development. Therefore, I do not accept Pull Requests (PRs) or external code contributions. However, this project is completely open-source. The community is more than welcome to fork this repository, explore the models, and adapt the code for your own research needs! For more details, please see the CONTRIBUTING.md file.
+Please note that FinTSLib is maintained strictly for my personal research and development. Therefore, I do not accept Pull Requests (PRs) or external code contributions. However, this project is completely open-source. The community is more than welcome to fork this repository, explore the models, and adapt the code for your own research needs! For more details, please see the [CONTRIBUTING](CONTRIBUTING.md) file.
 
 ## License
 
