@@ -1,6 +1,7 @@
 import os
 import torch
 import importlib
+import inspect
 import pkgutil
 import torch
 import torch.nn as nn
@@ -25,8 +26,8 @@ class Exp_Basic(object):
         self.model = self._build_model().to(self.device)
 
     def _scan_models_directory(self):
-        """遞迴掃描 models/ 資料夾及所有子資料夾，將所有 nn.Module 子類別註冊到 model_dict"""
-        model_dict = {}
+        """遞迴掃描 models/ 資料夾及所有子資料夾，將檔案名稱對應到模組路徑"""
+        model_map = {}
         models_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'models')
 
         for root, dirs, files in os.walk(models_dir):
@@ -37,32 +38,29 @@ class Exp_Basic(object):
                 if not filename.endswith('.py') or filename.startswith('__'):
                     continue
 
-                # 計算相對於 models/ 的模組路徑
-                # 例如 models/sota/attention.py -> models.sota.attention
+                # 用檔案名稱（不含 .py）當作模型名稱
+                model_name = filename[:-3]
+
+                # 計算相對於專案根目錄的模組路徑
+                # 例如 models/tslib/PatchTST.py -> models.tslib.PatchTST
+                # 例如 models/LSTMAttention.py -> models.LSTMAttention
                 rel_path = os.path.relpath(os.path.join(root, filename), os.path.dirname(models_dir))
                 module_path = rel_path.replace(os.sep, '.')[:-3]  # 去掉 .py
 
-                try:
-                    module = importlib.import_module(module_path)
-                except Exception as e:
-                    print(f'Warning: 無法載入模組 {module_path}: {e}')
-                    continue
+                if model_name in model_map:
+                    print(f'Warning: 模型名稱 "{model_name}" 重複，'
+                          f'{module_path} 將覆蓋 {model_map[model_name]}')
 
-                for attr_name in dir(module):
-                    attr = getattr(module, attr_name)
-                    if (inspect.isclass(attr)
-                            and issubclass(attr, nn.Module)
-                            and attr is not nn.Module):
-                        model_dict[attr_name] = attr
+                model_map[model_name] = module_path
 
-        return model_dict
+        return model_map
 
     def _build_model(self):
         if self.args.model not in self.model_dict:
             raise ValueError(
-                f"模型 '{self.args.model}' 找不到。可用模型: {list(self.model_dict.keys())}"
+                f"模型 '{self.args.model}' 找不到。可用模型: {list(self.model_dict.model_map.keys())}"
             )
-        model = self.model_dict[self.args.model].Model(self.args).float()
+        model = self.model_dict[self.args.model](self.args).float()
         if self.args.use_multi_gpu and self.args.use_gpu:
             model = nn.DataParallel(model, device_ids=self.args.device_ids)
         return model
