@@ -1,20 +1,17 @@
-## Instructions for Contributing to TSlib
+## Instructions for Using FinTSLib
 
-Sincerely thanks to all the researchers who want to use or contribute to TSlib.
+Sincerely thanks to anyone interested in using this project! 
 
-Since our team may not have enough time to fix all the bugs and catch up with the latest model, your contribution is essential to this project.
+This repository was initially based on the excellent [thuml/Time-Series-Library](https://github.com/thuml/Time-Series-Library) and is currently maintained by an individual researcher. The main focus of this project is to develop and extend custom time series forecasting models (such as DyVolFusion) and specific data processing pipelines. 
 
-### (1) Fix Bug
+Please note that this repository is maintained strictly for personal research and development. Therefore, **I do not accept Pull Requests (PRs) or external code contributions.**
 
-You can directly propose a pull request and add detailed descriptions to the comment, such as [this pull request](https://github.com/thuml/Time-Series-Library/pull/498).
+### (1) Forking and Usage
 
-### (2) Add a new time series model
+This project is open-sourced under the MIT License. You are more than welcome to **fork** this repository, modify the codebase, and adapt it for your own research, models, or projects! You do not need my permission to use or modify the code, as long as it complies with the license terms.
 
-Thanks to creative researchers, extensive great TS models are presented, which advance this community significantly. If you want to add your model to TSlib, here are some instructions:
+### (2) Bug Reports & Feedback
 
-- Propose an issue to describe your model and give a link to your paper and official code. We will discuss whether your model is suitable for this library, such as [this issue](https://github.com/thuml/Time-Series-Library/issues/346).
-- Propose a pull request in a similar style as TSlib, which means adding an additional file to ./models and providing corresponding scripts for reproduction, such as [this pull request](https://github.com/thuml/Time-Series-Library/pull/446).
+While I do not accept direct code integrations, if you encounter any critical bugs or have questions regarding the implementation, you may open an Issue for discussion. However, please understand that as a solo researcher, I may not have the capacity to provide technical support or respond immediately.
 
-Note: Given that there are a lot of TS models that have been proposed, we may not have enough time to judge which model can be a remarkable supplement to the current library. Thus, we decide ONLY to add the officially published paper to our library. Peer review can be a reliable criterion.
-
-Thanks again for your valuable contributions.
+Thanks again for your interest in this project!
