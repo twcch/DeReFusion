@@ -2,7 +2,7 @@
 
 Sincerely thanks to anyone interested in using this project! 
 
-This repository was initially based on the excellent [thuml/Time-Series-Library](https://github.com/thuml/Time-Series-Library) and is currently maintained by an individual researcher. The main focus of this project is to develop and extend custom time series forecasting models (such as DyVolFusion) and specific data processing pipelines. 
+This repository was initially based on the excellent [thuml/Time-Series-Library](https://github.com/thuml/Time-Series-Library) and is currently maintained by an individual researcher. The main focus of this project is to develop and extend custom time series forecasting models and specific data processing pipelines. 
 
 Please note that this repository is maintained strictly for personal research and development. Therefore, **I do not accept Pull Requests (PRs) or external code contributions.**
 
