@@ -31,8 +31,9 @@ class Exp_Basic(object):
         models_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'models')
 
         for root, dirs, files in os.walk(models_dir):
-            # 跳過 __pycache__
-            dirs[:] = [d for d in dirs if d != '__pycache__']
+            # 跳過 __pycache__，並排序以確保順序一致
+            dirs[:] = sorted([d for d in dirs if d != '__pycache__'])
+            files = sorted(files)
 
             for filename in files:
                 if not filename.endswith('.py') or filename.startswith('__'):

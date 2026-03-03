@@ -162,8 +162,8 @@ def _scan_known_models() -> set:
     names = set()
     if os.path.exists(models_dir):
         for root, dirs, files in os.walk(models_dir):
-            dirs[:] = [d for d in dirs if d != "__pycache__"]
-            for f in files:
+            dirs[:] = sorted([d for d in dirs if d != "__pycache__"])
+            for f in sorted(files):
                 if f.endswith(".py") and not f.startswith("__"):
                     names.add(f[:-3])
     return names
