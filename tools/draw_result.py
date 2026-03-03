@@ -2,10 +2,10 @@
 Publication-quality visualization for time-series forecasting results.
 
 Usage:
-    python tools/plot_publication.py                          # 互動式選擇
-    python tools/plot_publication.py --folder results/xxx/    # 指定資料夾
-    python tools/plot_publication.py --compare                # 多模型比較
-    python tools/plot_publication.py --folder results/xxx/ --save_dir figs/
+    python tools/draw_result.py                          # 互動式選擇
+    python tools/draw_result.py --folder results/xxx/    # 指定資料夾
+    python tools/draw_result.py --compare                # 多模型比較
+    python tools/draw_result.py --all                    # 全部圖表
 """
 
 import numpy as np
@@ -14,9 +14,7 @@ import matplotlib.ticker as ticker
 from matplotlib.gridspec import GridSpec
 import argparse
 import os
-import glob
 import re
-from collections import defaultdict
 
 # ──────────────────────────────────────────────
 # 全域期刊風格設定 (Nature / IEEE 風格)
@@ -96,6 +94,15 @@ def _ensure_dir(path: str):
         os.makedirs(path, exist_ok=True)
 
 
+def _save_fig(fig, folder_path: str, filename: str):
+    """將圖片存為 PNG 到 results/ 對應的 folder 下"""
+    _ensure_dir(folder_path)
+    fp = os.path.join(folder_path, filename)
+    fig.savefig(fp, format="png", dpi=300, bbox_inches="tight", pad_inches=0.05)
+    print(f"✅ Saved: {fp}")
+    plt.close(fig)
+
+
 def _parse_setting(folder_name: str) -> dict:
     """
     從 setting 字串解析模型名、資料集、pred_len 等資訊。
@@ -104,7 +111,7 @@ def _parse_setting(folder_name: str) -> dict:
     info = {"raw": folder_name}
     parts = folder_name.split("_")
 
-    # 嘗試抓 model name (通常在 parts 中出現已知模型名)
+    # 嘗試抓 model name
     known_models = _scan_known_models()
     for p in parts:
         if p in known_models:
@@ -165,11 +172,11 @@ def fig_prediction_curves(
     folder_path: str,
     feature_idx: int = -1,
     n_samples: int = 3,
-    save_dir: str | None = None,
 ):
     """
     繪製 Ground Truth vs Prediction 對比曲線。
     每個 sample 一列，附帶誤差陰影帶。
+    PNG 存入 folder_path。
     """
     preds, trues, metrics = _load_results(folder_path)
     info = _parse_setting(os.path.basename(folder_path.rstrip(os.sep)))
@@ -210,7 +217,6 @@ def fig_prediction_curves(
         if row == 0:
             ax.legend(loc="upper right", ncol=3)
 
-        # 右上角標示 sample 編號
         ax.text(
             0.98, 0.92, f"Sample #{idx}",
             transform=ax.transAxes, ha="right", va="top",
@@ -231,12 +237,7 @@ def fig_prediction_curves(
     fig.align_ylabels(axes)
     plt.tight_layout(rect=[0, 0, 1, 0.96])
 
-    if save_dir:
-        _ensure_dir(save_dir)
-        fp = os.path.join(save_dir, "fig_prediction_curves.pdf")
-        fig.savefig(fp)
-        print(f"✅ Saved: {fp}")
-    plt.show()
+    _save_fig(fig, folder_path, "fig_prediction_curves.png")
 
 
 # ──────────────────────────────────────────────
@@ -245,7 +246,6 @@ def fig_prediction_curves(
 def fig_error_analysis(
     folder_path: str,
     feature_idx: int = -1,
-    save_dir: str | None = None,
 ):
     """(a) 每個 time-step 的 MSE；(b) 誤差值分布直方圖。"""
     preds, trues, metrics = _load_results(folder_path)
@@ -259,7 +259,7 @@ def fig_error_analysis(
 
     # (a) MSE per step — 漸層色 bar
     norm_vals = mse_per_step / (mse_per_step.max() + 1e-12)
-    cmap = plt.cm.YlOrRd  # type: ignore
+    cmap = plt.cm.YlOrRd
     bar_colors = cmap(norm_vals * 0.7 + 0.15)
     ax1.bar(range(pred_len), mse_per_step, color=bar_colors, edgecolor="white", linewidth=0.3)
     ax1.set_xlabel("Prediction Step")
@@ -281,12 +281,7 @@ def fig_error_analysis(
     )
     plt.tight_layout(rect=[0, 0, 1, 0.93])
 
-    if save_dir:
-        _ensure_dir(save_dir)
-        fp = os.path.join(save_dir, "fig_error_analysis.pdf")
-        fig.savefig(fp)
-        print(f"✅ Saved: {fp}")
-    plt.show()
+    _save_fig(fig, folder_path, "fig_error_analysis.png")
 
 
 # ──────────────────────────────────────────────
@@ -294,12 +289,11 @@ def fig_error_analysis(
 # ──────────────────────────────────────────────
 def fig_metrics_radar(
     folder_path: str,
-    save_dir: str | None = None,
 ):
     """六軸雷達圖顯示 MAE, MSE, RMSE, MAPE, MSPE, R²。"""
     _, _, metrics = _load_results(folder_path)
     if metrics is None or len(metrics) < 6:
-        print("metrics.npy 不存在或長度不足，跳過雷達圖")
+        print("⚠️  metrics.npy 不存在或長度不足，跳過雷達圖")
         return
     info = _parse_setting(os.path.basename(folder_path.rstrip(os.sep)))
 
@@ -330,12 +324,7 @@ def fig_metrics_radar(
 
     plt.tight_layout(rect=[0, 0.06, 1, 1])
 
-    if save_dir:
-        _ensure_dir(save_dir)
-        fp = os.path.join(save_dir, "fig_metrics_radar.pdf")
-        fig.savefig(fp)
-        print(f"✅ Saved: {fp}")
-    plt.show()
+    _save_fig(fig, folder_path, "fig_metrics_radar.png")
 
 
 # ──────────────────────────────────────────────
@@ -344,18 +333,18 @@ def fig_metrics_radar(
 def fig_multi_model_comparison(
     folders: list[str] | None = None,
     metric_indices: tuple = (0, 1),   # MAE, MSE
-    save_dir: str | None = None,
 ):
     """
     跨設定 / 跨模型比較指定 metric。
     自動從 results/ 搜集所有可用結果。
+    PNG 存到 results/ 根目錄。
     """
     if folders is None:
         folders = list_result_folders()
     if not folders:
         return
 
-    records = []  # list of (label, metrics_array)
+    records = []
     for f in folders:
         mp = os.path.join(f, "metrics.npy")
         if not os.path.exists(mp):
@@ -368,7 +357,7 @@ def fig_multi_model_comparison(
         records.append((label, m))
 
     if len(records) == 0:
-        print("未找到有 metrics.npy 的結果")
+        print("⚠️  未找到有 metrics.npy 的結果")
         return
 
     n_metrics = len(metric_indices)
@@ -390,7 +379,6 @@ def fig_multi_model_comparison(
         ax.set_ylabel(METRIC_NAMES[mi] if mi < len(METRIC_NAMES) else f"Metric {mi}")
         ax.set_title(METRIC_NAMES[mi] if mi < len(METRIC_NAMES) else f"Metric {mi}", fontweight="bold")
 
-        # 在柱頂標數值
         for bar, v in zip(bars, vals):
             ax.text(
                 bar.get_x() + bar.get_width() / 2, bar.get_height(),
@@ -400,12 +388,9 @@ def fig_multi_model_comparison(
     fig.suptitle("Model Comparison", fontweight="bold")
     plt.tight_layout(rect=[0, 0, 1, 0.94])
 
-    if save_dir:
-        _ensure_dir(save_dir)
-        fp = os.path.join(save_dir, "fig_model_comparison.pdf")
-        fig.savefig(fp)
-        print(f"✅ Saved: {fp}")
-    plt.show()
+    # 存到 results/ 根目錄
+    results_base = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "results")
+    _save_fig(fig, results_base, "fig_model_comparison.png")
 
 
 # ──────────────────────────────────────────────
@@ -415,7 +400,6 @@ def fig_error_heatmap(
     folder_path: str,
     feature_idx: int = -1,
     max_samples: int = 200,
-    save_dir: str | None = None,
 ):
     """
     橫軸: prediction horizon, 縱軸: sample index
@@ -443,12 +427,7 @@ def fig_error_heatmap(
     cb.set_label("| Pred − True |", fontsize=9)
     plt.tight_layout()
 
-    if save_dir:
-        _ensure_dir(save_dir)
-        fp = os.path.join(save_dir, "fig_error_heatmap.pdf")
-        fig.savefig(fp)
-        print(f"✅ Saved: {fp}")
-    plt.show()
+    _save_fig(fig, folder_path, "fig_error_heatmap.png")
 
 
 # ──────────────────────────────────────────────
@@ -457,7 +436,6 @@ def fig_error_heatmap(
 def fig_dashboard(
     folder_path: str,
     feature_idx: int = -1,
-    save_dir: str | None = None,
 ):
     """一頁四面板綜合報告：(a) 預測曲線 (b) MSE per step (c) 誤差分布 (d) 雷達圖。"""
     preds, trues, metrics = _load_results(folder_path)
@@ -486,7 +464,7 @@ def fig_dashboard(
     ax_b = fig.add_subplot(gs[1, 0])
     mse_step = np.mean((preds[:, :, feature_idx] - trues[:, :, feature_idx]) ** 2, axis=0)
     norm_v = mse_step / (mse_step.max() + 1e-12)
-    cmap = plt.cm.YlOrRd  # type: ignore
+    cmap = plt.cm.YlOrRd
     ax_b.bar(range(pred_len), mse_step, color=cmap(norm_v * 0.7 + 0.15), edgecolor="white", linewidth=0.3)
     ax_b.set_xlabel("Prediction Step")
     ax_b.set_ylabel("MSE")
@@ -511,12 +489,7 @@ def fig_dashboard(
         txt = "  |  ".join(f"{n}: {v:.4f}" for n, v in zip(METRIC_NAMES, vals))
         fig.text(0.5, 0.005, txt, ha="center", fontsize=7.5, color="0.4")
 
-    if save_dir:
-        _ensure_dir(save_dir)
-        fp = os.path.join(save_dir, "fig_dashboard.pdf")
-        fig.savefig(fp)
-        print(f"✅ Saved: {fp}")
-    plt.show()
+    _save_fig(fig, folder_path, "fig_dashboard.png")
 
 
 # ──────────────────────────────────────────────
@@ -546,37 +519,56 @@ def main():
     parser.add_argument("--folder", type=str, default=None, help="Path to a single result folder")
     parser.add_argument("--feature", type=int, default=-1, help="Feature index (-1 = last)")
     parser.add_argument("--n_samples", type=int, default=3, help="Number of sample curves to plot")
-    parser.add_argument("--save_dir", type=str, default=None, help="Directory to save PDF figures")
     parser.add_argument("--compare", action="store_true", help="Run multi-model comparison across all results/")
     parser.add_argument("--dashboard", action="store_true", help="Generate single-page dashboard")
     parser.add_argument("--all", action="store_true", help="Generate ALL figure types")
+    parser.add_argument("--batch", action="store_true", help="Process ALL result folders under results/")
     args = parser.parse_args()
 
     if args.compare:
-        fig_multi_model_comparison(save_dir=args.save_dir)
+        fig_multi_model_comparison()
+        return
+
+    # --batch: 對 results/ 下所有資料夾批次產圖
+    if args.batch:
+        folders = list_result_folders()
+        if not folders:
+            return
+        for i, folder in enumerate(folders):
+            name = os.path.basename(folder.rstrip(os.sep))
+            print(f"\n{'='*60}")
+            print(f"📊 [{i+1}/{len(folders)}] {name}")
+            print(f"{'='*60}")
+            fig_prediction_curves(folder, feature_idx=args.feature, n_samples=args.n_samples)
+            fig_error_analysis(folder, feature_idx=args.feature)
+            fig_metrics_radar(folder)
+            fig_error_heatmap(folder, feature_idx=args.feature)
+            fig_dashboard(folder, feature_idx=args.feature)
+        fig_multi_model_comparison()
+        print(f"\n🎉 批次完成！共處理 {len(folders)} 個結果資料夾")
         return
 
     folder = args.folder or _interactive_select()
 
     if args.dashboard:
-        fig_dashboard(folder, feature_idx=args.feature, save_dir=args.save_dir)
+        fig_dashboard(folder, feature_idx=args.feature)
         return
 
     if args.all:
-        fig_prediction_curves(folder, feature_idx=args.feature, n_samples=args.n_samples, save_dir=args.save_dir)
-        fig_error_analysis(folder, feature_idx=args.feature, save_dir=args.save_dir)
-        fig_metrics_radar(folder, save_dir=args.save_dir)
-        fig_error_heatmap(folder, feature_idx=args.feature, save_dir=args.save_dir)
-        fig_dashboard(folder, feature_idx=args.feature, save_dir=args.save_dir)
-        fig_multi_model_comparison(save_dir=args.save_dir)
+        fig_prediction_curves(folder, feature_idx=args.feature, n_samples=args.n_samples)
+        fig_error_analysis(folder, feature_idx=args.feature)
+        fig_metrics_radar(folder)
+        fig_error_heatmap(folder, feature_idx=args.feature)
+        fig_dashboard(folder, feature_idx=args.feature)
+        fig_multi_model_comparison()
         return
 
-    # 預設：逐一顯示
-    fig_prediction_curves(folder, feature_idx=args.feature, n_samples=args.n_samples, save_dir=args.save_dir)
-    fig_error_analysis(folder, feature_idx=args.feature, save_dir=args.save_dir)
-    fig_metrics_radar(folder, save_dir=args.save_dir)
-    fig_error_heatmap(folder, feature_idx=args.feature, save_dir=args.save_dir)
-    fig_dashboard(folder, feature_idx=args.feature, save_dir=args.save_dir)
+    # 預設：逐一產出
+    fig_prediction_curves(folder, feature_idx=args.feature, n_samples=args.n_samples)
+    fig_error_analysis(folder, feature_idx=args.feature)
+    fig_metrics_radar(folder)
+    fig_error_heatmap(folder, feature_idx=args.feature)
+    fig_dashboard(folder, feature_idx=args.feature)
 
 
 if __name__ == "__main__":
