@@ -59,7 +59,7 @@ class LSTMDecoder(nn.Module):
         
         return dec_out
 
-class Seq2SeqPrdictionHead(nn.Module):
+class Seq2SeqPredictionHead(nn.Module):
     def __init__(self, in_dim, out_dim):
         super().__init__()
         
