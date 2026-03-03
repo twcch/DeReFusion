@@ -5,7 +5,7 @@ from einops import rearrange, repeat
 from layers.Crossformer_EncDec import scale_block, Encoder, Decoder, DecoderLayer
 from layers.Embed import PatchEmbedding
 from layers.SelfAttention_Family import AttentionLayer, FullAttention, TwoStageAttentionLayer
-from models.PatchTST import FlattenHead
+from models.tslib.PatchTST import FlattenHead
 
 
 from math import ceil
