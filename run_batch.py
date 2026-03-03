@@ -2,15 +2,89 @@ import subprocess
 import time
 
 def run_experiments():
+    # 共用參數
+    data_name = "TSMC"
+    
+    task_name = "long_term_forecast"
+    root_path = "./dataset/yfinance/"
+    data_path = data_name + ".csv"
+    data = "custom"
+    features = "MS"
+    target = "Close"
+    freq = "b"
+    enc_in = 5
+    dec_in = 5
+    c_out = 1
+    seq_len = 96
+    label_len = 48
+    pred_len = 7
+    embed = "timeF"
+    loss = "MSE"
+    patience = 5
+    dropout = 0.2
+    des = "Exp"
+    itr = 1
+    use_norm = 1
+    train_epochs = 30
+    batch_size = 32
+    learning_rate = 0.0001
+    lradj = "cosine"
+
+    base_args = (
+        f"python -u run.py",
+        f" --is_training 1",
+        f" --task_name {task_name}",
+        f" --root_path {root_path}",
+        f" --data_path {data_path}",
+        f" --data {data}",
+        f" --features {features}",
+        f" --target {target}",
+        f" --freq {freq}",
+        f" --enc_in {enc_in}",
+        f" --dec_in {dec_in}",
+        f" --c_out {c_out}",
+        f" --seq_len {seq_len}",
+        f" --label_len {label_len}",
+        f" --pred_len {pred_len}",
+        f" --embed {embed}",
+        f" --loss {loss}",
+        f" --patience {patience}",
+        f" --dropout {dropout}",
+        f" --des {des}",
+        f" --itr {itr}",
+        f" --use_norm {use_norm}",
+        f" --train_epochs {train_epochs}",
+        f" --batch_size {batch_size}",
+        f" --learning_rate {learning_rate}",
+        f" --lradj {lradj}",
+    )
+    
+    experiments = [
+        {"model": "DyVolFusion", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "Autoformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "Crossformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "DLinear", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "ETSformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "FEDformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "Informer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "iTransformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "PatchTST", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "PAttn", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "Pyraformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "Reformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "Transformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "TimesNet", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "TSMixer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+    ]
+    
     commands = [
-        "python -u run.py --task_name long_term_forecast --is_training 1 --root_path ./dataset/yfinance/ --data_path TSMC.csv --model_id TSMC_48_36 --model DyVolFusion --use_norm 1 --data custom --features MS --target Close --freq b --seq_len 96 --label_len 48 --pred_len 36 --e_layers 2 --d_layers 1 --factor 3 --enc_in 5 --dec_in 5 --c_out 1 --d_model 32 --d_ff 64 --n_heads 2 --dropout 0.2 --embed timeF --loss MSE --patience 5 --des Exp --itr 1 --train_epochs 30 --batch_size 32 --learning_rate 0.0001 --lradj cosine",
-        "python -u run.py --task_name long_term_forecast --is_training 1 --root_path ./dataset/yfinance/ --data_path TSMC.csv --model_id TSMC_48_48 --model DyVolFusion --use_norm 1 --data custom --features MS --target Close --freq b --seq_len 96 --label_len 48 --pred_len 48 --e_layers 2 --d_layers 1 --factor 3 --enc_in 5 --dec_in 5 --c_out 1 --d_model 32 --d_ff 64 --n_heads 2 --dropout 0.2 --embed timeF --loss MSE --patience 5 --des Exp --itr 1 --train_epochs 30 --batch_size 32 --learning_rate 0.0001 --lradj cosine",
-        "python -u run.py --task_name long_term_forecast --is_training 1 --root_path ./dataset/yfinance/ --data_path TSMC.csv --model_id TSMC_48_60 --model DyVolFusion --use_norm 1 --data custom --features MS --target Close --freq b --seq_len 96 --label_len 48 --pred_len 60 --e_layers 2 --d_layers 1 --factor 3 --enc_in 5 --dec_in 5 --c_out 1 --d_model 32 --d_ff 64 --n_heads 2 --dropout 0.2 --embed timeF --loss MSE --patience 5 --des Exp --itr 1 --train_epochs 30 --batch_size 32 --learning_rate 0.0001 --lradj cosine",
-        "python -u run.py --task_name long_term_forecast --is_training 1 --root_path ./dataset/yfinance/ --data_path TSMC.csv --model_id TSMC_48_96 --model DyVolFusion --use_norm 1 --data custom --features MS --target Close --freq b --seq_len 96 --label_len 48 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 5 --dec_in 5 --c_out 1 --d_model 32 --d_ff 64 --n_heads 2 --dropout 0.2 --embed timeF --loss MSE --patience 5 --des Exp --itr 1 --train_epochs 30 --batch_size 32 --learning_rate 0.0001 --lradj cosine"
+        f"{base_args} --model_id {exp['model_id']} --model {exp['model']}"
+        for exp in experiments
     ]
 
+
     total_experiments = len(commands)
-    print(f"任務啟動：共計 {total_experiments} 個實驗準備執行...\n")
+    print(f"任務啟動: 共計 {total_experiments} 個實驗準備執行...\n")
 
     for i, cmd in enumerate(commands):
         print("=" * 80)
