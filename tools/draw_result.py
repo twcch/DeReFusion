@@ -15,10 +15,12 @@ from matplotlib.gridspec import GridSpec
 import argparse
 import os
 import re
+import traceback
 
+# ──────────────────────────────────────────────
 # 全域期刊風格設定 (Nature / IEEE 風格)
+# ──────────────────────────────────────────────
 plt.rcParams.update({
-    # Font
     "font.family": "serif",
     "font.serif": ["Times New Roman", "DejaVu Serif"],
     "font.size": 10,
@@ -28,10 +30,8 @@ plt.rcParams.update({
     "ytick.labelsize": 9,
     "legend.fontsize": 8.5,
     "figure.titlesize": 12,
-    # Lines
     "lines.linewidth": 1.5,
     "lines.markersize": 4,
-    # Axes
     "axes.linewidth": 0.8,
     "axes.grid": True,
     "axes.spines.top": False,
@@ -39,29 +39,21 @@ plt.rcParams.update({
     "grid.alpha": 0.25,
     "grid.linewidth": 0.5,
     "grid.linestyle": "--",
-    # Figure
     "figure.dpi": 150,
     "savefig.dpi": 300,
     "savefig.bbox": "tight",
     "savefig.pad_inches": 0.05,
-    # Legend
     "legend.frameon": True,
     "legend.framealpha": 0.85,
     "legend.edgecolor": "0.8",
     "legend.fancybox": False,
 })
 
-# 配色方案 — 色盲友善 (Okabe-Ito 改良)
 COLORS = {
-    "gt":   "#2c3e50",   # 深灰藍 — Ground Truth
-    "pred": "#e74c3c",   # 紅 — Prediction
-    "fill": "#3498db",   # 藍 — 信賴區間 / 誤差帶
+    "gt":   "#2c3e50",
+    "pred": "#e74c3c",
+    "fill": "#3498db",
     "bar1": "#2980b9",
-    "bar2": "#27ae60",
-    "bar3": "#f39c12",
-    "bar4": "#8e44ad",
-    "bar5": "#e67e22",
-    "bar6": "#1abc9c",
 }
 
 MODEL_PALETTE = [
@@ -73,16 +65,52 @@ MODEL_PALETTE = [
 METRIC_NAMES = ["MAE", "MSE", "RMSE", "MAPE", "MSPE", "R²"]
 
 
+# ──────────────────────────────────────────────
 # 工具函式
+# ──────────────────────────────────────────────
 def _load_results(folder_path: str):
-    """載入 pred.npy, true.npy, metrics.npy"""
-    preds = np.load(os.path.join(folder_path, "pred.npy"))
-    trues = np.load(os.path.join(folder_path, "true.npy"))
+    """載入 pred.npy, true.npy, metrics.npy，附帶 shape 檢查"""
+    folder_path = os.path.abspath(folder_path)
+
+    pred_path = os.path.join(folder_path, "pred.npy")
+    true_path = os.path.join(folder_path, "true.npy")
+
+    if not os.path.exists(pred_path):
+        raise FileNotFoundError(f"pred.npy 不存在: {pred_path}")
+    if not os.path.exists(true_path):
+        raise FileNotFoundError(f"true.npy 不存在: {true_path}")
+
+    preds = np.load(pred_path)
+    trues = np.load(true_path)
+
+    print(f"  📐 pred.shape={preds.shape}, true.shape={trues.shape}")
+
+    # shape 不一致時自動修正 feature 維度
+    if preds.shape[-1] != trues.shape[-1]:
+        print(f"  ⚠️  pred 與 true 的 feature 維度不同 "
+              f"(pred={preds.shape[-1]}, true={trues.shape[-1]})，"
+              f"將以較小者為準")
+
     metrics = None
     mp = os.path.join(folder_path, "metrics.npy")
     if os.path.exists(mp):
         metrics = np.load(mp, allow_pickle=True)
+        print(f"  📊 metrics={metrics}")
+    else:
+        print(f"  ⚠️  metrics.npy 不存在")
+
     return preds, trues, metrics
+
+
+def _safe_feature_idx(preds, trues, feature_idx: int) -> int:
+    """安全取得 feature index，避免越界"""
+    min_features = min(preds.shape[-1], trues.shape[-1])
+    if feature_idx < 0:
+        feature_idx = min_features + feature_idx
+    if feature_idx < 0 or feature_idx >= min_features:
+        print(f"  ⚠️  feature_idx={feature_idx} 越界 (max={min_features-1})，改用 0")
+        feature_idx = 0
+    return feature_idx
 
 
 def _ensure_dir(path: str):
@@ -92,22 +120,21 @@ def _ensure_dir(path: str):
 
 def _save_fig(fig, folder_path: str, filename: str):
     """將圖片存為 PNG 到 results/ 對應的 folder 下"""
+    folder_path = os.path.abspath(folder_path)
     _ensure_dir(folder_path)
     fp = os.path.join(folder_path, filename)
     fig.savefig(fp, format="png", dpi=300, bbox_inches="tight", pad_inches=0.05)
-    print(f"✅ Saved: {fp}")
+    if os.path.exists(fp):
+        print(f"  ✅ Saved: {fp}  ({os.path.getsize(fp)} bytes)")
+    else:
+        print(f"  ❌ Failed to save: {fp}")
     plt.close(fig)
 
 
 def _parse_setting(folder_name: str) -> dict:
-    """
-    從 setting 字串解析模型名、資料集、pred_len 等資訊。
-    典型格式: long_term_forecast_ETTh1_96_192_PatchTST_...
-    """
     info = {"raw": folder_name}
     parts = folder_name.split("_")
 
-    # 嘗試抓 model name
     known_models = _scan_known_models()
     for p in parts:
         if p in known_models:
@@ -116,13 +143,11 @@ def _parse_setting(folder_name: str) -> dict:
     if "model" not in info:
         info["model"] = folder_name[:30]
 
-    # 嘗試抓 pred_len (連續兩個數字常為 seq_len, pred_len)
     nums = re.findall(r"(?:^|_)(\d+)(?=_)", folder_name)
     if len(nums) >= 2:
         info["seq_len"] = int(nums[-2])
         info["pred_len"] = int(nums[-1])
 
-    # 嘗試抓 dataset
     for ds in ["ETTh1", "ETTh2", "ETTm1", "ETTm2", "ECL", "traffic",
                 "weather", "illness", "Exchange", "TSMC", "yfinance"]:
         if ds.lower() in folder_name.lower():
@@ -133,7 +158,6 @@ def _parse_setting(folder_name: str) -> dict:
 
 
 def _scan_known_models() -> set:
-    """掃描 models/ 資料夾取得所有模型名稱"""
     models_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "models")
     names = set()
     if os.path.exists(models_dir):
@@ -146,45 +170,45 @@ def _scan_known_models() -> set:
 
 
 def list_result_folders() -> list:
-    """列出 results/ 下所有有效資料夾"""
-    base = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "results")
-    if not os.path.exists(base):
-        print("results/ 資料夾不存在")
+    base_candidates = [
+        os.path.join(os.getcwd(), "results"),
+        os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "results"),
+    ]
+    base = None
+    for candidate in base_candidates:
+        if os.path.exists(candidate):
+            base = candidate
+            break
+    if base is None:
+        print("❌ results/ 資料夾不存在，搜尋過的路徑:")
+        for c in base_candidates:
+            print(f"   - {c}")
         return []
+
+    print(f"📂 掃描目錄: {base}")
     dirs = sorted([
         os.path.join(base, d) for d in os.listdir(base)
         if os.path.isdir(os.path.join(base, d))
         and os.path.exists(os.path.join(base, d, "pred.npy"))
     ])
     if not dirs:
-        print("results/ 內未找到含有 pred.npy 的子資料夾")
+        print("⚠️  results/ 內未找到含有 pred.npy 的子資料夾")
     return dirs
 
 
-# Figure 1: 預測曲線 (單欄/雙欄寬)
-def fig_prediction_curves(
-    folder_path: str,
-    feature_idx: int = -1,
-    n_samples: int = 3,
-):
-    """
-    繪製 Ground Truth vs Prediction 對比曲線。
-    每個 sample 一列，附帶誤差陰影帶。
-    PNG 存入 folder_path。
-    """
-    preds, trues, metrics = _load_results(folder_path)
+# ──────────────────────────────────────────────
+# Figure 1: 預測曲線
+# ──────────────────────────────────────────────
+def fig_prediction_curves(folder_path: str, feature_idx: int = -1, n_samples: int = 3):
+    preds, trues, _ = _load_results(folder_path)
+    fi = _safe_feature_idx(preds, trues, feature_idx)
     info = _parse_setting(os.path.basename(folder_path.rstrip(os.sep)))
     n_total = preds.shape[0]
     pred_len = preds.shape[1]
 
     indices = np.linspace(0, n_total - 1, n_samples, dtype=int)
 
-    fig_width = 7.16  # IEEE 雙欄寬 (inch)
-    fig, axes = plt.subplots(
-        n_samples, 1,
-        figsize=(fig_width, 1.8 * n_samples + 0.6),
-        sharex=True,
-    )
+    fig, axes = plt.subplots(n_samples, 1, figsize=(7.16, 1.8 * n_samples + 0.6), sharex=True)
     if n_samples == 1:
         axes = [axes]
 
@@ -192,64 +216,47 @@ def fig_prediction_curves(
 
     for row, idx in enumerate(indices):
         ax = axes[row]
-        gt = trues[idx, :, feature_idx]
-        pd_ = preds[idx, :, feature_idx]
+        gt = trues[idx, :, fi]
+        pd_ = preds[idx, :, fi]
         err = np.abs(gt - pd_)
 
         ax.plot(timesteps, gt, color=COLORS["gt"], label="Ground Truth", zorder=3)
         ax.plot(timesteps, pd_, color=COLORS["pred"], linestyle="--", label="Prediction", zorder=3)
-        ax.fill_between(
-            timesteps,
-            pd_ - err * 0.5,
-            pd_ + err * 0.5,
-            color=COLORS["fill"],
-            alpha=0.12,
-            label="Error band",
-            zorder=1,
-        )
+        ax.fill_between(timesteps, pd_ - err * 0.5, pd_ + err * 0.5,
+                         color=COLORS["fill"], alpha=0.12, label="Error band", zorder=1)
         ax.set_ylabel("Value")
         if row == 0:
             ax.legend(loc="upper right", ncol=3)
-
-        ax.text(
-            0.98, 0.92, f"Sample #{idx}",
-            transform=ax.transAxes, ha="right", va="top",
-            fontsize=8, style="italic", color="0.4",
-        )
+        ax.text(0.98, 0.92, f"Sample #{idx}", transform=ax.transAxes,
+                ha="right", va="top", fontsize=8, style="italic", color="0.4")
 
     axes[-1].set_xlabel("Prediction Horizon (time steps)")
 
     title_parts = []
-    if "model" in info:
-        title_parts.append(info["model"])
-    if "dataset" in info:
-        title_parts.append(info["dataset"])
-    if "pred_len" in info:
-        title_parts.append(f"H={info['pred_len']}")
+    if "model" in info: title_parts.append(info["model"])
+    if "dataset" in info: title_parts.append(info["dataset"])
+    if "pred_len" in info: title_parts.append(f"H={info['pred_len']}")
     fig.suptitle(" — ".join(title_parts) if title_parts else "Prediction Curves", fontweight="bold")
-
     fig.align_ylabels(axes)
     plt.tight_layout(rect=[0, 0, 1, 0.96])
 
     _save_fig(fig, folder_path, "fig_prediction_curves.png")
 
 
-# Figure 2: 每步 MSE + 誤差直方圖 (雙面板)
-def fig_error_analysis(
-    folder_path: str,
-    feature_idx: int = -1,
-):
-    """(a) 每個 time-step 的 MSE；(b) 誤差值分布直方圖。"""
-    preds, trues, metrics = _load_results(folder_path)
+# ──────────────────────────────────────────────
+# Figure 2: 誤差分析
+# ──────────────────────────────────────────────
+def fig_error_analysis(folder_path: str, feature_idx: int = -1):
+    preds, trues, _ = _load_results(folder_path)
+    fi = _safe_feature_idx(preds, trues, feature_idx)
     info = _parse_setting(os.path.basename(folder_path.rstrip(os.sep)))
     pred_len = preds.shape[1]
 
-    errors = (preds[:, :, feature_idx] - trues[:, :, feature_idx]).flatten()
-    mse_per_step = np.mean((preds[:, :, feature_idx] - trues[:, :, feature_idx]) ** 2, axis=0)
+    errors = (preds[:, :, fi] - trues[:, :, fi]).flatten()
+    mse_per_step = np.mean((preds[:, :, fi] - trues[:, :, fi]) ** 2, axis=0)
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.16, 2.5))
 
-    # (a) MSE per step — 漸層色 bar
     norm_vals = mse_per_step / (mse_per_step.max() + 1e-12)
     cmap = plt.cm.YlOrRd
     bar_colors = cmap(norm_vals * 0.7 + 0.15)
@@ -259,7 +266,6 @@ def fig_error_analysis(
     ax1.set_title("(a) MSE per Horizon Step", fontsize=10)
     ax1.xaxis.set_major_locator(ticker.MaxNLocator(integer=True, nbins=8))
 
-    # (b) Error distribution
     ax2.hist(errors, bins=80, density=True, color=COLORS["fill"], alpha=0.7, edgecolor="white", linewidth=0.3)
     ax2.axvline(0, color=COLORS["pred"], linewidth=1.2, linestyle="--", alpha=0.8)
     mu, sigma = errors.mean(), errors.std()
@@ -267,28 +273,23 @@ def fig_error_analysis(
     ax2.set_ylabel("Density")
     ax2.set_title(f"(b) Error Distribution ($\\mu$={mu:.4f}, $\\sigma$={sigma:.4f})", fontsize=10)
 
-    fig.suptitle(
-        f"Error Analysis — {info.get('model', '')}  {info.get('dataset', '')}",
-        fontweight="bold",
-    )
+    fig.suptitle(f"Error Analysis — {info.get('model', '')}  {info.get('dataset', '')}", fontweight="bold")
     plt.tight_layout(rect=[0, 0, 1, 0.93])
 
     _save_fig(fig, folder_path, "fig_error_analysis.png")
 
 
-# Figure 3: Metrics 雷達圖 (單一實驗)
-def fig_metrics_radar(
-    folder_path: str,
-):
-    """六軸雷達圖顯示 MAE, MSE, RMSE, MAPE, MSPE, R²。"""
+# ──────────────────────────────────────────────
+# Figure 3: 雷達圖
+# ──────────────────────────────────────────────
+def fig_metrics_radar(folder_path: str):
     _, _, metrics = _load_results(folder_path)
     if metrics is None or len(metrics) < 6:
-        print("⚠️  metrics.npy 不存在或長度不足，跳過雷達圖")
+        print("  ⚠️  metrics.npy 不存在或長度不足，跳過雷達圖")
         return
     info = _parse_setting(os.path.basename(folder_path.rstrip(os.sep)))
 
     values = metrics[:6].astype(float).tolist()
-    # 將前 5 個 error 指標做 1/(1+x) 映射，使越小越好 → 越大越好
     radar_vals = [1.0 / (1.0 + v) for v in values[:5]] + [max(0, values[5])]
 
     N = len(METRIC_NAMES)
@@ -303,30 +304,19 @@ def fig_metrics_radar(
     ax.set_ylim(0, 1.05)
     ax.set_yticks([0.25, 0.5, 0.75, 1.0])
     ax.set_yticklabels(["0.25", "0.50", "0.75", "1.00"], fontsize=7, color="0.5")
-    ax.set_title(
-        f"{info.get('model', 'Model')} — {info.get('dataset', '')}",
-        fontweight="bold", pad=18,
-    )
+    ax.set_title(f"{info.get('model', 'Model')} — {info.get('dataset', '')}", fontweight="bold", pad=18)
 
-    # 在雷達圖下方列出原始數值
     text_lines = "  |  ".join(f"{n}: {v:.4f}" for n, v in zip(METRIC_NAMES, values))
     fig.text(0.5, 0.02, text_lines, ha="center", fontsize=7.5, color="0.35")
-
     plt.tight_layout(rect=[0, 0.06, 1, 1])
 
     _save_fig(fig, folder_path, "fig_metrics_radar.png")
 
 
-# Figure 4: 多模型 / 多 pred_len 比較 (柱狀圖)
-def fig_multi_model_comparison(
-    folders: list[str] | None = None,
-    metric_indices: tuple = (0, 1),   # MAE, MSE
-):
-    """
-    跨設定 / 跨模型比較指定 metric。
-    自動從 results/ 搜集所有可用結果。
-    PNG 存到 results/ 根目錄。
-    """
+# ──────────────────────────────────────────────
+# Figure 4: 多模型比較
+# ──────────────────────────────────────────────
+def fig_multi_model_comparison(folders=None, metric_indices=(0, 1)):
     if folders is None:
         folders = list_result_folders()
     if not folders:
@@ -366,49 +356,35 @@ def fig_multi_model_comparison(
         ax.set_xticklabels(labels, fontsize=8)
         ax.set_ylabel(METRIC_NAMES[mi] if mi < len(METRIC_NAMES) else f"Metric {mi}")
         ax.set_title(METRIC_NAMES[mi] if mi < len(METRIC_NAMES) else f"Metric {mi}", fontweight="bold")
-
         for bar, v in zip(bars, vals):
-            ax.text(
-                bar.get_x() + bar.get_width() / 2, bar.get_height(),
-                f"{v:.4f}", ha="center", va="bottom", fontsize=7,
-            )
+            ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
+                    f"{v:.4f}", ha="center", va="bottom", fontsize=7)
 
     fig.suptitle("Model Comparison", fontweight="bold")
     plt.tight_layout(rect=[0, 0, 1, 0.94])
 
-    # 存到 results/ 根目錄
     results_base = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "results")
     _save_fig(fig, results_base, "fig_model_comparison.png")
 
 
-# Figure 5: 預測熱力圖 (所有 sample × 所有 step)
-def fig_error_heatmap(
-    folder_path: str,
-    feature_idx: int = -1,
-    max_samples: int = 200,
-):
-    """
-    橫軸: prediction horizon, 縱軸: sample index
-    色彩: absolute error
-    """
+# ──────────────────────────────────────────────
+# Figure 5: 誤差熱力圖
+# ──────────────────────────────────────────────
+def fig_error_heatmap(folder_path: str, feature_idx: int = -1, max_samples: int = 200):
     preds, trues, _ = _load_results(folder_path)
+    fi = _safe_feature_idx(preds, trues, feature_idx)
     info = _parse_setting(os.path.basename(folder_path.rstrip(os.sep)))
 
-    abs_err = np.abs(preds[:, :, feature_idx] - trues[:, :, feature_idx])
+    abs_err = np.abs(preds[:, :, fi] - trues[:, :, fi])
     if abs_err.shape[0] > max_samples:
         step = abs_err.shape[0] // max_samples
         abs_err = abs_err[::step][:max_samples]
 
     fig, ax = plt.subplots(figsize=(7.16, 3.0))
-    im = ax.imshow(
-        abs_err, aspect="auto", cmap="YlOrRd", interpolation="nearest", origin="lower",
-    )
+    im = ax.imshow(abs_err, aspect="auto", cmap="YlOrRd", interpolation="nearest", origin="lower")
     ax.set_xlabel("Prediction Horizon")
     ax.set_ylabel("Sample Index")
-    ax.set_title(
-        f"Absolute Error Heatmap — {info.get('model', '')}  {info.get('dataset', '')}",
-        fontweight="bold",
-    )
+    ax.set_title(f"Absolute Error Heatmap — {info.get('model', '')}  {info.get('dataset', '')}", fontweight="bold")
     cb = fig.colorbar(im, ax=ax, pad=0.02, aspect=30)
     cb.set_label("| Pred − True |", fontsize=9)
     plt.tight_layout()
@@ -416,13 +392,12 @@ def fig_error_heatmap(
     _save_fig(fig, folder_path, "fig_error_heatmap.png")
 
 
-# Figure 6: 綜合 Dashboard (一頁四圖)
-def fig_dashboard(
-    folder_path: str,
-    feature_idx: int = -1,
-):
-    """一頁四面板綜合報告：(a) 預測曲線 (b) MSE per step (c) 誤差分布 (d) 雷達圖。"""
+# ──────────────────────────────────────────────
+# Figure 6: Dashboard
+# ──────────────────────────────────────────────
+def fig_dashboard(folder_path: str, feature_idx: int = -1):
     preds, trues, metrics = _load_results(folder_path)
+    fi = _safe_feature_idx(preds, trues, feature_idx)
     info = _parse_setting(os.path.basename(folder_path.rstrip(os.sep)))
     pred_len = preds.shape[1]
     n_total = preds.shape[0]
@@ -430,11 +405,10 @@ def fig_dashboard(
     fig = plt.figure(figsize=(7.16, 6.5))
     gs = GridSpec(2, 2, figure=fig, hspace=0.38, wspace=0.35)
 
-    # ── (a) Prediction Curve ──
     ax_a = fig.add_subplot(gs[0, :])
     mid_idx = n_total // 2
-    gt = trues[mid_idx, :, feature_idx]
-    pd_ = preds[mid_idx, :, feature_idx]
+    gt = trues[mid_idx, :, fi]
+    pd_ = preds[mid_idx, :, fi]
     t = np.arange(pred_len)
     ax_a.plot(t, gt, color=COLORS["gt"], label="Ground Truth")
     ax_a.plot(t, pd_, color=COLORS["pred"], linestyle="--", label="Prediction")
@@ -444,9 +418,8 @@ def fig_dashboard(
     ax_a.legend(loc="upper right", ncol=2)
     ax_a.set_title("(a) Prediction vs Ground Truth", fontsize=10, fontweight="bold")
 
-    # ── (b) MSE per step ──
     ax_b = fig.add_subplot(gs[1, 0])
-    mse_step = np.mean((preds[:, :, feature_idx] - trues[:, :, feature_idx]) ** 2, axis=0)
+    mse_step = np.mean((preds[:, :, fi] - trues[:, :, fi]) ** 2, axis=0)
     norm_v = mse_step / (mse_step.max() + 1e-12)
     cmap = plt.cm.YlOrRd
     ax_b.bar(range(pred_len), mse_step, color=cmap(norm_v * 0.7 + 0.15), edgecolor="white", linewidth=0.3)
@@ -454,9 +427,8 @@ def fig_dashboard(
     ax_b.set_ylabel("MSE")
     ax_b.set_title("(b) MSE per Horizon", fontsize=10, fontweight="bold")
 
-    # ── (c) Error distribution ──
     ax_c = fig.add_subplot(gs[1, 1])
-    errors = (preds[:, :, feature_idx] - trues[:, :, feature_idx]).flatten()
+    errors = (preds[:, :, fi] - trues[:, :, fi]).flatten()
     ax_c.hist(errors, bins=80, density=True, color=COLORS["fill"], alpha=0.7, edgecolor="white", linewidth=0.3)
     ax_c.axvline(0, color=COLORS["pred"], linewidth=1, linestyle="--")
     mu, sigma = errors.mean(), errors.std()
@@ -467,7 +439,6 @@ def fig_dashboard(
     title = f"{info.get('model', 'Model')} — {info.get('dataset', '')} — H={info.get('pred_len', '?')}"
     fig.suptitle(title, fontsize=12, fontweight="bold")
 
-    # metrics 文字列
     if metrics is not None and len(metrics) >= 6:
         vals = metrics[:6].astype(float)
         txt = "  |  ".join(f"{n}: {v:.4f}" for n, v in zip(METRIC_NAMES, vals))
@@ -476,7 +447,9 @@ def fig_dashboard(
     _save_fig(fig, folder_path, "fig_dashboard.png")
 
 
+# ──────────────────────────────────────────────
 # CLI
+# ──────────────────────────────────────────────
 def _interactive_select() -> str:
     dirs = list_result_folders()
     if not dirs:
@@ -487,10 +460,36 @@ def _interactive_select() -> str:
         print(f"  [{i}] {name}")
     try:
         choice = int(input("\nSelect folder index: "))
-        return dirs[choice]
-    except (ValueError, IndexError):
-        print("Invalid selection.")
+        if choice < 0 or choice >= len(dirs):
+            print(f"❌ 索引超出範圍 (0~{len(dirs)-1})")
+            raise SystemExit(1)
+        selected = dirs[choice]
+        print(f"📁 選擇: {selected}")
+        return selected
+    except ValueError:
+        print("❌ 請輸入數字")
         raise SystemExit(1)
+
+
+def _run_all_figures(folder: str, feature_idx: int, n_samples: int):
+    """對單一資料夾產出所有圖表，每張圖獨立 try/except"""
+    figures = [
+        ("prediction_curves", lambda: fig_prediction_curves(folder, feature_idx=feature_idx, n_samples=n_samples)),
+        ("error_analysis",    lambda: fig_error_analysis(folder, feature_idx=feature_idx)),
+        ("metrics_radar",     lambda: fig_metrics_radar(folder)),
+        ("error_heatmap",     lambda: fig_error_heatmap(folder, feature_idx=feature_idx)),
+        ("dashboard",         lambda: fig_dashboard(folder, feature_idx=feature_idx)),
+    ]
+    success = 0
+    for fig_name, fig_func in figures:
+        try:
+            print(f"\n🎨 繪製 {fig_name}...")
+            fig_func()
+            success += 1
+        except Exception as e:
+            print(f"  ❌ {fig_name} 失敗: {e}")
+            traceback.print_exc()
+    print(f"\n📊 完成 {success}/{len(figures)} 張圖 → {os.path.abspath(folder)}")
 
 
 def main():
@@ -511,7 +510,6 @@ def main():
         fig_multi_model_comparison()
         return
 
-    # --batch: 對 results/ 下所有資料夾批次產圖
     if args.batch:
         folders = list_result_folders()
         if not folders:
@@ -521,36 +519,31 @@ def main():
             print(f"\n{'='*60}")
             print(f"📊 [{i+1}/{len(folders)}] {name}")
             print(f"{'='*60}")
-            fig_prediction_curves(folder, feature_idx=args.feature, n_samples=args.n_samples)
-            fig_error_analysis(folder, feature_idx=args.feature)
-            fig_metrics_radar(folder)
-            fig_error_heatmap(folder, feature_idx=args.feature)
-            fig_dashboard(folder, feature_idx=args.feature)
-        fig_multi_model_comparison()
+            _run_all_figures(folder, args.feature, args.n_samples)
+        try:
+            fig_multi_model_comparison()
+        except Exception as e:
+            print(f"❌ 多模型比較失敗: {e}")
         print(f"\n🎉 批次完成！共處理 {len(folders)} 個結果資料夾")
         return
 
     folder = args.folder or _interactive_select()
 
     if args.dashboard:
-        fig_dashboard(folder, feature_idx=args.feature)
+        try:
+            fig_dashboard(folder, feature_idx=args.feature)
+        except Exception as e:
+            print(f"❌ Dashboard 失敗: {e}")
+            traceback.print_exc()
         return
+
+    _run_all_figures(folder, args.feature, args.n_samples)
 
     if args.all:
-        fig_prediction_curves(folder, feature_idx=args.feature, n_samples=args.n_samples)
-        fig_error_analysis(folder, feature_idx=args.feature)
-        fig_metrics_radar(folder)
-        fig_error_heatmap(folder, feature_idx=args.feature)
-        fig_dashboard(folder, feature_idx=args.feature)
-        fig_multi_model_comparison()
-        return
-
-    # 預設：逐一產出
-    fig_prediction_curves(folder, feature_idx=args.feature, n_samples=args.n_samples)
-    fig_error_analysis(folder, feature_idx=args.feature)
-    fig_metrics_radar(folder)
-    fig_error_heatmap(folder, feature_idx=args.feature)
-    fig_dashboard(folder, feature_idx=args.feature)
+        try:
+            fig_multi_model_comparison()
+        except Exception as e:
+            print(f"❌ 多模型比較失敗: {e}")
 
 
 if __name__ == "__main__":
