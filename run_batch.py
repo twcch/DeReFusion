@@ -3,7 +3,7 @@ import time
 
 def run_experiments():
     commands = [
-        "python -u run.py --task_name long_term_forecast --is_training 1 --root_path ./dataset/yfinance/ --data_path TSMC.csv --model_id TSMC_48_7 --model DyVolFusion --use_norm 1 --data custom --features MS --target Close --freq b --seq_len 96 --label_len 48 --pred_len 7 --e_layers 2 --d_layers 1 --factor 3 --enc_in 5 --dec_in 5 --c_out 1 --d_model 32 --d_ff 64 --n_heads 2 --dropout 0.2 --embed timeF --loss MAE --patience 5 --des Exp --itr 1 --train_epochs 30 --batch_size 32 --learning_rate 0.0001 --lradj cosine"
+        "python -u run.py --task_name long_term_forecast --is_training 1 --root_path ./dataset/yfinance/ --data_path TSMC.csv --model_id TSMC_48_7 --model DyVolFusion --use_norm 1 --data custom --features MS --target Close --freq b --seq_len 96 --label_len 48 --pred_len 7 --e_layers 2 --d_layers 1 --factor 3 --enc_in 5 --dec_in 5 --c_out 1 --d_model 32 --d_ff 64 --n_heads 2 --dropout 0.2 --embed timeF --loss MSE --patience 5 --des Exp --itr 1 --train_epochs 30 --batch_size 32 --learning_rate 0.0001 --lradj cosine"
     ]
 
     total_experiments = len(commands)
