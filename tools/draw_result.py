@@ -16,9 +16,7 @@ import argparse
 import os
 import re
 
-# ──────────────────────────────────────────────
 # 全域期刊風格設定 (Nature / IEEE 風格)
-# ──────────────────────────────────────────────
 plt.rcParams.update({
     # Font
     "font.family": "serif",
@@ -75,9 +73,7 @@ MODEL_PALETTE = [
 METRIC_NAMES = ["MAE", "MSE", "RMSE", "MAPE", "MSPE", "R²"]
 
 
-# ──────────────────────────────────────────────
 # 工具函式
-# ──────────────────────────────────────────────
 def _load_results(folder_path: str):
     """載入 pred.npy, true.npy, metrics.npy"""
     preds = np.load(os.path.join(folder_path, "pred.npy"))
@@ -165,9 +161,7 @@ def list_result_folders() -> list:
     return dirs
 
 
-# ──────────────────────────────────────────────
 # Figure 1: 預測曲線 (單欄/雙欄寬)
-# ──────────────────────────────────────────────
 def fig_prediction_curves(
     folder_path: str,
     feature_idx: int = -1,
@@ -240,9 +234,7 @@ def fig_prediction_curves(
     _save_fig(fig, folder_path, "fig_prediction_curves.png")
 
 
-# ──────────────────────────────────────────────
 # Figure 2: 每步 MSE + 誤差直方圖 (雙面板)
-# ──────────────────────────────────────────────
 def fig_error_analysis(
     folder_path: str,
     feature_idx: int = -1,
@@ -284,9 +276,7 @@ def fig_error_analysis(
     _save_fig(fig, folder_path, "fig_error_analysis.png")
 
 
-# ──────────────────────────────────────────────
 # Figure 3: Metrics 雷達圖 (單一實驗)
-# ──────────────────────────────────────────────
 def fig_metrics_radar(
     folder_path: str,
 ):
@@ -327,9 +317,7 @@ def fig_metrics_radar(
     _save_fig(fig, folder_path, "fig_metrics_radar.png")
 
 
-# ──────────────────────────────────────────────
 # Figure 4: 多模型 / 多 pred_len 比較 (柱狀圖)
-# ──────────────────────────────────────────────
 def fig_multi_model_comparison(
     folders: list[str] | None = None,
     metric_indices: tuple = (0, 1),   # MAE, MSE
@@ -393,9 +381,7 @@ def fig_multi_model_comparison(
     _save_fig(fig, results_base, "fig_model_comparison.png")
 
 
-# ──────────────────────────────────────────────
 # Figure 5: 預測熱力圖 (所有 sample × 所有 step)
-# ──────────────────────────────────────────────
 def fig_error_heatmap(
     folder_path: str,
     feature_idx: int = -1,
@@ -430,9 +416,7 @@ def fig_error_heatmap(
     _save_fig(fig, folder_path, "fig_error_heatmap.png")
 
 
-# ──────────────────────────────────────────────
 # Figure 6: 綜合 Dashboard (一頁四圖)
-# ──────────────────────────────────────────────
 def fig_dashboard(
     folder_path: str,
     feature_idx: int = -1,
@@ -492,9 +476,7 @@ def fig_dashboard(
     _save_fig(fig, folder_path, "fig_dashboard.png")
 
 
-# ──────────────────────────────────────────────
 # CLI
-# ──────────────────────────────────────────────
 def _interactive_select() -> str:
     dirs = list_result_folders()
     if not dirs:
