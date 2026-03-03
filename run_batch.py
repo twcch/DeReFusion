@@ -22,14 +22,14 @@ def run_experiments():
             subprocess.run(cmd, shell=True, check=True)
             
             elapsed_time = time.time() - start_time
-            print(f"\n✅ 實驗 [{i+1}/{total_experiments}] 成功執行完畢！耗時: {elapsed_time/60:.2f} 分鐘\n")
+            print(f"\n✅ 實驗 [{i+1}/{total_experiments}] 成功執行完畢! 耗時: {elapsed_time/60:.2f} 分鐘\n")
             
             # 每個實驗跑完後休息 3 秒，讓 GPU 釋放記憶體
             time.sleep(3) 
 
         except subprocess.CalledProcessError as e:
             # 如果某個實驗發生 Bug 崩潰，會捕捉錯誤並印出，然後直接停止後續實驗
-            print(f"\n❌ 實驗 [{i+1}/{total_experiments}] 發生錯誤而中斷！")
+            print(f"\n❌ 實驗 [{i+1}/{total_experiments}] 發生錯誤而中斷!")
             print(f"系統回傳錯誤碼: {e.returncode}")
             print("批次任務已停止。")
             break
