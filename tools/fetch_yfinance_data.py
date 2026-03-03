@@ -14,4 +14,6 @@ if isinstance(df.columns, pd.MultiIndex):
 df = df.reset_index()
 df = df[["Date", "Open", "High", "Low", "Volume", "Close"]]
 
+df.rename(columns={"Date": "date"}, inplace=True)
+
 df.to_csv("dataset/yfinance/TSMC.csv", index=False)
