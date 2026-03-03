@@ -31,32 +31,32 @@ def run_experiments():
     lradj = "cosine"
 
     base_args = (
-        f"python -u run.py",
-        f" --is_training 1",
-        f" --task_name {task_name}",
-        f" --root_path {root_path}",
-        f" --data_path {data_path}",
-        f" --data {data}",
-        f" --features {features}",
-        f" --target {target}",
-        f" --freq {freq}",
-        f" --enc_in {enc_in}",
-        f" --dec_in {dec_in}",
-        f" --c_out {c_out}",
-        f" --seq_len {seq_len}",
-        f" --label_len {label_len}",
-        f" --pred_len {pred_len}",
-        f" --embed {embed}",
-        f" --loss {loss}",
-        f" --patience {patience}",
-        f" --dropout {dropout}",
-        f" --des {des}",
-        f" --itr {itr}",
-        f" --use_norm {use_norm}",
-        f" --train_epochs {train_epochs}",
-        f" --batch_size {batch_size}",
-        f" --learning_rate {learning_rate}",
-        f" --lradj {lradj}",
+        f"python -u run.py"
+        f" --is_training 1"
+        f" --task_name {task_name}"
+        f" --root_path {root_path}"
+        f" --data_path {data_path}"
+        f" --data {data}"
+        f" --features {features}"
+        f" --target {target}"
+        f" --freq {freq}"
+        f" --enc_in {enc_in}"
+        f" --dec_in {dec_in}"
+        f" --c_out {c_out}"
+        f" --seq_len {seq_len}"
+        f" --label_len {label_len}"
+        f" --pred_len {pred_len}"
+        f" --embed {embed}"
+        f" --loss {loss}"
+        f" --patience {patience}"
+        f" --dropout {dropout}"
+        f" --des {des}"
+        f" --itr {itr}"
+        f" --use_norm {use_norm}"
+        f" --train_epochs {train_epochs}"
+        f" --batch_size {batch_size}"
+        f" --learning_rate {learning_rate}"
+        f" --lradj {lradj}"
     )
     
     experiments = [
