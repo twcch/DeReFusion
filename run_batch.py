@@ -60,10 +60,10 @@ def run_experiments():
     )
     
     experiments = [
-        # {"model": "DyVolFusion", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        # {"model": "Autoformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        # {"model": "Crossformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        # {"model": "DLinear", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "DyVolFusion", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "Autoformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "Crossformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "DLinear", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         {"model": "TransLSTM", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         {"model": "LSTMAttention", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         {"model": "Informer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
