@@ -37,7 +37,7 @@ class LSTMDecoder(nn.Module):
         
         self.lstm = nn.LSTM(
             input_size=hidden_dim,
-            hidden_dim=hidden_dim,
+            hidden_size=hidden_dim,
             num_layers=num_layers,
             dropout=dropout,
             batch_first=True
