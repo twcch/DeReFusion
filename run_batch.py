@@ -60,25 +60,33 @@ def run_experiments():
     )
     
     experiments = [
-        {"model": "DyVolFusion", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        {"model": "Autoformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        {"model": "Crossformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        {"model": "DLinear", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        {"model": "ETSformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        {"model": "FEDformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        # {"model": "DyVolFusion", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        # {"model": "Autoformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        # {"model": "Crossformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        # {"model": "DLinear", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "TransLSTM", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "LSTMAttention", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         {"model": "Informer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         {"model": "iTransformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         {"model": "PatchTST", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         {"model": "PAttn", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        {"model": "Pyraformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        {"model": "Reformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         {"model": "Transformer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         {"model": "TimesNet", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         {"model": "TSMixer", "model_id": f"{data_name}_{seq_len}_{label_len}_{pred_len}", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
     ]
     
     commands = [
-        f"{base_args} --model_id {exp['model_id']} --model {exp['model']}"
+        (
+            f"{base_args}"
+            f" --model_id {exp['model_id']}"
+            f" --model {exp['model']}"
+            f" --e_layers {exp['e_layers']}"
+            f" --d_layers {exp['d_layers']}"
+            f" --factor {exp['factor']}"
+            f" --d_model {exp['d_model']}"
+            f" --d_ff {exp['d_ff']}"
+            f" --n_heads {exp['n_heads']}"
+        )
         for exp in experiments
     ]
 
