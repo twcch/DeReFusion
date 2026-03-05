@@ -4,7 +4,7 @@ import itertools
 
 def run_experiments():
     # 可傳入多個 data_name 和 pred_len，會自動跑所有組合
-    data_names = ["TSMC"]
+    data_names = ["sp500"]
     pred_lens = [7, 12, 24, 48, 96]
 
     # 共用參數
