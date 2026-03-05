@@ -5,7 +5,7 @@ import os
 
 print("1. 開始從 yfinance 下載台積電資料...")
 # 下載台積電
-ticker = "2330.TW"
+ticker = "^GSPC"
 df = yf.download(ticker, start="2016-01-01", end="2026-01-01")
 
 if isinstance(df.columns, pd.MultiIndex):
@@ -16,4 +16,4 @@ df = df[["Date", "Open", "High", "Low", "Volume", "Close"]]
 
 df.rename(columns={"Date": "date"}, inplace=True)
 
-df.to_csv("dataset/yfinance/TSMC.csv", index=False)
+df.to_csv("dataset/yfinance/sp500.csv", index=False)
