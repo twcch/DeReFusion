@@ -5,7 +5,9 @@ import itertools
 def run_experiments():
     # 可傳入多個 data_name 和 pred_len，會自動跑所有組合
     data_names = ["sp500"]
-    pred_lens = [7, 12, 24, 48, 96]
+    # short-term: [12, 24, 36, 48, 60, 72, 84]
+    # long-term: [96, 192, 336, 720]
+    pred_lens = [1, 7, 12, 24, 36, 48, 60, 72, 84, 96, 192, 336, 720]
 
     # 共用參數
     task_name = "long_term_forecast"
