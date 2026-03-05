@@ -16,4 +16,4 @@ df = df[["Date", "Open", "High", "Low", "Volume", "Close"]]
 
 df.rename(columns={"Date": "date"}, inplace=True)
 
-df.to_csv("dataset/yfinance/sp500.csv", index=False)
+df.to_csv("dataset/yfinance/GSPC.csv", index=False)
