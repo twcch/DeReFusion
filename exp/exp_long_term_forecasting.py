@@ -178,6 +178,7 @@ class Exp_Long_Term_Forecast(Exp_Basic):
             os.makedirs(folder_path)
 
         self.model.eval()
+        test_start_time = time.time()
         with torch.no_grad():
             for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(test_loader):
                 batch_x = batch_x.float().to(self.device)
@@ -252,11 +253,12 @@ class Exp_Long_Term_Forecast(Exp_Basic):
         else:
             dtw = 'Not calculated'
 
+        test_elapsed = time.time() - test_start_time
         mae, mse, rmse, mape, mspe, r2 = metric(preds, trues)
-        print('mse:{}, mae:{}, rmse:{}, mape:{}, mspe:{}, r2:{}, dtw:{}'.format(mse, mae, rmse, mape, mspe, r2, dtw))
+        print('mse:{}, mae:{}, rmse:{}, mape:{}, mspe:{}, r2:{}, dtw:{}, time:{:.2f}s'.format(mse, mae, rmse, mape, mspe, r2, dtw, test_elapsed))
         f = open("result_long_term_forecast.txt", 'a')
         f.write(setting + "  \n")
-        f.write('mse:{}, mae:{}, rmse:{}, mape:{}, mspe:{}, r2:{}, dtw:{}'.format(mse, mae, rmse, mape, mspe, r2, dtw))
+        f.write('mse:{}, mae:{}, rmse:{}, mape:{}, mspe:{}, r2:{}, dtw:{}, time:{:.2f}s'.format(mse, mae, rmse, mape, mspe, r2, dtw, test_elapsed))
         f.write('\n')
         f.write('\n')
         f.close()
