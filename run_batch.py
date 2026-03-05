@@ -52,6 +52,7 @@ def run_experiments():
         base_args = (
             f"python -u run.py"
             f" --is_training 1"
+            f" --use_dtw 1"
             f" --task_name {task_name}"
             f" --root_path {root_path}"
             f" --data_path {data_path}"
