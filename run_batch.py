@@ -7,8 +7,8 @@ def run_experiments():
     # data: ["GSPC", "DJI", "SOX"]
     data_names = ["GSPC", "DJI", "SOX"]
     # short-term: [1, 7, 12, 24, 36, 48, 60, 72, 84]
-    # long-term: [96, 192, 336, 720]
-    pred_lens = [336, 720]
+    # long-term: [96, 192]
+    pred_lens = [1, 7, 12, 24, 36, 48, 60, 72, 84, 96, 192]
 
     # 共用參數
     task_name = "long_term_forecast"
