@@ -14,7 +14,7 @@ def run_experiments():
     
     # short-term: [1, 7, 12, 24, 36, 48, 60, 72, 84]
     # long-term: [96, 192]
-    pred_lens = [1]
+    pred_lens = [1, 7, 12, 24, 36, 48, 60, 72, 84, 96, 192]
 
     # 共用參數
     task_name = "long_term_forecast"
@@ -40,7 +40,7 @@ def run_experiments():
 
     # 模型定義（不含隨組合變動的 model_id）
     model_configs = [
-        {"model": "DyVolFusion", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        #{"model": "DyVolFusion", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         {"model": "DyVolFusion_woDy", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         {"model": "DyVolFusion_woVol", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         {"model": "DyVolFusion_woFusion", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
