@@ -4,8 +4,8 @@ import itertools
 
 def run_experiments():
     # 可傳入多個 data_name 和 pred_len，會自動跑所有組合
-    # data: ["GSPC-2016-2026", "DJI-2016-2026", "SOX-2016-2026"]
-    data_names = ["GSPC-2016-2026", "DJI-2016-2026", "SOX-2016-2026"]
+    # data: ["GSPC-2016-2025", "DJI-2016-2025", "SOX-2016-2025"]
+    data_names = ["GSPC-2016-2025", "DJI-2016-2025", "SOX-2016-2025"]
     
     # [7, 12, 24, 36, 48, 60, 72, 84, 96]
     seq_lens = [96]
@@ -41,6 +41,9 @@ def run_experiments():
     # 模型定義（不含隨組合變動的 model_id）
     model_configs = [
         {"model": "DyVolFusion", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "DyVolFusion_woDy", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "DyVolFusion_woVol", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "DyVolFusion_woFusion", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         # {"model": "RevINTransformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         # {"model": "RevINTransLSTM", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         # {"model": "Autoformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
