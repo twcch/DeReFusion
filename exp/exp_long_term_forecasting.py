@@ -82,6 +82,7 @@ class Exp_Long_Term_Forecast(Exp_Basic):
         if not os.path.exists(path):
             os.makedirs(path)
 
+        train_start_time = time.time()
         time_now = time.time()
 
         train_steps = len(train_loader)
@@ -160,12 +161,14 @@ class Exp_Long_Term_Forecast(Exp_Basic):
 
             adjust_learning_rate(model_optim, epoch + 1, self.args)
 
+        train_elapsed = time.time() - train_start_time
+
         best_model_path = path + '/' + 'checkpoint.pth'
         self.model.load_state_dict(torch.load(best_model_path))
 
-        return self.model
+        return self.model, train_elapsed
 
-    def test(self, setting, test=0):
+    def test(self, setting, test=0, train_time=None):
         test_data, test_loader = self._get_data(flag='test')
         if test:
             print('loading model')
@@ -255,10 +258,11 @@ class Exp_Long_Term_Forecast(Exp_Basic):
 
         test_elapsed = time.time() - test_start_time
         mae, mse, rmse, mape, mspe, r2 = metric(preds, trues)
-        print('mse:{}, mae:{}, rmse:{}, mape:{}, mspe:{}, r2:{}, dtw:{}, time:{:.2f}s'.format(mse, mae, rmse, mape, mspe, r2, dtw, test_elapsed))
+        train_time_str = ', train_time:{:.2f}s'.format(train_time) if train_time is not None else ''
+        print('mse:{}, mae:{}, rmse:{}, mape:{}, mspe:{}, r2:{}, dtw:{}, time:{:.2f}s{}'.format(mse, mae, rmse, mape, mspe, r2, dtw, test_elapsed, train_time_str))
         f = open("result_long_term_forecast.txt", 'a')
         f.write(setting + "  \n")
-        f.write('mse:{}, mae:{}, rmse:{}, mape:{}, mspe:{}, r2:{}, dtw:{}, time:{:.2f}s'.format(mse, mae, rmse, mape, mspe, r2, dtw, test_elapsed))
+        f.write('mse:{}, mae:{}, rmse:{}, mape:{}, mspe:{}, r2:{}, dtw:{}, time:{:.2f}s{}'.format(mse, mae, rmse, mape, mspe, r2, dtw, test_elapsed, train_time_str))
         f.write('\n')
         f.write('\n')
         f.close()

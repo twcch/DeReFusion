@@ -5,7 +5,7 @@ import itertools
 def run_experiments():
     # 可傳入多個 data_name 和 pred_len，會自動跑所有組合
     # data: ["GSPC", "DJI", "SOX"]
-    data_names = ["GSPC", "DJI", "SOX"]
+    data_names = ["GSPC"]
     
     # [7, 12, 24, 36, 48, 60, 72, 84, 96]
     seq_lens = [96]
@@ -14,7 +14,7 @@ def run_experiments():
     
     # short-term: [1, 7, 12, 24, 36, 48, 60, 72, 84]
     # long-term: [96, 192]
-    pred_lens = [1, 7, 12, 24, 36, 48, 60, 72, 84, 96, 192]
+    pred_lens = [2]
 
     # 共用參數
     task_name = "long_term_forecast"
@@ -41,15 +41,15 @@ def run_experiments():
     # 模型定義（不含隨組合變動的 model_id）
     model_configs = [
         {"model": "DyVolFusion", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        {"model": "RevINTransformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        {"model": "RevINTransLSTM", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        {"model": "Autoformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        {"model": "DLinear", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        {"model": "iTransformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        {"model": "PatchTST", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        {"model": "PAttn", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        {"model": "TimesNet", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        {"model": "TSMixer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        # {"model": "RevINTransformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        # {"model": "RevINTransLSTM", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        # {"model": "Autoformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        # {"model": "DLinear", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        # {"model": "iTransformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        # {"model": "PatchTST", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        # {"model": "PAttn", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        # {"model": "TimesNet", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        # {"model": "TSMixer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
     ]
 
     # 建立所有 (data_name, pred_len, model_config) 的組合
