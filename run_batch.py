@@ -4,8 +4,8 @@ import itertools
 
 def run_experiments():
     # 可傳入多個 data_name 和 pred_len，會自動跑所有組合
-    # data: ["GSPC", "DJI", "SOX"]
-    data_names = ["GSPC"]
+    # data: ["GSPC-2016-2026", "DJI-2016-2026", "SOX-2016-2026"]
+    data_names = ["GSPC-2016-2026", "DJI-2016-2026", "SOX-2016-2026"]
     
     # [7, 12, 24, 36, 48, 60, 72, 84, 96]
     seq_lens = [96]
@@ -14,7 +14,7 @@ def run_experiments():
     
     # short-term: [1, 7, 12, 24, 36, 48, 60, 72, 84]
     # long-term: [96, 192]
-    pred_lens = [2]
+    pred_lens = [1]
 
     # 共用參數
     task_name = "long_term_forecast"
