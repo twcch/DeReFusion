@@ -6,6 +6,10 @@ def run_experiments():
     # 可傳入多個 data_name 和 pred_len，會自動跑所有組合
     # data: ["GSPC", "DJI", "SOX"]
     data_names = ["GSPC", "DJI", "SOX"]
+    
+    # [7, 12, 24, 36, 48, 60, 72, 84, 96]
+    seq_lens = [96]
+    
     # short-term: [1, 7, 12, 24, 36, 48, 60, 72, 84]
     # long-term: [96, 192]
     pred_lens = [1, 7, 12, 24, 36, 48, 60, 72, 84, 96, 192]
@@ -20,7 +24,6 @@ def run_experiments():
     enc_in = 5
     dec_in = 5
     c_out = 1
-    seq_len = 96
     label_len = 48
     embed = "timeF"
     loss = "MSE"
@@ -50,7 +53,7 @@ def run_experiments():
 
     # 建立所有 (data_name, pred_len, model_config) 的組合
     commands = []
-    for data_name, pred_len in itertools.product(data_names, pred_lens):
+    for data_name, seq_len, pred_len in itertools.product(data_names, seq_lens, pred_lens):
         data_path = data_name + ".csv"
         base_args = (
             f"python -u run.py"
