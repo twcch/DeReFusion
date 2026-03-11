@@ -61,7 +61,7 @@ def run_experiments():
         data_path = data_name + ".csv"
         base_args = (
             f"python -u run.py"
-            f" --is_training 0"
+            f" --is_training 1"
             #f" --use_dtw"
             f" --task_name {task_name}"
             f" --root_path {root_path}"
