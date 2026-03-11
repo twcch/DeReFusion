@@ -182,6 +182,8 @@ class Exp_Long_Term_Forecast(Exp_Basic):
 
         self.model.eval()
         test_start_time = time.time()
+        inference_time_total = 0.0
+        total_samples = 0
         with torch.no_grad():
             for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(test_loader):
                 batch_x = batch_x.float().to(self.device)
@@ -194,11 +196,18 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                 dec_inp = torch.zeros_like(batch_y[:, -self.args.pred_len:, :]).float()
                 dec_inp = torch.cat([batch_y[:, :self.args.label_len, :], dec_inp], dim=1).float().to(self.device)
                 # encoder - decoder
+                if self.device.type == 'cuda':
+                    torch.cuda.synchronize()
+                infer_start = time.time()
                 if self.args.use_amp:
                     with torch.cuda.amp.autocast():
                         outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
                 else:
                     outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
+                if self.device.type == 'cuda':
+                    torch.cuda.synchronize()
+                inference_time_total += time.time() - infer_start
+                total_samples += batch_x.size(0)
 
                 f_dim = -1 if self.args.features == 'MS' else 0
                 outputs = outputs[:, -self.args.pred_len:, :]
@@ -257,12 +266,16 @@ class Exp_Long_Term_Forecast(Exp_Basic):
             dtw = 'Not calculated'
 
         test_elapsed = time.time() - test_start_time
+        inference_speed_ms = (inference_time_total / total_samples) * 1000  # ms per sample
         mae, mse, rmse, mape, mspe, r2 = metric(preds, trues)
         train_time_str = ', train_time:{:.2f}s'.format(train_time) if train_time is not None else ''
-        print('mse:{}, mae:{}, rmse:{}, mape:{}, mspe:{}, r2:{}, dtw:{}, time:{:.2f}s{}'.format(mse, mae, rmse, mape, mspe, r2, dtw, test_elapsed, train_time_str))
+        inference_str = ', inference_time:{:.4f}ms/sample ({} samples, {:.4f}s total)'.format(inference_speed_ms, total_samples, inference_time_total)
+        print('mse:{}, mae:{}, rmse:{}, mape:{}, mspe:{}, r2:{}, dtw:{}, time:{:.2f}s{}{}'.format(
+            mse, mae, rmse, mape, mspe, r2, dtw, test_elapsed, train_time_str, inference_str))
         f = open("result_long_term_forecast.txt", 'a')
         f.write(setting + "  \n")
-        f.write('mse:{}, mae:{}, rmse:{}, mape:{}, mspe:{}, r2:{}, dtw:{}, time:{:.2f}s{}'.format(mse, mae, rmse, mape, mspe, r2, dtw, test_elapsed, train_time_str))
+        f.write('mse:{}, mae:{}, rmse:{}, mape:{}, mspe:{}, r2:{}, dtw:{}, time:{:.2f}s{}{}'.format(
+            mse, mae, rmse, mape, mspe, r2, dtw, test_elapsed, train_time_str, inference_str))
         f.write('\n')
         f.write('\n')
         f.close()
