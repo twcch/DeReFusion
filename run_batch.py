@@ -47,12 +47,17 @@ def run_experiments():
         # {"model": "RevINTransformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         # {"model": "RevINTransLSTM", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         # {"model": "Autoformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        {"model": "DLinear", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        # {"model": "DLinear", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         # {"model": "iTransformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         # {"model": "PatchTST", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         # {"model": "PAttn", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         # {"model": "TimesNet", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         # {"model": "TSMixer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        # {"model": "FEDformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        # {"model": "ETSformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        # {"model": "Informer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        # {"model": "Reformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        # {"model": "LightTS", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
     ]
 
     # 建立所有 (data_name, pred_len, model_config) 的組合
