@@ -8,12 +8,10 @@ print("1. 開始從 yfinance 下載台積電資料...")
 ticker = "^GSPC"
 df = yf.download(ticker, start="2016-01-01", end="2026-01-01")
 
-if isinstance(df.columns, pd.MultiIndex):
-    df.columns = df.columns.get_level_values(0)
-
+df.columns = df.columns.droplevel('Ticker')
+df.columns.name = None
 df = df.reset_index()
-df = df[["Date", "Open", "High", "Low", "Volume", "Close"]]
 
 df.rename(columns={"Date": "date"}, inplace=True)
 
-df.to_csv("dataset/yfinance/GSPC-2016-2025.csv", index=False)
+df.to_csv("dataset/yfinance/GSPC-2016-2025a.csv", index=False)
