@@ -194,32 +194,16 @@ class TransformerLSTMResidualBranch(nn.Module):
 # 3. Fusion Mechanism
 class SigmoidGate(nn.Module):
     """
-    Learnable sigmoid gate that fuses the base prediction with a residual.
-    gate ∈ (0, 1):  output = (1 - gate) * base + gate * residual
+    用一個簡單的可學習參數來決定 base 和 residual 的比例
     """
-
-    def __init__(self, seq_len: int, pred_len: int, init_bias: float = -2.0):
+    def __init__(self, channels: int):
         super().__init__()
-        self.proj = nn.Linear(seq_len, pred_len)
-        # Negative bias → gate ≈ 0 at init → model starts from DLinear baseline
-        nn.init.constant_(self.proj.bias, init_bias)
+        # 初始化為一個極小值 (例如 -2.0)，讓 sigmoid 後接近 0，初期以 DLinear 為主
+        self.w = nn.Parameter(torch.ones(1, 1, channels) * -2.0)
 
-    def forward(
-        self,
-        x_enc: torch.Tensor,
-        base: torch.Tensor,
-        residual: torch.Tensor,
-    ) -> torch.Tensor:
-        """
-        Args:
-            x_enc:    [B, seq_len, C]  — raw (normalised) encoder input
-            base:     [B, pred_len, C] — DLinear prediction
-            residual: [B, pred_len, C] — Residual prediction
-        Returns:
-            fused: [B, pred_len, C]
-        """
-        gate = torch.sigmoid(self.proj(x_enc.permute(0, 2, 1)))  # [B, C, pred_len]
-        gate = gate.permute(0, 2, 1)                             # [B, pred_len, C]
+    def forward(self, base: torch.Tensor, residual: torch.Tensor) -> torch.Tensor:
+        gate = torch.sigmoid(self.w)
+        # 廣播機制會自動處理 batch 和 pred_len 維度
         fused = (1.0 - gate) * base + gate * residual
         return fused
 
@@ -267,7 +251,7 @@ class Model(nn.Module):
             )
 
         # Fusion
-        self.gate = SigmoidGate(self.seq_len, self.pred_len, init_bias=-2.0)
+        self.gate = SigmoidGate(self.enc_in)
 
     # Task-specific heads
     def forecast(self, x_enc: torch.Tensor) -> torch.Tensor:
@@ -287,7 +271,7 @@ class Model(nn.Module):
         residual = self.res_branch(x_norm)
 
         # D. Gated fusion
-        fused = self.gate(x_norm, base, residual)
+        fused = self.gate(base, residual)
 
         # E. RevIN De-normalisation
         dec_out = self.revin(fused, "denorm")
