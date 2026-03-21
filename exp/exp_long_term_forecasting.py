@@ -284,4 +284,12 @@ class Exp_Long_Term_Forecast(Exp_Basic):
         np.save(folder_path + 'pred.npy', preds)
         np.save(folder_path + 'true.npy', trues)
 
+        # Generate publication-quality figures from .npy results
+        try:
+            from utils.visualization import generate_figures
+            test_results_path = './test_results/' + setting + '/'
+            generate_figures(input_path=folder_path, output_path=test_results_path)
+        except Exception as e:
+            print(f'Warning: figure generation failed: {e}')
+
         return
