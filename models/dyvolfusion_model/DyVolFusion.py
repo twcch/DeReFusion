@@ -1,0 +1,115 @@
+import torch
+import torch.nn as nn
+from layers.RevIN import RevIN
+
+
+# ========== 1. Building Blocks ==========
+class MovingAvg(nn.Module):
+    """Moving average block to highlight the trend of time series."""
+
+    def __init__(self, kernel_size: int):
+        super().__init__()
+        self.kernel_size = kernel_size
+        self.avg = nn.AvgPool1d(kernel_size=kernel_size, stride=1, padding=0)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        front = x[:, :1, :].repeat(1, (self.kernel_size - 1) // 2, 1)
+        end = x[:, -1:, :].repeat(1, (self.kernel_size - 1) // 2, 1)
+        x_padded = torch.cat([front, x, end], dim=1)
+        return self.avg(x_padded.permute(0, 2, 1)).permute(0, 2, 1)
+
+
+class SeriesDecomposition(nn.Module):
+    """Decompose a time series into seasonal and trend components."""
+
+    def __init__(self, kernel_size: int = 25):
+        super().__init__()
+        self.moving_avg = MovingAvg(kernel_size)
+
+    def forward(self, x: torch.Tensor):
+        trend = self.moving_avg(x)
+        return x - trend, trend
+
+
+# ========== 2. Branches ==========
+class DLinearBranch(nn.Module):
+    """DLinear-style branch: decompose → project seasonal & trend independently."""
+
+    def __init__(self, seq_len: int, pred_len: int, kernel_size: int = 25):
+        super().__init__()
+        self.decomp = SeriesDecomposition(kernel_size)
+        self.linear_seasonal = nn.Linear(seq_len, pred_len)
+        self.linear_trend = nn.Linear(seq_len, pred_len)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        seasonal, trend = self.decomp(x)
+        seasonal_out = self.linear_seasonal(seasonal.permute(0, 2, 1))
+        trend_out = self.linear_trend(trend.permute(0, 2, 1))
+        return (seasonal_out + trend_out).permute(0, 2, 1)
+
+
+class TransformerLSTMResidualBranch(nn.Module):
+    """
+    Hybrid residual branch: LSTM captures local sequential patterns,
+    followed by Transformer to capture global cross-time dependencies.
+    """
+
+    def __init__(self, enc_in: int, d_model: int, seq_len: int, pred_len: int, n_heads: int = 4):
+        super().__init__()
+        self.feature_proj = nn.Linear(enc_in, d_model)
+        self.lstm = nn.LSTM(
+            input_size=d_model, hidden_size=d_model,
+            num_layers=1, batch_first=True,
+        )
+        encoder_layer = nn.TransformerEncoderLayer(
+            d_model=d_model, nhead=n_heads,
+            dim_feedforward=d_model * 4, batch_first=True, dropout=0.3,
+        )
+        self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=1)
+        self.time_proj = nn.Linear(seq_len, pred_len)
+        self.channel_proj = nn.Linear(d_model, enc_in)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x_emb = self.feature_proj(x)
+        lstm_out, _ = self.lstm(x_emb)
+        tf_out = self.transformer(lstm_out)
+        out = self.time_proj(tf_out.permute(0, 2, 1)).permute(0, 2, 1)
+        return self.channel_proj(out)
+
+
+# ========== 3. Top-level Model ==========
+class Model(nn.Module):
+    """
+    DyVolFusion — Decomposition-Residual Fusion for Financial Time Series
+
+    Architecture:
+      1. RevIN normalisation
+      2. DLinear branch: seasonal-trend decomposition → linear projection (base)
+      3. TransformerLSTM branch: LSTM → Transformer → projection (residual)
+      4. Direct additive fusion: base + residual
+      5. RevIN de-normalisation
+    """
+
+    def __init__(self, configs):
+        super().__init__()
+        self.seq_len: int = configs.seq_len
+        self.pred_len: int = configs.pred_len
+        self.enc_in: int = configs.enc_in
+        self.d_model: int = configs.d_model
+        kernel_size: int = getattr(configs, "moving_avg", 25)
+
+        self.revin = RevIN(self.enc_in)
+        self.dlinear_branch = DLinearBranch(self.seq_len, self.pred_len, kernel_size)
+        self.res_branch = TransformerLSTMResidualBranch(
+            self.enc_in, self.d_model, self.seq_len, self.pred_len
+        )
+
+    def forecast(self, x_enc: torch.Tensor) -> torch.Tensor:
+        x_norm = self.revin(x_enc, "norm")
+        base = self.dlinear_branch(x_norm)
+        residual = self.res_branch(x_norm)
+        fused = base + residual
+        return self.revin(fused, "denorm")
+
+    def forward(self, x_enc, x_mark_enc, x_dec, x_mark_dec, mask=None):
+        return self.forecast(x_enc)
