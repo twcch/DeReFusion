@@ -29,7 +29,7 @@ def run_experiments():
     embed = "timeF"
     loss = "MSE"
     patience = 5
-    dropout = 0.2
+    dropout = 0.3
     des = "Exp"
     itr = 1
     use_norm = 1
@@ -37,29 +37,32 @@ def run_experiments():
     batch_size = 32
     learning_rate = 0.0001
     lradj = "cosine"
+    rand_seed = 2
 
     # 模型定義（不含隨組合變動的 model_id）
     model_configs = [
-        # {"model": "DyVolFusion", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "DyVolFusion", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         {"model": "DyVolFusion_woDy", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        {"model": "DyVolFusion_woFusion", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         {"model": "DyVolFusion_woLSTM", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
         {"model": "DyVolFusion_woTransformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        
-        # {"model": "RevINTransformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        # {"model": "RevINTransLSTM", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        # {"model": "Autoformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        # {"model": "DLinear", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        # {"model": "iTransformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        # {"model": "PatchTST", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        # {"model": "PAttn", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        # {"model": "TimesNet", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        # {"model": "TSMixer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        # {"model": "FEDformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        # {"model": "ETSformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        # {"model": "Informer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        # {"model": "Reformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
-        # {"model": "LightTS", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "Dyvolfusion_gatev1_volatilityaware", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "Dyvolfusion_gatev2_learnable", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "Dyvolfusion_gatev3_inputconditioned", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+
+        {"model": "RevINTransformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "RevINTransLSTM", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "Autoformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "DLinear", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "iTransformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "PatchTST", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "PAttn", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "TimesNet", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "TSMixer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "FEDformer", "e_layers": 2, "d_layers": 2, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "ETSformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "Informer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "Reformer", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
+        {"model": "LightTS", "e_layers": 2, "d_layers": 1, "factor": 3, "d_model": 32, "d_ff": 64, "n_heads": 2},
     ]
 
     # 建立所有 (data_name, pred_len, model_config) 的組合
@@ -69,7 +72,7 @@ def run_experiments():
         base_args = (
             f"python -u run.py"
             f" --is_training 1"
-            #f" --use_dtw"
+            f" --use_dtw"
             f" --task_name {task_name}"
             f" --root_path {root_path}"
             f" --data_path {data_path}"
@@ -94,6 +97,7 @@ def run_experiments():
             f" --batch_size {batch_size}"
             f" --learning_rate {learning_rate}"
             f" --lradj {lradj}"
+            f" --rand_seed {rand_seed}"
         )
         model_id = f"{data_name}_{seq_len}_{label_len}_{pred_len}"
         for cfg in model_configs:
