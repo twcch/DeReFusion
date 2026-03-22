@@ -7,12 +7,9 @@ import random
 import numpy as np
 
 if __name__ == '__main__':
-    fix_seed = 2021
-    random.seed(fix_seed)
-    torch.manual_seed(fix_seed)
-    np.random.seed(fix_seed)
-
     parser = argparse.ArgumentParser(description='TimesNet')
+
+    parser.add_argument('--rand_seed', type=int, default=2021, help='random seed')
 
     # basic config
     parser.add_argument('--task_name', type=str, required=True, default='long_term_forecast',
@@ -153,6 +150,11 @@ if __name__ == '__main__':
     parser.add_argument('--pos', type=int, choices=[0, 1], default=1, help='Positional Embedding. Set pos to 0 or 1')
 
     args = parser.parse_args()
+
+    random.seed(args.rand_seed)
+    torch.manual_seed(args.rand_seed)
+    np.random.seed(args.rand_seed)
+
     if torch.cuda.is_available() and args.use_gpu:
         args.device = torch.device('cuda:{}'.format(args.gpu))
         print('Using GPU')
