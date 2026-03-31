@@ -1,6 +1,5 @@
 .venv-mac/
 .venv-win/
-result_long_term_forecast_old.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
