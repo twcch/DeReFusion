@@ -80,7 +80,7 @@ class TransformerLSTMResidualBranch(nn.Module):
 # ========== 3. Top-level Model ==========
 class Model(nn.Module):
     """
-    DeReFusion — Decomposition-Residual Fusion for Financial Time Series
+    DyVolFusion — Decomposition-Residual Fusion for Financial Time Series
 
     Architecture:
       1. RevIN normalisation
