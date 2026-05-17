@@ -43,7 +43,7 @@ def run_experiments():
 
     # 共用參數
     task_name = "long_term_forecast"
-    root_path = "./dataset/2016_2025/"
+    root_path = "./dataset/"
     data = "custom"
     features = "MS"
     target = "Close"
