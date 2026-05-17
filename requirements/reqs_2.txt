@@ -30,5 +30,5 @@ jax==0.8.1
 jaxtyping==0.3.4
 orjson==3.11.5
 tensorboard==2.20.0
-python-dotenv==1.0.0
+python-dotenv==1.2.2
 ######
