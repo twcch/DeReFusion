@@ -5,6 +5,24 @@ from layers.SelfAttention_Family import FullAttention, AttentionLayer
 from layers.Embed import PatchEmbedding
 import timesfm
 
+# ---------------------------------------------------------------------------
+# Compatibility shim for huggingface_hub >= 0.26, which injects extra kwargs
+# (e.g. ``proxies``, ``resume_download``) into the model constructor during
+# ``from_pretrained``. ``TimesFM_2p5_200M_torch.__init__`` only accepts
+# ``torch_compile``/``config`` and otherwise raises
+# ``TypeError: ... got an unexpected keyword argument 'proxies'``.
+# See https://github.com/google-research/timesfm/issues/412
+# ---------------------------------------------------------------------------
+_TimesFM25 = timesfm.TimesFM_2p5_200M_torch
+if not getattr(_TimesFM25.__init__, "_ignores_hub_kwargs", False):
+    _orig_timesfm_init = _TimesFM25.__init__
+
+    def _timesfm_init(self, torch_compile=True, config=None, **_ignored):
+        _orig_timesfm_init(self, torch_compile=torch_compile, config=config)
+
+    _timesfm_init._ignores_hub_kwargs = True
+    _TimesFM25.__init__ = _timesfm_init
+
 
 class Model(nn.Module):
     def __init__(self, configs):

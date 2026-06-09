@@ -4,6 +4,7 @@ import torch.nn.functional as F
 from layers.Transformer_EncDec import Encoder, EncoderLayer
 from layers.SelfAttention_Family import ReformerLayer
 from layers.Embed import DataEmbedding
+from layers.RevIN import RevIN
 
 
 class Model(nn.Module):
@@ -21,6 +22,9 @@ class Model(nn.Module):
         self.task_name = configs.task_name
         self.pred_len = configs.pred_len
         self.seq_len = configs.seq_len
+
+        # RevIN
+        self.revin = RevIN(configs.enc_in)
 
         self.enc_embedding = DataEmbedding(configs.enc_in, configs.d_model, configs.embed, configs.freq,
                                            configs.dropout)
@@ -49,6 +53,9 @@ class Model(nn.Module):
                 configs.d_model, configs.c_out, bias=True)
 
     def long_forecast(self, x_enc, x_mark_enc, x_dec, x_mark_dec):
+        # RevIN: normalize
+        x_enc = self.revin(x_enc, 'norm')
+
         # add placeholder
         x_enc = torch.cat([x_enc, x_dec[:, -self.pred_len:, :]], dim=1)
         if x_mark_enc is not None:
@@ -59,14 +66,13 @@ class Model(nn.Module):
         enc_out, attns = self.encoder(enc_out, attn_mask=None)
         dec_out = self.projection(enc_out)
 
+        # RevIN: denormalize
+        dec_out = self.revin(dec_out, 'denorm')
         return dec_out  # [B, L, D]
-    
+
     def short_forecast(self, x_enc, x_mark_enc, x_dec, x_mark_dec):
-        # Normalization
-        mean_enc = x_enc.mean(1, keepdim=True).detach()  # B x 1 x E
-        x_enc = x_enc - mean_enc
-        std_enc = torch.sqrt(torch.var(x_enc, dim=1, keepdim=True, unbiased=False) + 1e-5).detach()  # B x 1 x E
-        x_enc = x_enc / std_enc
+        # RevIN: normalize
+        x_enc = self.revin(x_enc, 'norm')
 
         # add placeholder
         x_enc = torch.cat([x_enc, x_dec[:, -self.pred_len:, :]], dim=1)
@@ -78,26 +84,37 @@ class Model(nn.Module):
         enc_out, attns = self.encoder(enc_out, attn_mask=None)
         dec_out = self.projection(enc_out)
 
-        dec_out = dec_out * std_enc + mean_enc
+        # RevIN: denormalize
+        dec_out = self.revin(dec_out, 'denorm')
         return dec_out  # [B, L, D]
 
     def imputation(self, x_enc, x_mark_enc):
+        # RevIN: normalize
+        x_enc = self.revin(x_enc, 'norm')
         enc_out = self.enc_embedding(x_enc, x_mark_enc)  # [B,T,C]
 
         enc_out, attns = self.encoder(enc_out)
         enc_out = self.projection(enc_out)
 
+        # RevIN: denormalize
+        enc_out = self.revin(enc_out, 'denorm')
         return enc_out  # [B, L, D]
 
     def anomaly_detection(self, x_enc):
+        # RevIN: normalize
+        x_enc = self.revin(x_enc, 'norm')
         enc_out = self.enc_embedding(x_enc, None)  # [B,T,C]
 
         enc_out, attns = self.encoder(enc_out)
         enc_out = self.projection(enc_out)
 
+        # RevIN: denormalize
+        enc_out = self.revin(enc_out, 'denorm')
         return enc_out  # [B, L, D]
 
     def classification(self, x_enc, x_mark_enc):
+        # RevIN: normalize (no denorm — output is class logits)
+        x_enc = self.revin(x_enc, 'norm')
         # enc
         enc_out = self.enc_embedding(x_enc, None)
         enc_out, attns = self.encoder(enc_out)

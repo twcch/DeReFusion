@@ -26,6 +26,20 @@ class Exp_Long_Term_Forecast(Exp_Basic):
             model = nn.DataParallel(model, device_ids=self.args.device_ids)
         return model
 
+    def _count_parameters(self):
+        total = sum(p.numel() for p in self.model.parameters())
+        trainable = sum(p.numel() for p in self.model.parameters() if p.requires_grad)
+        return total, trainable
+
+    def _reset_gpu_peak_memory(self):
+        if self.device.type == 'cuda':
+            torch.cuda.reset_peak_memory_stats(self.device)
+
+    def _get_gpu_peak_memory_mb(self):
+        if self.device.type == 'cuda':
+            return torch.cuda.max_memory_allocated(self.device) / (1024 ** 2)
+        return None
+
     def _get_data(self, flag):
         data_set, data_loader = data_provider(self.args, flag)
         return data_set, data_loader
@@ -82,6 +96,7 @@ class Exp_Long_Term_Forecast(Exp_Basic):
         if not os.path.exists(path):
             os.makedirs(path)
 
+        self._reset_gpu_peak_memory()
         train_start_time = time.time()
         time_now = time.time()
 
@@ -173,6 +188,8 @@ class Exp_Long_Term_Forecast(Exp_Basic):
         if test:
             print('loading model')
             self.model.load_state_dict(torch.load(os.path.join('./checkpoints/' + setting, 'checkpoint.pth')))
+            # standalone test (no training in this process): measure inference-only peak memory
+            self._reset_gpu_peak_memory()
 
         preds = []
         trues = []
@@ -270,12 +287,19 @@ class Exp_Long_Term_Forecast(Exp_Basic):
         mae, mse, rmse, mape, mspe, r2 = metric(preds, trues)
         train_time_str = ', train_time:{:.2f}s'.format(train_time) if train_time is not None else ''
         inference_str = ', inference_time:{:.4f}ms/sample ({} samples, {:.4f}s total)'.format(inference_speed_ms, total_samples, inference_time_total)
-        print('mse:{}, mae:{}, rmse:{}, mape:{}, mspe:{}, r2:{}, dtw:{}, time:{:.2f}s{}{}'.format(
-            mse, mae, rmse, mape, mspe, r2, dtw, test_elapsed, train_time_str, inference_str))
+
+        total_params, trainable_params = self._count_parameters()
+        gpu_mem_peak = self._get_gpu_peak_memory_mb()
+        gpu_mem_val = '{:.2f}'.format(gpu_mem_peak) if gpu_mem_peak is not None else 'nan'
+        model_stats_str = ', params:{}, trainable_params:{}, gpu_mem_peak_mb:{}'.format(
+            total_params, trainable_params, gpu_mem_val)
+
+        print('mse:{}, mae:{}, rmse:{}, mape:{}, mspe:{}, r2:{}, dtw:{}, time:{:.2f}s{}{}{}'.format(
+            mse, mae, rmse, mape, mspe, r2, dtw, test_elapsed, train_time_str, inference_str, model_stats_str))
         f = open("result_long_term_forecast.txt", 'a')
         f.write(setting + "  \n")
-        f.write('mse:{}, mae:{}, rmse:{}, mape:{}, mspe:{}, r2:{}, dtw:{}, time:{:.2f}s{}{}'.format(
-            mse, mae, rmse, mape, mspe, r2, dtw, test_elapsed, train_time_str, inference_str))
+        f.write('mse:{}, mae:{}, rmse:{}, mape:{}, mspe:{}, r2:{}, dtw:{}, time:{:.2f}s{}{}{}'.format(
+            mse, mae, rmse, mape, mspe, r2, dtw, test_elapsed, train_time_str, inference_str, model_stats_str))
         f.write('\n')
         f.write('\n')
         f.close()

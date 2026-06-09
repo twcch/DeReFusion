@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from layers.Autoformer_EncDec import series_decomp
+from layers.RevIN import RevIN
 
 
 class Model(nn.Module):
@@ -24,6 +25,8 @@ class Model(nn.Module):
         self.decompsition = series_decomp(configs.moving_avg)
         self.individual = individual
         self.channels = configs.enc_in
+        # RevIN
+        self.revin = RevIN(configs.enc_in)
 
         if self.individual:
             self.Linear_Seasonal = nn.ModuleList()
@@ -96,15 +99,22 @@ class Model(nn.Module):
 
     def forward(self, x_enc, x_mark_enc, x_dec, x_mark_dec, mask=None):
         if self.task_name == 'long_term_forecast' or self.task_name == 'short_term_forecast':
+            x_enc = self.revin(x_enc, 'norm')
             dec_out = self.forecast(x_enc)
+            dec_out = self.revin(dec_out, 'denorm')
             return dec_out[:, -self.pred_len:, :]  # [B, L, D]
         if self.task_name == 'imputation':
+            x_enc = self.revin(x_enc, 'norm')
             dec_out = self.imputation(x_enc)
+            dec_out = self.revin(dec_out, 'denorm')
             return dec_out  # [B, L, D]
         if self.task_name == 'anomaly_detection':
+            x_enc = self.revin(x_enc, 'norm')
             dec_out = self.anomaly_detection(x_enc)
+            dec_out = self.revin(dec_out, 'denorm')
             return dec_out  # [B, L, D]
         if self.task_name == 'classification':
+            x_enc = self.revin(x_enc, 'norm')
             dec_out = self.classification(x_enc)
             return dec_out  # [B, N]
         return None

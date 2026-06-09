@@ -46,6 +46,10 @@ if __name__ == '__main__':
     # model define
     parser.add_argument('--expand', type=int, default=2, help='expansion factor for Mamba')
     parser.add_argument('--d_conv', type=int, default=4, help='conv kernel size for Mamba')
+    parser.add_argument('--tv_dt', type=int, default=0, help='whether to use time variant dt for MambaSL')
+    parser.add_argument('--tv_B', type=int, default=0, help='whether to use time variant B for MambaSL')
+    parser.add_argument('--tv_C', type=int, default=0, help='whether to use time variant C for MambaSL')
+    parser.add_argument('--use_D', type=int, default=0, help='whether to use D for MambaSL')
     parser.add_argument('--top_k', type=int, default=5, help='for TimesBlock')
     parser.add_argument('--num_kernels', type=int, default=6, help='for Inception')
     parser.add_argument('--enc_in', type=int, default=7, help='encoder input size')

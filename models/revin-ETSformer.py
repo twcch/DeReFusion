@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 from layers.Embed import DataEmbedding
 from layers.ETSformer_EncDec import EncoderLayer, Encoder, DecoderLayer, Decoder, Transform
+from layers.RevIN import RevIN
 
 
 class Model(nn.Module):
@@ -20,6 +21,9 @@ class Model(nn.Module):
             self.pred_len = configs.pred_len
 
         assert configs.e_layers == configs.d_layers, "Encoder and decoder layers must be equal"
+
+        # RevIN
+        self.revin = RevIN(configs.enc_in)
 
         # Embedding
         self.enc_embedding = DataEmbedding(configs.enc_in, configs.d_model, configs.embed, configs.freq,
@@ -53,6 +57,8 @@ class Model(nn.Module):
             self.projection = nn.Linear(configs.d_model * configs.seq_len, configs.num_class)
 
     def forecast(self, x_enc, x_mark_enc, x_dec, x_mark_dec):
+        # RevIN: normalize
+        x_enc = self.revin(x_enc, 'norm')
         with torch.no_grad():
             if self.training:
                 x_enc = self.transform.transform(x_enc)
@@ -61,23 +67,35 @@ class Model(nn.Module):
 
         growth, season = self.decoder(growths, seasons)
         preds = level[:, -1:] + growth + season
+        # RevIN: denormalize
+        preds = self.revin(preds, 'denorm')
         return preds
 
     def imputation(self, x_enc, x_mark_enc, x_dec, x_mark_dec, mask):
+        # RevIN: normalize
+        x_enc = self.revin(x_enc, 'norm')
         res = self.enc_embedding(x_enc, x_mark_enc)
         level, growths, seasons = self.encoder(res, x_enc, attn_mask=None)
         growth, season = self.decoder(growths, seasons)
         preds = level[:, -1:] + growth + season
+        # RevIN: denormalize
+        preds = self.revin(preds, 'denorm')
         return preds
 
     def anomaly_detection(self, x_enc):
+        # RevIN: normalize
+        x_enc = self.revin(x_enc, 'norm')
         res = self.enc_embedding(x_enc, None)
         level, growths, seasons = self.encoder(res, x_enc, attn_mask=None)
         growth, season = self.decoder(growths, seasons)
         preds = level[:, -1:] + growth + season
+        # RevIN: denormalize
+        preds = self.revin(preds, 'denorm')
         return preds
 
     def classification(self, x_enc, x_mark_enc):
+        # RevIN: normalize (no denorm — output is class logits)
+        x_enc = self.revin(x_enc, 'norm')
         res = self.enc_embedding(x_enc, None)
         _, growths, seasons = self.encoder(res, x_enc, attn_mask=None)
 

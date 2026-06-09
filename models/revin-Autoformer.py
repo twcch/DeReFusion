@@ -4,6 +4,7 @@ import torch.nn.functional as F
 from layers.Embed import DataEmbedding, DataEmbedding_wo_pos
 from layers.AutoCorrelation import AutoCorrelation, AutoCorrelationLayer
 from layers.Autoformer_EncDec import Encoder, Decoder, EncoderLayer, DecoderLayer, my_Layernorm, series_decomp
+from layers.RevIN import RevIN
 import math
 import numpy as np
 
@@ -21,6 +22,9 @@ class Model(nn.Module):
         self.seq_len = configs.seq_len
         self.label_len = configs.label_len
         self.pred_len = configs.pred_len
+
+        # RevIN
+        self.revin = RevIN(configs.enc_in)
 
         # Decomp
         kernel_size = configs.moving_avg
@@ -86,6 +90,9 @@ class Model(nn.Module):
                 configs.d_model * configs.seq_len, configs.num_class)
 
     def forecast(self, x_enc, x_mark_enc, x_dec, x_mark_dec):
+        # RevIN: normalize
+        x_enc = self.revin(x_enc, 'norm')
+
         # decomp init
         mean = torch.mean(x_enc, dim=1).unsqueeze(
             1).repeat(1, self.pred_len, 1)
@@ -106,25 +113,37 @@ class Model(nn.Module):
                                                  trend=trend_init)
         # final
         dec_out = trend_part + seasonal_part
+        # RevIN: denormalize
+        dec_out = self.revin(dec_out, 'denorm')
         return dec_out
 
     def imputation(self, x_enc, x_mark_enc, x_dec, x_mark_dec, mask):
+        # RevIN: normalize
+        x_enc = self.revin(x_enc, 'norm')
         # enc
         enc_out = self.enc_embedding(x_enc, x_mark_enc)
         enc_out, attns = self.encoder(enc_out, attn_mask=None)
         # final
         dec_out = self.projection(enc_out)
+        # RevIN: denormalize
+        dec_out = self.revin(dec_out, 'denorm')
         return dec_out
 
     def anomaly_detection(self, x_enc):
+        # RevIN: normalize
+        x_enc = self.revin(x_enc, 'norm')
         # enc
         enc_out = self.enc_embedding(x_enc, None)
         enc_out, attns = self.encoder(enc_out, attn_mask=None)
         # final
         dec_out = self.projection(enc_out)
+        # RevIN: denormalize
+        dec_out = self.revin(dec_out, 'denorm')
         return dec_out
 
     def classification(self, x_enc, x_mark_enc):
+        # RevIN: normalize (no denorm — output is class logits)
+        x_enc = self.revin(x_enc, 'norm')
         # enc
         enc_out = self.enc_embedding(x_enc, None)
         enc_out, attns = self.encoder(enc_out, attn_mask=None)

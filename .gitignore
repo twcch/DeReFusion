@@ -1,6 +1,5 @@
-tools/
-run_batch.py
-result_long_term_forecast.xlsx
+run_batch_long_term_forecast.py
+run_batch_zero_shot_forecast.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
