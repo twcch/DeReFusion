@@ -116,7 +116,7 @@ class Model(nn.Module):
         x_norm = self.revin(x_enc, "norm")
         base = self.dlinear_branch(x_norm)
         residual = self.res_branch(x_norm)
-        # Gate 使用原始輸入 (x_enc) 的波動率
+        # Gate uses the volatility of the raw input (x_enc)
         fused = self.gate(x_enc, base, residual)
         return self.revin(fused, "denorm")
 

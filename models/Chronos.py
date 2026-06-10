@@ -9,8 +9,8 @@ from chronos import BaseChronosPipeline
 class Model(nn.Module):
     def __init__(self, configs):
         """
-        patch_len: int, patch len for patch_embedding
-        stride: int, stride for patch_embedding
+        Load the pretrained Chronos-Bolt pipeline and read task settings
+        (task_name, seq_len, pred_len) from configs.
         """
         super().__init__()
         self.model = BaseChronosPipeline.from_pretrained(

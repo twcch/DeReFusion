@@ -148,7 +148,7 @@ class Model(nn.Module):
         enc_out = self.encoder(x_enc)
 
         # Output
-        output = enc_out.reshape(enc_out.shape[0], -1)  # (batch_size, seq_length * d_model)
+        output = enc_out.reshape(enc_out.shape[0], -1)  # (batch_size, seq_length * enc_in)
         output = self.projection(output)  # (batch_size, num_classes)
         return output
 

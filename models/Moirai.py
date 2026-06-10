@@ -12,8 +12,8 @@ from uni2ts.model.moirai2 import Moirai2Forecast, Moirai2Module
 class Model(nn.Module):
     def __init__(self, configs):
         """
-        patch_len: int, patch len for patch_embedding
-        stride: int, stride for patch_embedding
+        Wraps a pretrained Moirai-2 forecasting model.
+        configs.pred_len sets the prediction length and configs.seq_len sets the context length.
         """
         super().__init__()
         self.model = Moirai2Forecast(

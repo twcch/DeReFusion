@@ -9,7 +9,7 @@ from layers.RevIN import RevIN
 
 class Model(nn.Module):
     """
-    Informer with Propspare attention in O(LlogL) complexity
+    Informer with ProbSparse attention in O(LlogL) complexity
     Paper link: https://ojs.aaai.org/index.php/AAAI/article/view/17325/17132
     """
 

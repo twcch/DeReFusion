@@ -27,8 +27,9 @@ if not getattr(_TimesFM25.__init__, "_ignores_hub_kwargs", False):
 class Model(nn.Module):
     def __init__(self, configs):
         """
-        patch_len: int, patch len for patch_embedding
-        stride: int, stride for patch_embedding
+        Load the pretrained TimesFM 2.5 (200M) PyTorch model and compile it
+        with a ForecastConfig derived from configs (max_context=seq_len,
+        max_horizon=pred_len).
         """
         super().__init__()
 
