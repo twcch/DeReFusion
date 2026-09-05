@@ -1,8 +1,9 @@
 # DeReFusion
 
 **Official code for the paper**
-**_DeReFusion: A Controlled Comparison of Soft Computing Fusion Strategies for Financial Time Series Forecasting via a Decomposition-Residual Architecture_**
+**[_DeReFusion: A Controlled Comparison of Soft Computing Fusion Strategies for Financial Time Series Forecasting via a Decomposition-Residual Architecture_](https://doi.org/10.1016/j.asoc.2026.116252)** (*Applied Soft Computing*, 2026)
 
+[![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.asoc.2026.116252-blue.svg)](https://doi.org/10.1016/j.asoc.2026.116252)
 [![Python 3.11](https://img.shields.io/badge/Python-3.11-blue.svg)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.5.1-EE4C2C.svg)](https://pytorch.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
@@ -393,7 +394,7 @@ python -m utils.visualization --input results/<setting>/ --output test_results/<
 
 The registry ([`exp/exp_basic.py`](./exp/exp_basic.py)) **auto-discovers** models: drop a `.py` file anywhere under [`models/`](./models/) that defines a class named `Model`, and its filename (without `.py`) becomes the `--model` string — no manual registration, and the module is lazily imported only when selected. This is exactly how the RevIN baselines (`revin-*.py`) and the DeReFusion family are wired in. An unknown `--model` name raises a `ValueError` listing the discovered models.
 
-<!-- ---
+---
 
 ## Citation
 
@@ -401,14 +402,17 @@ If you use this code or build on the benchmark, please cite the paper:
 
 ```bibtex
 @article{hsieh2026derefusion,
-  title   = {DeReFusion: A Decomposition--Residual Fusion Forecaster for
-             Non-Stationary Financial Time Series},
-  author  = {Hsieh, Chih-Chien},
-  year    = {2026}
+  title   = {{DeReFusion}: A controlled comparison of soft computing fusion strategies for financial time series forecasting via a decomposition-residual architecture},
+  author  = {Hsieh, Chih-Chien and Chen, Mu-Yen},
+  journal = {Applied Soft Computing},
+  volume  = {203},
+  pages   = {116252},
+  year    = {2026},
+  issn    = {1568-4946},
+  doi     = {10.1016/j.asoc.2026.116252},
+  url     = {https://doi.org/10.1016/j.asoc.2026.116252}
 }
 ```
-
-> Bibliographic details (journal, volume, DOI) will be completed upon publication. -->
 
 ---
 
