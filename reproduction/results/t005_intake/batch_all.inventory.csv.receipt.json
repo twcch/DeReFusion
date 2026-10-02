@@ -1,0 +1,8 @@
+{
+  "created_utc": "2026-09-16T08:29:20.962615+00:00",
+  "executor_reported_commit": "d17822f",
+  "inventory": "C:\\Users\\26843\\Desktop\\project\\repos\\DeReFusion\\reproduction\\results\\t005_intake\\batch_all.inventory.csv",
+  "runs_passing": 54,
+  "runs_seen": 87,
+  "source": "C:\\Users\\26843\\lobster-link\\geng-lobster\\T005-c1"
+}

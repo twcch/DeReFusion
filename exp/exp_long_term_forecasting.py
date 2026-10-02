@@ -2,6 +2,7 @@ from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.tools import EarlyStopping, adjust_learning_rate, visual
 from utils.metrics import metric
+from utils import recovery
 import torch
 import torch.nn as nn
 from torch import optim
@@ -109,7 +110,12 @@ class Exp_Long_Term_Forecast(Exp_Basic):
         if self.args.use_amp:
             scaler = torch.cuda.amp.GradScaler()
 
-        for epoch in range(self.args.train_epochs):
+        start_epoch, elapsed_before = self._resume_from_snapshot(
+            setting, path, model_optim, early_stopping,
+            scaler if self.args.use_amp else None)
+        train_start_time -= elapsed_before
+
+        for epoch in range(start_epoch, self.args.train_epochs):
             iter_count = 0
             train_loss = []
 
@@ -165,23 +171,69 @@ class Exp_Long_Term_Forecast(Exp_Basic):
             print("Epoch: {} cost time: {}".format(epoch + 1, time.time() - epoch_time))
             train_loss = np.average(train_loss)
             vali_loss = self.vali(vali_data, vali_loader, criterion)
-            test_loss = self.vali(test_data, test_loader, criterion)
-
-            print("Epoch: {0}, Steps: {1} | Train Loss: {2:.7f} Vali Loss: {3:.7f} Test Loss: {4:.7f}".format(
-                epoch + 1, train_steps, train_loss, vali_loss, test_loss))
+            # The test split is deliberately untouched during training.  Earlier revisions
+            # printed test loss every epoch (while still selecting checkpoints only on
+            # validation loss).  Removing that diagnostic closes a human-in-the-loop leakage
+            # channel and keeps the test set for the single final evaluation below.
+            print("Epoch: {0}, Steps: {1} | Train Loss: {2:.7f} Vali Loss: {3:.7f}".format(
+                epoch + 1, train_steps, train_loss, vali_loss))
             early_stopping(vali_loss, self.model, path)
             if early_stopping.early_stop:
                 print("Early stopping")
                 break
 
             adjust_learning_rate(model_optim, epoch + 1, self.args)
+            # Written after the learning-rate step, so the snapshot's optimizer
+            # already carries the rate that epoch+1 will run with.  A kill
+            # between here and the next save therefore costs exactly one epoch.
+            self._save_snapshot(
+                setting, path, epoch + 1, time.time() - train_start_time,
+                model_optim, early_stopping, scaler if self.args.use_amp else None)
 
         train_elapsed = time.time() - train_start_time
 
         best_model_path = path + '/' + 'checkpoint.pth'
         self.model.load_state_dict(torch.load(best_model_path))
+        if self._recovery_enabled():
+            recovery.discard_snapshot(recovery.snapshot_path(path))
 
         return self.model, train_elapsed
+
+    def _recovery_enabled(self):
+        return bool(getattr(self.args, 'enable_recovery', False))
+
+    def _resume_from_snapshot(self, setting, path, model_optim, early_stopping, amp_scaler):
+        """Continue the run this setting already started, if one is on disk."""
+        if not self._recovery_enabled():
+            return 0, 0.0
+        snapshot = recovery.read_snapshot(recovery.snapshot_path(path), setting)
+        if snapshot is None:
+            return 0, 0.0
+        self.model.load_state_dict(snapshot['model'])
+        model_optim.load_state_dict(snapshot['optimizer'])
+        early_stopping.load_state_dict(snapshot['early_stopping'])
+        if amp_scaler is not None:
+            amp_scaler.load_state_dict(snapshot['amp_scaler'])
+        recovery.restore_rng(snapshot['rng'])
+        print('>>>>>>>resuming : {} at epoch {}>>>>>>>>>>>>>>>>'.format(
+            setting, snapshot['next_epoch'] + 1))
+        return snapshot['next_epoch'], snapshot['elapsed_seconds']
+
+    def _save_snapshot(self, setting, path, next_epoch, elapsed_seconds,
+                       model_optim, early_stopping, amp_scaler):
+        if not self._recovery_enabled():
+            return
+        recovery.write_snapshot(recovery.snapshot_path(path), {
+            'snapshot_version': recovery.SNAPSHOT_VERSION,
+            'identity': setting,
+            'next_epoch': next_epoch,
+            'elapsed_seconds': elapsed_seconds,
+            'model': self.model.state_dict(),
+            'optimizer': model_optim.state_dict(),
+            'early_stopping': early_stopping.state_dict(),
+            'amp_scaler': amp_scaler.state_dict() if amp_scaler is not None else None,
+            'rng': recovery.capture_rng(),
+        })
 
     def test(self, setting, test=0, train_time=None):
         test_data, test_loader = self._get_data(flag='test')
@@ -296,7 +348,9 @@ class Exp_Long_Term_Forecast(Exp_Basic):
 
         print('mse:{}, mae:{}, rmse:{}, mape:{}, mspe:{}, r2:{}, dtw:{}, time:{:.2f}s{}{}{}'.format(
             mse, mae, rmse, mape, mspe, r2, dtw, test_elapsed, train_time_str, inference_str, model_stats_str))
-        f = open("result_long_term_forecast.txt", 'a')
+        result_log_dir = os.path.dirname(os.path.abspath(self.args.result_log))
+        os.makedirs(result_log_dir, exist_ok=True)
+        f = open(self.args.result_log, 'a')
         f.write(setting + "  \n")
         f.write('mse:{}, mae:{}, rmse:{}, mape:{}, mspe:{}, r2:{}, dtw:{}, time:{:.2f}s{}{}{}'.format(
             mse, mae, rmse, mape, mspe, r2, dtw, test_elapsed, train_time_str, inference_str, model_stats_str))

@@ -1,0 +1,416 @@
+{
+  "checkpoint_sha256": "7a657cd87e5be2bdfb7f990be67ed24be3ed5e761d5932e61dd227b4d0820993",
+  "differences": {
+    "bitwise_equal": false,
+    "max_absolute_prediction_difference": 4.76837158203125e-07,
+    "mean_squared_prediction_difference": 8.040087533353326e-17,
+    "numerical_equivalence_claim": false,
+    "numerical_equivalence_threshold": "TBD",
+    "prediction_difference_l2": 1.1680077279964342e-06,
+    "reference_mse_float64": 0.22205392301582405,
+    "relative_prediction_difference_l2": 2.0626776225212394e-09,
+    "replay_mse_float64": 0.22205392300338073,
+    "signed_mse_difference_float64": -1.2443324148847523e-11
+  },
+  "effective_root_path": "C:\\Users\\26843\\Documents\\ChatGPT\\redefusion\\dataset",
+  "elapsed_seconds": 0.25,
+  "inference": {
+    "amp": false,
+    "batch_size": 32,
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "dataset_arrays_sha256": {
+      "data_stamp": "5af2b20bb6311b05778504782c211913eb43e1024b37955e8a872c5f962ff319",
+      "data_x": "36a2f5a1d5281b84931f1352f860233730fa7d90b08ce0676ec06662b2549ae7",
+      "data_y": "36a2f5a1d5281b84931f1352f860233730fa7d90b08ce0676ec06662b2549ae7"
+    },
+    "deterministic_algorithms": true,
+    "deterministic_warn_only": true,
+    "drop_last": false,
+    "gradient_mode": "inference_mode",
+    "input_batches": [
+      {
+        "batch_index": 0,
+        "float32_tensors_sha256": [
+          "f009edb5c151b17829721a65e0aba9f3488b25f5e37c6b077d30086498798e13",
+          "2b376fcae0e8d086c619d7135db9b13748535c4edf20867698e73d5e408e960c",
+          "590e7712581b859293bc84460c32770d301ad466318ac5fdb4b71d719cf4de0b",
+          "8029be4f5284710638bc688854c5e78f5b6f3d4fe01d42991b68a158013d5e15"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 1,
+        "float32_tensors_sha256": [
+          "9fc6541a48afe6242142d787325c7dbe400410bed8703b29fffa5ea735c64658",
+          "ceef1a7043c01f8d52cfaabb79588403ff7ccc22884df7b98ddb726e1ab9c30b",
+          "f59fe574d05b2d82b34d618a962e74823c223713eaa00d21e91cc756f59b4b34",
+          "0aa9bc894110827cead17c730b3954755ebb015ab8e37c851907270471e54543"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 2,
+        "float32_tensors_sha256": [
+          "56df120601b8d6e39335ac7e82d4a0d41df4fe4b958b9575c878337c78d3e8d0",
+          "2b056d2a90757f1b1a954aca3854b7bef17790fc27bec576e8bde4164cb7ee44",
+          "78d31dc68b3a61cf0f532e2a8e7fd8e3f643c4a8c3ffe63402915954e314b95a",
+          "2fed9a2ca19f5598c682f7a12aadbf32b6e28b5af7cf8086ae7d63fd81544634"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 3,
+        "float32_tensors_sha256": [
+          "817b88791bc4757ed738e9cf5a77f8cf06e13fc42855a1bce21aacf2fc8e8dea",
+          "c55f53421666ea124145751ba00ad9b4ede9a486b61fe6b9c17090a5e33d2f6d",
+          "f153ed28a3b3e6605876f7cb82ff20741a580d7dce8cf3cb0e03c44eccca276a",
+          "4518b3f17244c3078cda3c74a37df29948dbf3e49f7de3c7782a8d57897317e6"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 4,
+        "float32_tensors_sha256": [
+          "9fd2982e3f2991907a6a8a201d88ad987de31f477c542c337dff65ec7bfc851d",
+          "8ff0b70a54b4783fb5c5c742268d66bb40e617ee78d33fce494772f9104c908f",
+          "d4d24102843828cf7e0b09a0291e0b0e245a2227e4280bd83f2042ec4b278da2",
+          "57ba488f7f0f8d943c11c40990c9b84a5bf8d170af1ab14f688894cb02d82080"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 5,
+        "float32_tensors_sha256": [
+          "df08b0851ab3610d5398b3fdb64610342d03540aed8f0d01591f6017c8ca0328",
+          "ebd71d0eb535eb21899a567daa7a7e3301277dbfec40b96ccbcea93c8ce54901",
+          "58f266f4c7876277f03dfc29a86262ce85a0cb29dbb141382f1d69ca783f1f1d",
+          "33bafb7a0e74d3f75a0376d1605754475049ed8acc65ab96599ecd62952e070f"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 6,
+        "float32_tensors_sha256": [
+          "003bc84bc593082f66cffb87a2ebd138c8b238dd166ddeb65a474f758cfaf9c7",
+          "14b172f1d3ccb5b7aae346ed52d46dda08f2082b903d7eadf0d98c7d9af0b0d7",
+          "d0d45325c1a01bbec9d0c6a6c433263790238ac21054dc10415ffa094f7e3ce1",
+          "e2b1f70d931e4bffd5097d2c33618e6996aa6f1ef0ec36398fefc65e6c4a6efe"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 7,
+        "float32_tensors_sha256": [
+          "b0322ddeb224336046bf95022c763c1684066744500613ce09b1c6e3a56a68cc",
+          "e6507034fb51a52f10b0f78921f6752c7fed0d4c03d19c6ec058e30bdbd29829",
+          "b1b723878a1ad3ee2120cbc82e7e008df4415f5102c35764528036ab78d46069",
+          "d1a9efc48831bc6ec88d9994811d79b3a71ea4d8a0fe0e5e57c1c6e97803ea0b"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 8,
+        "float32_tensors_sha256": [
+          "2127ef697fc4cd09faf79f3dc61077dc50769aed536f128286ab757b49384a7f",
+          "7a7003e4bf4c6b3ffd9e8bb74e9b93813ff3012381c43696d10cead3f8077d0a",
+          "2ad4e9f2ef19546f10a8ef29387591e6a430d1ddb1af723c981ce3bbee270c39",
+          "bf4ac54e00600f004f2bef1fd1dac23fa28b49c62680c86fc34c8dbd3cb51279"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 9,
+        "float32_tensors_sha256": [
+          "4d5889d1b5649739fe680c2f43bcf8f3c7afc8535a459187ca51f09f24bc4bd4",
+          "db6c81c237dc6039382e1318df198279a837ddadcab0bef64dbb9ea3d2d09e11",
+          "4fb060823a0e3b0782e1c6883ba3aa8a5f503fe507ffad24294dd69880bf10db",
+          "f5f9ec97b73060b42a76d9cc13478d47abb360136c424f1b426cd924441d366c"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 10,
+        "float32_tensors_sha256": [
+          "5d1485bf27d5ea8c16b7f6f9e1eca182ee1b756d2a57e94999b6299bb5baf6b3",
+          "03d5b557dfafcdd34a310a1b57f390c7e98aedbeb96f4f83e0c7b8cb42d4c619",
+          "08369d3747922b398c10c65cb49f1af41f1eedfb0c7abc76a235281a303b59b1",
+          "24845b135098cc6641025edb1a2dc6db58036267573f828172409434fcd5fd53"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 11,
+        "float32_tensors_sha256": [
+          "92b2edf97821fb35542de30204992e68d16f0508f0d2610080b66f2debc228c8",
+          "4218b23d961f67f7ab0e08807e8f66b015c8d5b6f96bd3ab68d3f560153d16ac",
+          "b7eb3388301d99fd2ab8a2080b29dc49b962edd0ec49bb928ccd4c29ee0f6c18",
+          "fafe2cff38b755754864383625dbdfdd113550edd3754d80841fb16be6fe7aa2"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 12,
+        "float32_tensors_sha256": [
+          "421395d342008a5c54df994c44ebcd39c005f99b3329efaf959fb055a3b7a5b3",
+          "ec13f8d68695e29c15167868b927df2c1734deb27127d00dd3df9edb3dcee415",
+          "f60c0153e25f7ab3676829ada1badf500bc53d6dbdd9d5145dbe089e3bca23b4",
+          "b2d29b7ec806d08063b74d15852ff88e9cabb9d6833e1a4783f4c853ef8ce963"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 13,
+        "float32_tensors_sha256": [
+          "721fada1278a4328171f9f2ade8abb7040b42a428eebbd84f57b5cb8e818ea59",
+          "46bbce9763dc00c9b15cf3a825d46f09c4125c22652b668e0beab210bf5cf21c",
+          "ef68213d7f3b60afd2c3ab271fcd91d3d253f55f14e498a3175aa253dc31bae5",
+          "3034289659e936ba75525bc0d811650dd00ac6a7a9b3cd573c47fd8ae3a3ff06"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 14,
+        "float32_tensors_sha256": [
+          "03607768591e49c7daf77b5161bc3699e74fe0241b28f699e3395ea60fe03d7e",
+          "20d5c747e9785c8d335d5e1fded6afa572cca70c7206825f9c5db1bdde362ad4",
+          "773fd5ce4e396def5c698855b00f64b290c3cb20a6ab0ea9b2eb22a34783e53f",
+          "3b36e1540062d2ab2de2509769b81cec9a572973b9449cbbf5558635be9a3972"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 15,
+        "float32_tensors_sha256": [
+          "6e2abad9216831eaf29ccb6b4718be54ff16fd0216089d92b222b358b4ca84ec",
+          "1797c99e892515ca5438afc9eaf01a6f699fb7def07ca884e618d4969731e99b",
+          "6c92de1e24a7615fe37f121df7c35defc53b99df28c4bdb54dba8300fc482680",
+          "b5bf531e3f9e44d83c69795a8745d6a0d47eccbdab3bfed671a27be2a009a259"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 16,
+        "float32_tensors_sha256": [
+          "b5a83b80fcc79d179e27dd98d0b753665b1f49b463fcbe8a7e507a3780d1be32",
+          "5615cb794b1eb12862b34406ec86e2cfa97ba7691ac2d0fd6cd5544df264c976",
+          "d9da79c6cd7fdbc0ffb41b0d448684a368c3df692c655f9e3c371aaa4d6be268",
+          "2ed9b1090abe15a75bf0f0b505159b6cfffa0f8b1c69be6a483a9840487dbd3d"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 17,
+        "float32_tensors_sha256": [
+          "2970ccb27d0053a2d1613f92987a750e27c2e46fc972ded81cf2d81db418f69f",
+          "aabce1099a55340ff2023bb54a6db4879e851fc621c62801c4df5089dea6d8a3",
+          "46ea3a7ac771bd860c26b04171c72ab93562ee0601c4d16c7c5282ba2da789c5",
+          "37a61a5680248198a1a8a4252ef25df925e064083b4a0168180a5e11a7fa64ce"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 18,
+        "float32_tensors_sha256": [
+          "d697048008cb45be3c570895cdc4c41a3aee40e4acd0edc86e0acd93a6f64230",
+          "9a59adc144d4f9df964d08b0d3d526bc212ee07ceeb23cbe4b4a3a897afacdfe",
+          "b6de492bf2a139757172550becbdde12930def9ed2482b42775f981026b00eea",
+          "07688799b5f5ecf6729b97fb96588e0ed44c61728c07ffbb135be188809fc69a"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 19,
+        "float32_tensors_sha256": [
+          "db80266e0de553652aee3833954f0a135e339a13ee2b932fa89a9ff37264ae60",
+          "3b70ff5fe7d596c114b8e0c91e0cd60dd8b30a19f83f2c077f8b4e5c8b5cf224",
+          "7ff99b6ae5da85ab066e3d40f7265d899e7b63756c7fcbb15fd2b5304488f3df",
+          "8b951f6fc7de8860b61088ce0792f1c9911869950a42bee013603b33a9a91ec5"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 20,
+        "float32_tensors_sha256": [
+          "4389cd01e2377235a11aeba96d924b418faf345a11b915253382cce4f35c5654",
+          "4955f8df3c41dfffd8005f406bb6c40d61da131aeab823724a52279770ded6f6",
+          "1554fc9910096fad88d19f678be6685f627bca00ba244b953974163cca24f8fc",
+          "bb357e92f3e401c1f6a31179ab197015548f4fb0d150680343d674db1717ae8f"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 21,
+        "float32_tensors_sha256": [
+          "33e9e77fa4b1391b9a7e0bf0317d7ea9ddb8546e3712cbb2eaf33d132ec382d3",
+          "e8bc5e27daea0b874685389d7f3c8151b1d24545cbc26f5e33f0e1aeb18ea97e",
+          "623f7116957ad7afed297922aefd8d9684600fa3e5542f6fa6dbc8336d89a702",
+          "55937a0a9a76ad548bf17ab8e5bf85a45548abeb9d7c08aeb07f512e4cb23e68"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 22,
+        "float32_tensors_sha256": [
+          "d44e435c1f33908bc5392f0c47ff0790c72d43657e1bc1da161cee4d05920bbc",
+          "f8d37c765996829bf7d463582ded27c6e33e8f60fea20d32bbfedcc949fb3bcc",
+          "39137b9f925e96bdaa2073bf8f86a8efea7048957882415a24c67b3f784e42c0",
+          "cb7f2277f5cafcb18c0718aa2783e1fa5f340b96cc8e4566d44ac6669b3b4cc3"
+        ],
+        "samples": 3
+      }
+    ],
+    "input_batches_sha256": "45c0ba742cdbc3b649f70e6cad708f2ebacbf896fba62cc220aa68c1905939eb",
+    "last_batch_samples": 3,
+    "parameters": 28436,
+    "samples": 707,
+    "scaler_arrays_sha256": {
+      "mean_": "eb2aba720fb1c04c11fd3b8565d48be796a60e0ce340ec85fe124a4f7efb82d9",
+      "n_samples_seen_": "49b6faf5890ea29a960c3e4a7eed5717f9bb0263c44ddb0c2a6775f1f42b866f",
+      "scale_": "2668bf38077813be3d56abaf2629ff29932683347deade2bda17a798564ce0d9",
+      "var_": "257f8f9b00e355aad167c6b0e048d23f9dfc4db9e04d4bd9844a6b68edec7f61"
+    },
+    "scaler_reconstruction": "Dataset_Custom historical training-prefix StandardScaler; no model fitting",
+    "scaler_sha256": "36218f3a01edffe554e813b27eb037fba0a35098834e9912fa9434f720c4b8cb",
+    "shuffle": false,
+    "split_metadata": {
+      "flag": "test",
+      "mode": "ratio",
+      "slice_start": 2827,
+      "slice_stop": 3653,
+      "test_rows": 730,
+      "train_rows": 2557,
+      "val_rows": 366
+    },
+    "strict_load": true,
+    "tf32": {
+      "cudnn_allow_tf32": true,
+      "matmul_allow_tf32": false
+    },
+    "weights_only": true
+  },
+  "logical_run_id": "B_screen_BTCUSD_DeReFusion_h24_s2021",
+  "prediction_keys_sha256": "bea6a2cf90a02c238da38916357bf778abc4958687e8c137561d64f346fe7619",
+  "receipt_command": "C:\\Users\\26843\\anaconda3\\envs\\derefusion-5060ti\\python.exe run.py --task_name long_term_forecast --is_training 1 --model_id B_screen_BTCUSD_DeReFusion_h24_s2021__attempt-01 --model DeReFusion --data custom --root_path C:/Users/26843/Documents/ChatGPT/redefusion/dataset/ --data_path BTCUSD-2016-2025.csv --features MS --target Close --freq b --seq_len 96 --label_len 48 --pred_len 24 --enc_in 4 --dec_in 4 --c_out 1 --d_model 32 --n_heads 8 --e_layers 2 --d_layers 1 --d_ff 2048 --moving_avg 25 --factor 1 --dropout 0.1 --embed timeF --train_epochs 30 --batch_size 32 --patience 5 --learning_rate 0.0001 --lradj cosine --rand_seed 2021 --num_workers 0 --des local_bridge_v1 --result_log reproduction/logs/phase1/B_screen.txt --deterministic --gpu_type cuda --gpu 0 --enable_recovery",
+  "receipt_config": {
+    "activation": "gelu",
+    "alpha": 0.1,
+    "anomaly_ratio": 0.25,
+    "augmentation_ratio": 0,
+    "batch_size": 32,
+    "c_out": 1,
+    "channel_independence": 1,
+    "checkpoints": "./checkpoints/",
+    "conv_channel": 32,
+    "d_conv": 4,
+    "d_ff": 2048,
+    "d_layers": 1,
+    "d_model": 32,
+    "data": "custom",
+    "data_path": "BTCUSD-2016-2025.csv",
+    "dec_in": 4,
+    "decomp_method": "moving_avg",
+    "des": "local_bridge_v1",
+    "deterministic": true,
+    "devices": "0,1,2,3",
+    "discdtw": false,
+    "discsdtw": false,
+    "distil": true,
+    "down_sampling_layers": 0,
+    "down_sampling_method": null,
+    "down_sampling_window": 1,
+    "dropout": 0.1,
+    "dtwwarp": false,
+    "e_layers": 2,
+    "embed": "timeF",
+    "enable_recovery": true,
+    "enc_in": 4,
+    "expand": 2,
+    "extra_tag": "",
+    "factor": 1,
+    "features": "MS",
+    "freq": "b",
+    "gcn_depth": 2,
+    "gcn_dropout": 0.3,
+    "gpu": 0,
+    "gpu_type": "cuda",
+    "individual": false,
+    "inverse": false,
+    "is_training": 1,
+    "itr": 1,
+    "jitter": false,
+    "label_len": 48,
+    "learning_rate": 0.0001,
+    "loss": "MSE",
+    "lradj": "cosine",
+    "magwarp": false,
+    "mask_rate": 0.25,
+    "model": "DeReFusion",
+    "model_id": "B_screen_BTCUSD_DeReFusion_h24_s2021__attempt-01",
+    "moving_avg": 25,
+    "n_heads": 8,
+    "node_dim": 10,
+    "num_kernels": 6,
+    "num_workers": 0,
+    "p_hidden_dims": [
+      128,
+      128
+    ],
+    "p_hidden_layers": 2,
+    "patch_len": 16,
+    "patience": 5,
+    "permutation": false,
+    "pos": 1,
+    "pred_len": 24,
+    "propalpha": 0.3,
+    "rand_seed": 2021,
+    "randompermutation": false,
+    "result_log": "reproduction/logs/phase1/B_screen.txt",
+    "root_path": "C:/Users/26843/Documents/ChatGPT/redefusion/dataset/",
+    "rotation": false,
+    "scaling": false,
+    "seasonal_patterns": "Monthly",
+    "seed": 2,
+    "seg_len": 96,
+    "seq_len": 96,
+    "shapedtwwarp": false,
+    "skip_channel": 32,
+    "spawner": false,
+    "split_mode": "ratio",
+    "target": "Close",
+    "task_name": "long_term_forecast",
+    "test_end": null,
+    "timewarp": false,
+    "top_k": 5,
+    "top_p": 0.5,
+    "train_end": null,
+    "train_epochs": 30,
+    "tv_B": 0,
+    "tv_C": 0,
+    "tv_dt": 0,
+    "use_D": 0,
+    "use_amp": false,
+    "use_dtw": false,
+    "use_gpu": true,
+    "use_multi_gpu": false,
+    "use_norm": 1,
+    "val_end": null,
+    "wdba": false,
+    "windowslice": false,
+    "windowwarp": false
+  },
+  "reference_attempt": "C:\\Users\\26843\\Documents\\ChatGPT\\redefusion\\reproduction\\results\\phase1\\local-5060-bridge-v1\\B_screen_BTCUSD_DeReFusion_h24_s2021__attempt-01",
+  "reference_pred_array_sha256": "2edb91f58d72d30d54d2f656f7c4a4b692da234fec4856327c9238c2d1df43e1",
+  "reference_pred_file_sha256": "d3bf38a2045fa4350d64d4f5c74e157d6b035c8638fab39435bb2ddb58706441",
+  "reference_track": "local",
+  "reference_true_file_sha256": "e23fd93a92b440f6929221d852179f69ca0f5e1f57f4439b2360d509713edd56",
+  "replay_pred_array_sha256": "d1da850c06b6efe0c5d749a0ec1c041f967baa737fc3b1a0d7833286c458be35",
+  "replay_pred_file_sha256": "6c6d853a979508568af8624028dd75406e1e2df2478e5a7256de38d7b6cbc343",
+  "replay_true_array_sha256": "8b30b32d62d6d074995017f97a05bf010488699711ac94af392117a1a8d0708c",
+  "shape": [
+    707,
+    24,
+    1
+  ],
+  "truth_bitwise_equal": true
+}

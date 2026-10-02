@@ -1,0 +1,30 @@
+﻿  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[ 0.22901946  0.08266991  0.28752378  1.4485573  47.016003    0.71079683]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_GBPUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_prediction_curves.png  (375718 bytes)
+
+Generating error_analysis...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[ 0.22901946  0.08266991  0.28752378  1.4485573  47.016003    0.71079683]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_GBPUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_error_analysis.png  (99404 bytes)
+
+Generating metrics_radar...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[ 0.22901946  0.08266991  0.28752378  1.4485573  47.016003    0.71079683]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_GBPUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_metrics_radar.png  (141705 bytes)
+
+Generating error_heatmap...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[ 0.22901946  0.08266991  0.28752378  1.4485573  47.016003    0.71079683]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_GBPUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_error_heatmap.png  (129835 bytes)
+
+Generating pred_true...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[ 0.22901946  0.08266991  0.28752378  1.4485573  47.016003    0.71079683]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_GBPUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_pred_true.png  (199856 bytes)
+
+Generating dashboard...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[ 0.22901946  0.08266991  0.28752378  1.4485573  47.016003    0.71079683]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_GBPUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_dashboard.png  (256720 bytes)
+
+Figures complete: 6/6 -> C:\Users\geng\DeReFusion\test_results\long_term_forecast_GBPUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0

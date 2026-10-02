@@ -1,0 +1,21 @@
+model,assets,mean_asset_mse,median_asset_mse,min_asset_mse,max_asset_mse,mean_asset_mae,mean_asset_rmse,rank_lowest_mse_is_1,cohort,horizon,p4_fits,rtx8000_fits,interpretation
+revin-PatchTST,20,0.0196614587062,0.0163154931751,0.00364256817052,0.0857919132106,0.0970593382419,0.131850731924,1,c1-20,1,20,0,observed model+execution-track artifact rank; descriptive only
+revin-iTransformer,20,0.0247049039942,0.0199861295963,0.00479322932785,0.0804952875909,0.111864541363,0.149718482329,2,c1-20,1,20,0,observed model+execution-track artifact rank; descriptive only
+revin-TimesNet,20,0.0329958669058,0.0286845420733,0.00703067663209,0.11963790066,0.123672329515,0.171396199462,3,c1-20,1,3,17,observed model+execution-track artifact rank; descriptive only
+DeReFusion,20,0.0468036760285,0.0363317066046,0.00913443891223,0.188234383311,0.154861785347,0.204319228197,4,c1-20,1,20,0,observed model+execution-track artifact rank; descriptive only
+revin-DLinear,20,0.0487312273528,0.0376612266459,0.0104052544433,0.179860883651,0.157244763869,0.20837074831,5,c1-20,1,20,0,observed model+execution-track artifact rank; descriptive only
+revin-PatchTST,20,0.158807360392,0.132281946225,0.0250777622484,0.528041631009,0.280885775768,0.375184042431,1,c1-20,24,20,0,observed model+execution-track artifact rank; descriptive only
+DeReFusion,20,0.179202526976,0.142239524438,0.0343359143703,0.661516648316,0.300998612089,0.398876799674,2,c1-20,24,20,0,observed model+execution-track artifact rank; descriptive only
+revin-DLinear,20,0.179487412264,0.14275986398,0.0294866407829,0.646629598072,0.299214877497,0.397486157388,3,c1-20,24,20,0,observed model+execution-track artifact rank; descriptive only
+revin-iTransformer,20,0.179569435176,0.155834788274,0.0247618919957,0.553127057966,0.30183595084,0.398144451816,4,c1-20,24,20,0,observed model+execution-track artifact rank; descriptive only
+revin-TimesNet,20,0.182390615784,0.140980947364,0.0256831472093,0.591329241078,0.307812003713,0.405460886289,5,c1-20,24,2,18,observed model+execution-track artifact rank; descriptive only
+revin-PatchTST,10,0.0206031699439,0.0161660958942,0.00645178071235,0.0624347176506,0.0977520841638,0.134459016555,1,original-10,1,10,0,observed model+execution-track artifact rank; descriptive only
+revin-iTransformer,10,0.0259812583967,0.0211217377963,0.00845173997582,0.0726302288901,0.112728491256,0.151798705653,2,original-10,1,10,0,observed model+execution-track artifact rank; descriptive only
+revin-TimesNet,10,0.0446296145314,0.0282862374424,0.00932251147539,0.178115815813,0.138749349236,0.189395290939,3,original-10,1,0,10,observed model+execution-track artifact rank; descriptive only
+DeReFusion,10,0.0510744513652,0.0389195620776,0.0144486368395,0.166007083748,0.159970837642,0.210587486451,4,original-10,1,10,0,observed model+execution-track artifact rank; descriptive only
+revin-DLinear,10,0.0516767777568,0.0419030769349,0.0146010659073,0.163132790798,0.161240205015,0.211384283072,5,original-10,1,10,0,observed model+execution-track artifact rank; descriptive only
+revin-PatchTST,10,0.185569478926,0.151957512232,0.0427133540434,0.594412337352,0.301684119045,0.399593730922,1,original-10,24,10,0,observed model+execution-track artifact rank; descriptive only
+revin-DLinear,10,0.209800624967,0.1706917288,0.0666233468719,0.586371585429,0.331979520109,0.434266303347,2,original-10,24,10,0,observed model+execution-track artifact rank; descriptive only
+DeReFusion,10,0.214574222961,0.16705942441,0.0462964106879,0.685651252478,0.324565214887,0.428014071759,3,original-10,24,10,0,observed model+execution-track artifact rank; descriptive only
+revin-iTransformer,10,0.226294049788,0.154052092745,0.0504375188736,0.767114864695,0.33410734161,0.437026605373,4,original-10,24,10,0,observed model+execution-track artifact rank; descriptive only
+revin-TimesNet,10,0.234772311426,0.169115476133,0.0552595689273,0.848308082599,0.335284930099,0.444626104697,5,original-10,24,0,10,observed model+execution-track artifact rank; descriptive only

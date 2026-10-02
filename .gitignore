@@ -169,3 +169,30 @@ result_anomaly_detection.txt
 scripts/augmentation/
 run_anylearn.py
 environment.txt
+# reproduction run artifacts (local only)
+pip_cache_dl/
+afternoon_batch_*.txt
+repro_*.txt
+r_*.txt
+reproduction/logs/
+
+# reproduction results are tracked (small JSON/TXT summaries)
+!reproduction/results/
+!reproduction/results/**
+
+# TimesNet checkpoints are ~287 MB at the frozen d_ff=2048 (75,010,369
+# parameters); the other twelve model checkpoints are under 2 MB and stay
+# tracked. GitHub rejects any file above 100 MB, so a `git add -A` that swept
+# one in would stage a commit that cannot be pushed and add ~287 MB to .git per
+# file. Doctrine L0.8: an artifact above its host's limit is stored by a
+# declared mechanism, never by committing the blob.
+reproduction/results/**/*revin-TimesNet*/checkpoint.pth
+
+# Archify diagram build evidence: its receipts resolve spec/artifact paths to
+# absolute local paths, so only the diagram HTML and its source JSON are tracked.
+.archify/**/*.finalize.json
+.archify/**/*.finalize-summary.json
+.archify/**/*.browser-check.json
+.archify/**/*.delivery.json
+.archify/**/visual-check*/
+.archify/**/evidence-v*/

@@ -1,0 +1,336 @@
+{
+  "checkpoint_sha256": "7218ad67b2650f9e9c5227fe09678ddc7c158ef907e7516da11a1d4b585fdce1",
+  "differences": {
+    "bitwise_equal": false,
+    "max_absolute_prediction_difference": 4.76837158203125e-07,
+    "mean_squared_prediction_difference": 6.965741677119284e-15,
+    "numerical_equivalence_claim": false,
+    "numerical_equivalence_threshold": "TBD",
+    "prediction_difference_l2": 8.948640473287732e-06,
+    "reference_mse_float64": 0.06662334687187196,
+    "relative_prediction_difference_l2": 2.4364349871636635e-08,
+    "replay_mse_float64": 0.06662334643596175,
+    "signed_mse_difference_float64": -4.359102107054369e-10
+  },
+  "effective_root_path": "C:\\Users\\26843\\Documents\\ChatGPT\\redefusion\\dataset",
+  "elapsed_seconds": 0.14099999999962165,
+  "inference": {
+    "amp": false,
+    "batch_size": 32,
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "dataset_arrays_sha256": {
+      "data_stamp": "96b7440eebaca024729840b255e1d1e593777d23eae5f0add39d4e3f38af7f9a",
+      "data_x": "17c29cddf72f202045bda33f078c63f260bea7122d81762d5cb8fd4bce9aa0a5",
+      "data_y": "17c29cddf72f202045bda33f078c63f260bea7122d81762d5cb8fd4bce9aa0a5"
+    },
+    "deterministic_algorithms": true,
+    "deterministic_warn_only": true,
+    "drop_last": false,
+    "gradient_mode": "inference_mode",
+    "input_batches": [
+      {
+        "batch_index": 0,
+        "float32_tensors_sha256": [
+          "f852553b706fe16ed216353bfc88e65c6812bb0afc0c057bab30b7c54ff71f62",
+          "64245d9021d721991198d8bebee736fa62a285f605db47fa4fc1de3a1f9f24fd",
+          "fd3fbe1a23b5a62c90635ebf2c10e379b3a0744dda83784f7aa5a7bfc419fcd4",
+          "84ebf4731c3027a445de33e3f262e48f634a99485139287af28d6ad2b379b891"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 1,
+        "float32_tensors_sha256": [
+          "6dfa43458fe275ff93a3c1b5a6dc5483faf4e62e5179eda12f8290436d31826b",
+          "bcff8bc3e2750d287b9447f1e6244b9a2b3f4afd20ef1620145f6943973fad5d",
+          "a3c09fbc50cbebdc5d13ad6c4832488eabf5d7e1fb1c35b524c3101dea45abde",
+          "8a3e720378c2cfe26c31d4b716ef007f07142eab743c72910ce67c16731748d0"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 2,
+        "float32_tensors_sha256": [
+          "2a039edf12b769dd9f7808821d23579e5789f52ae8b02f863d4276b6e3436841",
+          "e10e211ba96527695e9c1a746416c4809df11470fbbb3b58b7cbce47da2eb584",
+          "e91d215236f98cb1ec895c197bb7207e7a9b1236cb75aadb515224e1fee88cd3",
+          "87e9358141a1fbed2cdc1853b1ff01fb2bf8dec7542b2738cbbda7d175b84636"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 3,
+        "float32_tensors_sha256": [
+          "e1c8a8dbfbfadffb443a1a4b9ee206b0fa8e7a09a65fdbccbd7e1f361d46a747",
+          "83bff8f0592fef484afdffbe0b659a7a2f7c4b88b463f9b3d34eec7f3bb57e0b",
+          "f7dbfebeddcc40bc1f3f864e29a3c4ed925862a8e8f3a626ef219885867029a2",
+          "e043105add2ffee542d86aafe7d113aa17bd746a9d9548101616d6f718f897a3"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 4,
+        "float32_tensors_sha256": [
+          "8a9b0e15d6fee2c23b7be96564595e4478869eeb4f6bfd3038abc0b48b5b8cba",
+          "bdad7d021e32d71c04cf130eaf35abcb76d246ac43ab1078dbcd89ca3884bbda",
+          "6f5dd11dfeecca8e54bd52fe22c90ff1124f0286bd452920ffb36e5d6350a5ae",
+          "3221b9f48dfca8598deb6282f45bb2680fcfaaf329410d0b7143a4fab40894a2"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 5,
+        "float32_tensors_sha256": [
+          "a511c7300b62e6aa53a2e494f52e3c749625d0c089bd9ba0000f0154ca24fe29",
+          "f9fac34187363523abfe56f6a24fb5fed9b379a8f3427064c526da16e215c5b4",
+          "eed5051c411b72d0d25ce36c30a11f85f3d6fb76ee5eaeb11e1f2d0ec1abea8b",
+          "d8e40f17459d292f7bad7a22eff4018ab32ce0b06417ba4ad362bee841e84ee5"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 6,
+        "float32_tensors_sha256": [
+          "18116fc1b8920a52b715a629f77dceefe30e0ddc6407903ffd344de48140e9af",
+          "48f83bd96f6a4d1b177720a7c99dd3c98d6626bac457a18ab087a85a930f4c98",
+          "f677f63d1a3b5b71dfcb3de311e6c84c35499992dd6ee8bdb6d010b0de642a2b",
+          "ce7b8a81f969b9ca29d89594e66ecc29b510cc67528f793243c2a76fe44ecbea"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 7,
+        "float32_tensors_sha256": [
+          "a9dce3d4cb545238acaa04c9a4476facdd59b573bda8381abf9528252ae5fe25",
+          "5d5b095b3c4d371c74524f442beef26b1f0b8989abf754b3465fe52dac810fe7",
+          "87f394798413d295324dec5a6b6e0dfebcf858f22e500928adea552d91432348",
+          "f567b8df33c5907e3dd7d0be5b23c21c7757f626db60b292842c3e4636f3e3ee"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 8,
+        "float32_tensors_sha256": [
+          "be0b1b1cdaf489fe621f993714f907f3a52a78e2d202255a36fb2abc670537f1",
+          "69f8a59b34952f3a86dfff09af144e90fcc5da355f7ff85a9b44589391326693",
+          "254beb653b30277dc425626a64a1e0e759a2e9479ce08d507f4732ccec19df90",
+          "5224ee917f1e99862df74ea7f3a75f2375d76af06f7dd26ec0b9104c2046dc75"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 9,
+        "float32_tensors_sha256": [
+          "a2da6424753a9e244489961f4d2a0b0b305987aa5d6adad5d0d6873173ced3f2",
+          "b2aa5c74abb91a88b63056ce4fc69e30adc4f5f712315a037529d1a026454c9e",
+          "1bc8f3e627529f58eeea11a6de484d58ce30d0524b8ccc475a6cd7ff72a81984",
+          "841926c5d140cf100cf66a529f96e84e8e98399c65fc8ba2a5e0b046024f5a38"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 10,
+        "float32_tensors_sha256": [
+          "c2fb0bcdf4c4f003fce0149ebbda3d019c3c07c2c2d53311346db67d0ae59964",
+          "6c1b60e7cf91b1230a7ebcc7687b635deb44a088ecf0dba7f1d0172c77cea498",
+          "ab012e08dc55218e4d1cbe52ca93d68a7e0707b0042b38a8c8d6adc65d55a01b",
+          "830cc3f684a361a3e342a6ea5b09b46e2b3463dfa81bfac9faff20069823a8ff"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 11,
+        "float32_tensors_sha256": [
+          "bcd6c35eb388943fc3c2d79138146a0b8aa4be14e618a3db919dc8666de51b9a",
+          "5b8d0f2b12c946e8406143e11672b98d86429f0b012d80eaeb0db4be4a591a07",
+          "3a11e821ab395a5155e3ba4285b66780e894b3ded9469b2499baceb64b8441b0",
+          "f52b8e2d5a41fb97d34ef0d8727643251401306d168e6bdcf539ec659a937658"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 12,
+        "float32_tensors_sha256": [
+          "8e617e750cef9fcae56708c805525732f5a1ffb474834cb28b4e81562947a84b",
+          "b5e32b4d80181242eabfd33b44e52db6ddf7949c2e4df80e2e1046cf976b27a7",
+          "65d3bbcfe5106d1a0671fda41dec2a0635d537c7acb79e5756752da924bbc33d",
+          "91d0208b69e8a013b817b404f6a4ddff4aa1c3294447a259c380814718b5dbf6"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 13,
+        "float32_tensors_sha256": [
+          "8aa49a5b178881a5b9ce72f6169f5c79f6d393eec0d806c2dba13aef806ea994",
+          "cf41868e07948731ff1bb37eae178d2e51b0fd8029c98d5927f9ad87a9e0bf7d",
+          "4ee7f011df1945160822421e98328dbd5e7c252a45819eedda6fd0812b6efbfb",
+          "43de125bcde7f851f4d52572553a3f7f04659a8fb3ff399ce6944ab8a347a797"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 14,
+        "float32_tensors_sha256": [
+          "b1cc56c518103a1c541cfca6decf5036ba1cddeb54cd9e557185aa3e391e1347",
+          "bf5ed93abaa4dbc7502753ac5108729062c28f380642e7c2be5d0d3dc58b3fcb",
+          "6e838ac20a25a4bd9fd6c5dc65bfcde9708c82112d3868ef80117139037370d3",
+          "9d0709b0305e3047bb5d5780d2fc19677afc23fae94f87b42bd87a42b1e77b11"
+        ],
+        "samples": 31
+      }
+    ],
+    "input_batches_sha256": "3b30342f920bc05876637e6b7f39f24caddfea32fda67504da3f11c872544c7f",
+    "last_batch_samples": 31,
+    "parameters": 4664,
+    "samples": 479,
+    "scaler_arrays_sha256": {
+      "mean_": "d4a761c3988ff44d80d6ce83b6141fa448d49666ea2f12204b89b1e6a8a6de04",
+      "n_samples_seen_": "8c6bed6b7e58e87634bbd0b27790a36d1bd17b7a2072de91e769051fb492ad0a",
+      "scale_": "1aa93178c7acf6616cf458c8d0ca17ba61f72f2437130119a0edcb3c789ceb7e",
+      "var_": "d1dc0ea3d3f2817b3a80aea54880ba9a899862c142985205b8f272f0650bb581"
+    },
+    "scaler_reconstruction": "Dataset_Custom historical training-prefix StandardScaler; no model fitting",
+    "scaler_sha256": "6124fef763ffc3798e07d6ea57bf20856c3ff92e853d1dbe7437a1598b30e1fa",
+    "shuffle": false,
+    "split_metadata": {
+      "flag": "test",
+      "mode": "ratio",
+      "slice_start": 1915,
+      "slice_stop": 2513,
+      "test_rows": 502,
+      "train_rows": 1759,
+      "val_rows": 252
+    },
+    "strict_load": true,
+    "tf32": {
+      "cudnn_allow_tf32": true,
+      "matmul_allow_tf32": false
+    },
+    "weights_only": true
+  },
+  "logical_run_id": "B_screen_GSPC_revin-DLinear_h24_s2021",
+  "prediction_keys_sha256": "e84e76156e630783971274372f18d8591538bb30809aa3076df61be9118789a1",
+  "receipt_command": "/data/miniconda/envs/derefusion-p1/bin/python run.py --task_name long_term_forecast --is_training 1 --model_id B_screen_GSPC_revin-DLinear_h24_s2021__attempt-01 --model revin-DLinear --data custom --root_path /data/coding/DeReFusion/dataset/ --data_path GSPC-2016-2025.csv --features MS --target Close --freq b --seq_len 96 --label_len 48 --pred_len 24 --enc_in 4 --dec_in 4 --c_out 1 --d_model 32 --n_heads 8 --e_layers 2 --d_layers 1 --d_ff 2048 --moving_avg 25 --factor 1 --dropout 0.1 --embed timeF --train_epochs 30 --batch_size 32 --patience 5 --learning_rate 0.0001 --lradj cosine --rand_seed 2021 --num_workers 0 --des phase1_frozen --result_log reproduction/logs/phase1/B_screen.txt --deterministic --gpu_type cuda --gpu 0 --enable_recovery",
+  "receipt_config": {
+    "activation": "gelu",
+    "alpha": 0.1,
+    "anomaly_ratio": 0.25,
+    "augmentation_ratio": 0,
+    "batch_size": 32,
+    "c_out": 1,
+    "channel_independence": 1,
+    "checkpoints": "./checkpoints/",
+    "conv_channel": 32,
+    "d_conv": 4,
+    "d_ff": 2048,
+    "d_layers": 1,
+    "d_model": 32,
+    "data": "custom",
+    "data_path": "GSPC-2016-2025.csv",
+    "dec_in": 4,
+    "decomp_method": "moving_avg",
+    "des": "phase1_frozen",
+    "deterministic": true,
+    "devices": "0,1,2,3",
+    "discdtw": false,
+    "discsdtw": false,
+    "distil": true,
+    "down_sampling_layers": 0,
+    "down_sampling_method": null,
+    "down_sampling_window": 1,
+    "dropout": 0.1,
+    "dtwwarp": false,
+    "e_layers": 2,
+    "embed": "timeF",
+    "enable_recovery": true,
+    "enc_in": 4,
+    "expand": 2,
+    "extra_tag": "",
+    "factor": 1,
+    "features": "MS",
+    "freq": "b",
+    "gcn_depth": 2,
+    "gcn_dropout": 0.3,
+    "gpu": 0,
+    "gpu_type": "cuda",
+    "individual": false,
+    "inverse": false,
+    "is_training": 1,
+    "itr": 1,
+    "jitter": false,
+    "label_len": 48,
+    "learning_rate": 0.0001,
+    "loss": "MSE",
+    "lradj": "cosine",
+    "magwarp": false,
+    "mask_rate": 0.25,
+    "model": "revin-DLinear",
+    "model_id": "B_screen_GSPC_revin-DLinear_h24_s2021__attempt-01",
+    "moving_avg": 25,
+    "n_heads": 8,
+    "node_dim": 10,
+    "num_kernels": 6,
+    "num_workers": 0,
+    "p_hidden_dims": [
+      128,
+      128
+    ],
+    "p_hidden_layers": 2,
+    "patch_len": 16,
+    "patience": 5,
+    "permutation": false,
+    "pos": 1,
+    "pred_len": 24,
+    "propalpha": 0.3,
+    "rand_seed": 2021,
+    "randompermutation": false,
+    "result_log": "reproduction/logs/phase1/B_screen.txt",
+    "root_path": "/data/coding/DeReFusion/dataset/",
+    "rotation": false,
+    "scaling": false,
+    "seasonal_patterns": "Monthly",
+    "seed": 2,
+    "seg_len": 96,
+    "seq_len": 96,
+    "shapedtwwarp": false,
+    "skip_channel": 32,
+    "spawner": false,
+    "split_mode": "ratio",
+    "target": "Close",
+    "task_name": "long_term_forecast",
+    "test_end": null,
+    "timewarp": false,
+    "top_k": 5,
+    "top_p": 0.5,
+    "train_end": null,
+    "train_epochs": 30,
+    "tv_B": 0,
+    "tv_C": 0,
+    "tv_dt": 0,
+    "use_D": 0,
+    "use_amp": false,
+    "use_dtw": false,
+    "use_gpu": true,
+    "use_multi_gpu": false,
+    "use_norm": 1,
+    "val_end": null,
+    "wdba": false,
+    "windowslice": false,
+    "windowwarp": false
+  },
+  "reference_attempt": "C:\\Users\\26843\\Documents\\ChatGPT\\redefusion\\reproduction\\results\\phase1\\p4-partial-20260929\\attempts\\B_screen_GSPC_revin-DLinear_h24_s2021__attempt-01",
+  "reference_pred_array_sha256": "62877f4be354d0a36829a2fef592da99e0f682f7bab2ffa61ec8ddaa3fe2a513",
+  "reference_pred_file_sha256": "525b9163aa66940788f92287e8da3786ad1cca820db382ab2ac7a76101517bd7",
+  "reference_track": "p4",
+  "reference_true_file_sha256": "5cc8a06d7a403ed317e46ca7f04ab4de5d3de06b6cda830da61465e7ea53d0f3",
+  "replay_pred_array_sha256": "a27d0c36be04756f25d9cb4283fa198c0e01bd08adb9143adc7d397c6a8468c2",
+  "replay_pred_file_sha256": "7a852a309faab4213d286d01f28e2d6d3decb79ee134d20065ec81da58ab790d",
+  "replay_true_array_sha256": "f18e6bc90220ea64dcc3391f5c6eb7164b32ca026d6bb2d16bb741e80812573c",
+  "shape": [
+    479,
+    24,
+    1
+  ],
+  "truth_bitwise_equal": true
+}

@@ -1,0 +1,346 @@
+{
+  "checkpoint_sha256": "e59c2fcb2a6ce07c1e62ef038e61923d5fd4d74b93fce188c91832a3669c3641",
+  "differences": {
+    "bitwise_equal": true,
+    "max_absolute_prediction_difference": 0.0,
+    "mean_squared_prediction_difference": 0.0,
+    "numerical_equivalence_claim": false,
+    "numerical_equivalence_threshold": "TBD",
+    "prediction_difference_l2": 0.0,
+    "reference_mse_float64": 0.10102915280974774,
+    "relative_prediction_difference_l2": 0.0,
+    "replay_mse_float64": 0.10102915280974774,
+    "signed_mse_difference_float64": 0.0
+  },
+  "effective_root_path": "C:\\Users\\26843\\Documents\\ChatGPT\\redefusion\\dataset",
+  "elapsed_seconds": 0.18799999999828287,
+  "inference": {
+    "amp": false,
+    "batch_size": 32,
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "dataset_arrays_sha256": {
+      "data_stamp": "7a5dda1f0de80483c01e02fa920004b4763df730114c6139da67e328eaf49269",
+      "data_x": "9c2ff71830ad10a262bdf0737dfef21c60db4ca507ba9ed65fe7544e8a59897e",
+      "data_y": "9c2ff71830ad10a262bdf0737dfef21c60db4ca507ba9ed65fe7544e8a59897e"
+    },
+    "deterministic_algorithms": true,
+    "deterministic_warn_only": true,
+    "drop_last": false,
+    "gradient_mode": "inference_mode",
+    "input_batches": [
+      {
+        "batch_index": 0,
+        "float32_tensors_sha256": [
+          "639d923599d9c550f071f1900c1f021cdea08ca791c19c77eb4c68c726b3d33f",
+          "8627ab642ac9899a315f48cee87169a0024c64e8b4a0633652c4d6845b6b4e98",
+          "01d508a64703680b261aef294bbcbb35622ceeda4a8310654aaf6055e2cf6142",
+          "cb10deaa9188d50fad4215be2fd303215884864314b0bad012d8f7c2915d3271"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 1,
+        "float32_tensors_sha256": [
+          "bd8d551f922c39f452490512dafb048b89bcf9bfac8387edb939416e21892fcf",
+          "00e2c93b892f87a5635f66c4d235033d818eabc53c3b06a97e2ff19f3f75baea",
+          "8ea3caee3435837340dacc3250ce30d5b640ab905919997f2655c9d79830dd94",
+          "3ff715d0c55dbbce31d009f28cce5453cb84011b77481e26b6477509aa55117a"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 2,
+        "float32_tensors_sha256": [
+          "c95a5e2631d4a1382e7f98bcc0176e170f7fc94428d25b66e400a100a292993c",
+          "b7b145e710e753ac52133e133cec55c2e28638711961a9cfb23bf5e248cfccf7",
+          "5478d20ace8e1dda38668d67e73aed7479da1cd82b35ece8aade49b3d409596e",
+          "16e936b7b0e49415d243a30778ad0a231e3f2b7255b470d64b443b1c21ea50c0"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 3,
+        "float32_tensors_sha256": [
+          "de5e92116970d9316a6c2130e8a9123ab05691636bc1871b1e87491759aa3d68",
+          "db9042b6b7a03b82500b0928463801e372c69395373fa665133238a49d86af7e",
+          "caf45a6859c0110a9b7de9cc33c707bb6664a71408479cd479ac6e5ea4e841e7",
+          "170b7a9ea84d63340cfc3f9dbd5b4c8f99f3924c0b516d94f71338e9fb32e371"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 4,
+        "float32_tensors_sha256": [
+          "8748517db0f802d026772754d2d87026e67ba3dc90a172b9d4c73e2c105fce75",
+          "66d0ad11d510fabd981c46a6bb22f880ed7e9d515dd62e09928dce3c8c1ae450",
+          "a7bdd616f7c0fbeb9ae03d61afba73ac8e147f59b092798b9f6265bd085d2f2e",
+          "848627c4090072e7135af6e8221c89fc9e35b8435d346398641f93b25fc18451"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 5,
+        "float32_tensors_sha256": [
+          "0aa4d3ef9f0b7984315552f345c2424d63f92bf1705e30a30a0031fff41c2daa",
+          "edfc2aceb5051b5d9c02593c6154fa0dde685a400bbefe699cf700ba5cce9f78",
+          "185b4c5b3a112f509a4d8a853adcdf57769e87ee97ca5d666a7f036ab7e2335c",
+          "5700d72cf557fc15ad55994a4d30348f5dd8ad3e4eec06fc87aa811adc0ec2e6"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 6,
+        "float32_tensors_sha256": [
+          "fb208bbf434d6ebb9db550161540fd604bc5e2f7e3c8943013e4a16597297ba5",
+          "c766e602f91835f55cd569cfedabb212dbe311d6d42e78ef7577d7cbc5850cc1",
+          "233c7034261be6876403d1ed65de9514ee7142cbc2fb93b34f023f4767ee9be2",
+          "ad0ac3dec5c48e74e997d3911fa0460d1ef17150e13a2e450c0a4f944533f00f"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 7,
+        "float32_tensors_sha256": [
+          "3e30ec4cce7e6a09e0916e74c15960b679b43c6af9215a6d2a9942f3717ecdcc",
+          "aaf253a3ed2e18b3211e3ec0d9d872a54309785323ac7f87f20bbe0c8f0bc4e4",
+          "0c74bd3d0022b8914e2812cc02634338d74a575bea3099f85749bc45f5e9147e",
+          "c04bddf589ddeed6698b4ca5761c34ee28f3fb53767d812d43fbe96b6fd88b1f"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 8,
+        "float32_tensors_sha256": [
+          "d6f87f3e500f659f7f4593b70ab74d79df65a20bae97eda7a6ac114dfc1b2031",
+          "9ab66af518ae33f605018feedde48dba6043158eafa1cebbe9485d9ba6f59290",
+          "e6feb24b6fcd5f59f0d28e2d62d5c609f60048f8dfb4fc5dfc8e441ae1df60ab",
+          "5ccf5fea0c3aecdf490a7358ac45d6cf6391c6b7f3575e9288380bf7cba543f1"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 9,
+        "float32_tensors_sha256": [
+          "1aa9ae1646925b73b7f8e18c22d1ea3e986f79d956a6c06b280f37e5d9ddf065",
+          "a22022ce1ac4c6a1adf57cc097ca950b75095455954afcdd97afd8fb92835683",
+          "520ff5fd7969f29de6f56919624570dc77b4e3c99881aa836c6fcb1b831359f9",
+          "14058fc93bf1db4dd0850f0c7458854ba86ed84afc4935603d22493ebb3a254a"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 10,
+        "float32_tensors_sha256": [
+          "1d6074aec19b9b81ca3ccf85c31a25fef662e57a05482ed95f8f8c0b5d63b1c1",
+          "247ea93c3bba269a6bae04924812e42c871b7c247a77e4da186031ba119e9515",
+          "64a5980152577888827f8422f40d43d6ca6b95f2a59dc99fba88de300fa9efed",
+          "ff3daf8886af33500c2b9bd5aae257819cf426ab4d99b6fd6ca2dfac35a3f65f"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 11,
+        "float32_tensors_sha256": [
+          "8153108024631040ff2d0dbb201c571893478590361bd804a56e41c0ef59500f",
+          "a9362995d339ce75baeba4177eddfe354d7c15fe4e99ce0e734601b7fffd86d9",
+          "a8329690d3f14727aa18baa72ec3d45dd71ec3af3f57341db112bd59504fd632",
+          "865092531160795298db02faf88e7126f62f00598e3d9084624ed0b4e48a731e"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 12,
+        "float32_tensors_sha256": [
+          "788b8bb62e98dff6b40b2899c9b74d1ccf60328c734e47dc55a99fa0f172c6bc",
+          "9465aff76e77fb887460c3972c3667f81e80883d1dabda07586b09e6017b4e94",
+          "db45d46c029ace0bb91f16111ff53c360d4e7547655cdb8ae743edce50c07f67",
+          "598ab12412b0d9b1c016720934f11b1ec21a57550aab79505b5cc2b615e090e3"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 13,
+        "float32_tensors_sha256": [
+          "45239261b19830448affca246fd556d50186aa741e5b43e646c29f3726795527",
+          "c3afae3af5ab2b57b3da8850d06e72de35d96f140adb8e1a758432279e451c59",
+          "cee0ce71539dfa02724da241732628d63e321fb47e6d876f447917f03f5a9ab1",
+          "8578d42c784b4e28bbbae75b26cc5be093e187716a571ea829980627236dfcff"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 14,
+        "float32_tensors_sha256": [
+          "3a39a7909509899ab07bfd7b85cb33efdc66441a6b4ccae4937bef61307874fa",
+          "7b76211c81d0e48f9b45e1adac6489f2969a77a38115743984112a308644a660",
+          "cbc4f837421775b760592a26c618804138e4b7c13d1ed9d94315e844ba7109ee",
+          "09815305d65c62fd5e139faced69c4166746ce148477bdca53f4100355b1042c"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 15,
+        "float32_tensors_sha256": [
+          "76d491323ddc3de97f462be05703c0eaed79047cc538a22986581a2bc55b5914",
+          "4ddf7f187ad949c024f6a4e407e6c52e3e545b67e40a65e7072e5e3685b14ca9",
+          "36633b6d1ff8b287494b64ef622d4799d18f02a6ed7f168ac7a14e6bac8d2f2d",
+          "60122b0d371e52620aebcd98164c442ddfaaba7f6251d0e2bb62f0f5fc2832e9"
+        ],
+        "samples": 17
+      }
+    ],
+    "input_batches_sha256": "3638bbf64efd0b1f935fe0f6517f6cde367f1ac237e8e9aeebe9ed4bd8b379a3",
+    "last_batch_samples": 17,
+    "parameters": 28436,
+    "samples": 497,
+    "scaler_arrays_sha256": {
+      "mean_": "557222517c91b3bf7c61ca3050cc0de4f37843bc04a6d72e6bd0bbbe83735c2f",
+      "n_samples_seen_": "c17aeef9c3b4f196dbc8cfd9c59412d7ff59bdefb6f23f04b5dd3c79726a5be8",
+      "scale_": "cc71518ccdccdf62b14bb2705c68e426dfe6696bbd0ec053dffade525b13f8a7",
+      "var_": "1d5b6570d1d2a5d839a10721267df8cfdeb5a44792bb6d263445220e13d4a083"
+    },
+    "scaler_reconstruction": "Dataset_Custom historical training-prefix StandardScaler; no model fitting",
+    "scaler_sha256": "ce9d56497779381011df3e6d7c43b6647d4ba2dc9e44d3cc778d46ec9050261f",
+    "shuffle": false,
+    "split_metadata": {
+      "flag": "test",
+      "mode": "ratio",
+      "slice_start": 1986,
+      "slice_stop": 2602,
+      "test_rows": 520,
+      "train_rows": 1821,
+      "val_rows": 261
+    },
+    "strict_load": true,
+    "tf32": {
+      "cudnn_allow_tf32": true,
+      "matmul_allow_tf32": false
+    },
+    "weights_only": true
+  },
+  "logical_run_id": "B_screen_EURUSD_DeReFusion_h24_s2021",
+  "prediction_keys_sha256": "f6de2ecafc74a796bdf0bf4d47220f786dbf505e8f54bcb6219099d572a27283",
+  "receipt_command": "C:\\Users\\26843\\anaconda3\\envs\\derefusion-5060ti\\python.exe run.py --task_name long_term_forecast --is_training 1 --model_id B_screen_EURUSD_DeReFusion_h24_s2021__attempt-01 --model DeReFusion --data custom --root_path C:/Users/26843/Documents/ChatGPT/redefusion/dataset/ --data_path EURUSD-2016-2025.csv --features MS --target Close --freq b --seq_len 96 --label_len 48 --pred_len 24 --enc_in 4 --dec_in 4 --c_out 1 --d_model 32 --n_heads 8 --e_layers 2 --d_layers 1 --d_ff 2048 --moving_avg 25 --factor 1 --dropout 0.1 --embed timeF --train_epochs 30 --batch_size 32 --patience 5 --learning_rate 0.0001 --lradj cosine --rand_seed 2021 --num_workers 0 --des local_bridge_v1 --result_log reproduction/logs/phase1/B_screen.txt --deterministic --gpu_type cuda --gpu 0 --enable_recovery",
+  "receipt_config": {
+    "activation": "gelu",
+    "alpha": 0.1,
+    "anomaly_ratio": 0.25,
+    "augmentation_ratio": 0,
+    "batch_size": 32,
+    "c_out": 1,
+    "channel_independence": 1,
+    "checkpoints": "./checkpoints/",
+    "conv_channel": 32,
+    "d_conv": 4,
+    "d_ff": 2048,
+    "d_layers": 1,
+    "d_model": 32,
+    "data": "custom",
+    "data_path": "EURUSD-2016-2025.csv",
+    "dec_in": 4,
+    "decomp_method": "moving_avg",
+    "des": "local_bridge_v1",
+    "deterministic": true,
+    "devices": "0,1,2,3",
+    "discdtw": false,
+    "discsdtw": false,
+    "distil": true,
+    "down_sampling_layers": 0,
+    "down_sampling_method": null,
+    "down_sampling_window": 1,
+    "dropout": 0.1,
+    "dtwwarp": false,
+    "e_layers": 2,
+    "embed": "timeF",
+    "enable_recovery": true,
+    "enc_in": 4,
+    "expand": 2,
+    "extra_tag": "",
+    "factor": 1,
+    "features": "MS",
+    "freq": "b",
+    "gcn_depth": 2,
+    "gcn_dropout": 0.3,
+    "gpu": 0,
+    "gpu_type": "cuda",
+    "individual": false,
+    "inverse": false,
+    "is_training": 1,
+    "itr": 1,
+    "jitter": false,
+    "label_len": 48,
+    "learning_rate": 0.0001,
+    "loss": "MSE",
+    "lradj": "cosine",
+    "magwarp": false,
+    "mask_rate": 0.25,
+    "model": "DeReFusion",
+    "model_id": "B_screen_EURUSD_DeReFusion_h24_s2021__attempt-01",
+    "moving_avg": 25,
+    "n_heads": 8,
+    "node_dim": 10,
+    "num_kernels": 6,
+    "num_workers": 0,
+    "p_hidden_dims": [
+      128,
+      128
+    ],
+    "p_hidden_layers": 2,
+    "patch_len": 16,
+    "patience": 5,
+    "permutation": false,
+    "pos": 1,
+    "pred_len": 24,
+    "propalpha": 0.3,
+    "rand_seed": 2021,
+    "randompermutation": false,
+    "result_log": "reproduction/logs/phase1/B_screen.txt",
+    "root_path": "C:/Users/26843/Documents/ChatGPT/redefusion/dataset/",
+    "rotation": false,
+    "scaling": false,
+    "seasonal_patterns": "Monthly",
+    "seed": 2,
+    "seg_len": 96,
+    "seq_len": 96,
+    "shapedtwwarp": false,
+    "skip_channel": 32,
+    "spawner": false,
+    "split_mode": "ratio",
+    "target": "Close",
+    "task_name": "long_term_forecast",
+    "test_end": null,
+    "timewarp": false,
+    "top_k": 5,
+    "top_p": 0.5,
+    "train_end": null,
+    "train_epochs": 30,
+    "tv_B": 0,
+    "tv_C": 0,
+    "tv_dt": 0,
+    "use_D": 0,
+    "use_amp": false,
+    "use_dtw": false,
+    "use_gpu": true,
+    "use_multi_gpu": false,
+    "use_norm": 1,
+    "val_end": null,
+    "wdba": false,
+    "windowslice": false,
+    "windowwarp": false
+  },
+  "reference_attempt": "C:\\Users\\26843\\Documents\\ChatGPT\\redefusion\\reproduction\\results\\phase1\\local-5060-bridge-v1\\B_screen_EURUSD_DeReFusion_h24_s2021__attempt-01",
+  "reference_pred_array_sha256": "c282256b50f6d84ab9d408a2497719132b0939476f86962c10f961af03f5612a",
+  "reference_pred_file_sha256": "7dcb53aef4e1952465dce3e232e3078c8e8160ba83085c2c16d5d677e9b90fcf",
+  "reference_track": "local",
+  "reference_true_file_sha256": "b7a6d962122f29d61ab2adf9ecc28a98479f6a546c45faedd1bcb42a4c4055eb",
+  "replay_pred_array_sha256": "c282256b50f6d84ab9d408a2497719132b0939476f86962c10f961af03f5612a",
+  "replay_pred_file_sha256": "7dcb53aef4e1952465dce3e232e3078c8e8160ba83085c2c16d5d677e9b90fcf",
+  "replay_true_array_sha256": "f7dc9303e8b02616d0b65bf864ac6d16282eec79cb6ed054bcafd2fe161abc01",
+  "shape": [
+    497,
+    24,
+    1
+  ],
+  "truth_bitwise_equal": true
+}

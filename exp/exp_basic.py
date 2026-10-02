@@ -110,10 +110,10 @@ class LazyModelDict(dict):
             
         module_path = self.model_map[key]
         try:
-            print(f"🚀 Lazy Loading: {key} ...") 
+            print(f"[Lazy Loading] {key} ...") 
             module = importlib.import_module(module_path)
         except ImportError as e:
-            print(f"❌ Error: Failed to import model [{key}]. Dependencies missing?")
+            print(f"[ERROR] Failed to import model [{key}]. Dependencies missing?")
             raise e
 
         # Try to find the model class

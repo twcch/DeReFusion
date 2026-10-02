@@ -1,0 +1,111 @@
+long_term_forecast_GSPC_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.06230152025818825, mae:0.1908877044916153, rmse:0.24960272014141083, mape:0.05879858508706093, mspe:0.006471973843872547, r2:0.8690698146820068, dtw:Not calculated, time:17.23s, train_time:1410.38s, inference_time:0.1695ms/sample (479 samples, 0.0812s total), params:28436, trainable_params:28436, gpu_mem_peak_mb:nan
+
+long_term_forecast_GSPC_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.07006526738405228, mae:0.21355704963207245, rmse:0.26469844579696655, mape:0.06523647159337997, mspe:0.007115147076547146, r2:0.8527538180351257, dtw:Not calculated, time:21.01s, train_time:21664.09s, inference_time:0.0445ms/sample (479 samples, 0.0213s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+long_term_forecast_GSPC_96_24_DeReFusion-gatev2-learnable_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.07191455364227295, mae:0.2106771320104599, rmse:0.2681688964366913, mape:0.06447919458150864, mspe:0.007284598425030708, r2:0.8488674163818359, dtw:Not calculated, time:21.22s, train_time:21742.61s, inference_time:0.2611ms/sample (479 samples, 0.1251s total), params:28440, trainable_params:28440, gpu_mem_peak_mb:nan
+
+long_term_forecast_GSPC_96_1_DeReFusion_custom_ftMS_sl96_ll48_pl1_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.01647261530160904, mae:0.0930200070142746, rmse:0.12834568321704865, mape:0.028455514460802078, mspe:0.001764844637364149, r2:0.9692463278770447, dtw:Not calculated, time:16.89s, train_time:2011.06s, inference_time:0.1548ms/sample (502 samples, 0.0777s total), params:21743, trainable_params:21743, gpu_mem_peak_mb:nan
+
+long_term_forecast_GSPC_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.07006526738405228, mae:0.21355704963207245, rmse:0.26469844579696655, mape:0.06523647159337997, mspe:0.007115147076547146, r2:0.8527538180351257, dtw:Not calculated, time:16.46s, train_time:1124.19s, inference_time:0.0314ms/sample (479 samples, 0.0151s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+long_term_forecast_GSPC_96_1_revin-DLinear_custom_ftMS_sl96_ll48_pl1_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.01577291637659073, mae:0.09477681666612625, rmse:0.1255902647972107, mape:0.029149789363145828, mspe:0.0017057284712791443, r2:0.9705526232719421, dtw:Not calculated, time:16.28s, train_time:1799.69s, inference_time:0.0266ms/sample (502 samples, 0.0134s total), params:202, trainable_params:202, gpu_mem_peak_mb:nan
+
+long_term_forecast_GSPC_96_24_DeReFusion-gatev2-learnable_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.07191455364227295, mae:0.2106771320104599, rmse:0.2681688964366913, mape:0.06447919458150864, mspe:0.007284598425030708, r2:0.8488674163818359, dtw:Not calculated, time:54.78s, train_time:3427.74s, inference_time:1.2174ms/sample (479 samples, 0.5831s total), params:28440, trainable_params:28440, gpu_mem_peak_mb:nan
+
+long_term_forecast_GSPC_96_1_DeReFusion-gatev2-learnable_custom_ftMS_sl96_ll48_pl1_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.025260137394070625, mae:0.1200547069311142, rmse:0.15893438458442688, mape:0.0369233600795269, mspe:0.0027094280812889338, r2:0.9528404474258423, dtw:Not calculated, time:48.77s, inference_time:1.2792ms/sample (502 samples, 0.6422s total), params:21747, trainable_params:21747, gpu_mem_peak_mb:nan
+
+long_term_forecast_BTCUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.21797291934490204, mae:0.3572460412979126, rmse:0.46687570214271545, mape:0.09233373403549194, mspe:0.014845569618046284, r2:0.8755303025245667, dtw:Not calculated, time:17.50s, train_time:1919.60s, inference_time:0.1891ms/sample (707 samples, 0.1337s total), params:28436, trainable_params:28436, gpu_mem_peak_mb:nan
+
+long_term_forecast_BTCUSD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.22321707010269165, mae:0.362190842628479, rmse:0.47245854139328003, mape:0.09287405014038086, mspe:0.014932258985936642, r2:0.8725357055664062, dtw:Not calculated, time:14.63s, train_time:1791.20s, inference_time:0.0268ms/sample (707 samples, 0.0189s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+long_term_forecast_GSPC_96_24_DeReFusion-gatev1-volatilityaware_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.06767447292804718, mae:0.20176874101161957, rmse:0.2601431906223297, mape:0.06206656992435455, mspe:0.006970747373998165, r2:0.8577781915664673, dtw:Not calculated, time:15.93s, train_time:1262.14s, inference_time:0.1674ms/sample (479 samples, 0.0802s total), params:28580, trainable_params:28580, gpu_mem_peak_mb:nan
+
+long_term_forecast_ETHUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.1460183560848236, mae:0.29427000880241394, rmse:0.3821234703063965, mape:0.2081453502178192, mspe:0.08261978626251221, r2:0.6694031953811646, dtw:Not calculated, time:15.53s, train_time:1767.29s, inference_time:0.1639ms/sample (572 samples, 0.0938s total), params:28436, trainable_params:28436, gpu_mem_peak_mb:nan
+
+long_term_forecast_ETHUSD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.1487550139427185, mae:0.2943958640098572, rmse:0.3856877088546753, mape:0.21847479045391083, mspe:0.10301027446985245, r2:0.6632072329521179, dtw:Not calculated, time:15.22s, train_time:1768.72s, inference_time:0.0309ms/sample (572 samples, 0.0177s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+long_term_forecast_GSPC_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0  
+mse:0.05710850656032562, mae:0.1806514412164688, rmse:0.23897385597229004, mape:0.05595465749502182, mspe:0.006009223405271769, r2:0.8799831867218018, dtw:Not calculated, time:15.78s, train_time:1050.16s, inference_time:0.1578ms/sample (479 samples, 0.0756s total), params:28436, trainable_params:28436, gpu_mem_peak_mb:nan
+
+long_term_forecast_GSPC_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0  
+mse:0.06751029938459396, mae:0.20693156123161316, rmse:0.2598274350166321, mape:0.06333526968955994, mspe:0.006899735424667597, r2:0.858123242855072, dtw:Not calculated, time:15.30s, train_time:1169.83s, inference_time:0.0338ms/sample (479 samples, 0.0162s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+long_term_forecast_USDJPY_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.18949031829833984, mae:0.3271960914134979, rmse:0.4353048503398895, mape:0.08167268335819244, mspe:0.012552008964121342, r2:0.2943575978279114, dtw:Not calculated, time:21.50s, train_time:2237.76s, inference_time:0.0551ms/sample (497 samples, 0.0274s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+long_term_forecast_USDJPY_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.18831749260425568, mae:0.32776299118995667, rmse:0.4339556396007538, mape:0.0818752571940422, mspe:0.012423832900822163, r2:0.29872506856918335, dtw:Not calculated, time:20.97s, train_time:2333.37s, inference_time:0.4054ms/sample (497 samples, 0.2015s total), params:28436, trainable_params:28436, gpu_mem_peak_mb:nan
+
+long_term_forecast_EURUSD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.1677277386188507, mae:0.304410457611084, rmse:0.40954577922821045, mape:1.6566081047058105, mspe:88.88123321533203, r2:0.7223367691040039, dtw:Not calculated, time:20.87s, train_time:701.81s, inference_time:0.0563ms/sample (497 samples, 0.0280s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+long_term_forecast_SOX_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.21592245995998383, mae:0.35907095670700073, rmse:0.46467456221580505, mape:0.10392703115940094, mspe:0.02046462520956993, r2:0.6762946248054504, dtw:Not calculated, time:17.99s, train_time:1366.37s, inference_time:0.4263ms/sample (479 samples, 0.2042s total), params:28436, trainable_params:28436, gpu_mem_peak_mb:nan
+
+long_term_forecast_DJI_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.09758605062961578, mae:0.26718777418136597, rmse:0.3123876750469208, mape:0.09419964998960495, mspe:0.0129663972184062, r2:0.6293954849243164, dtw:Not calculated, time:18.31s, train_time:483.62s, inference_time:0.0293ms/sample (479 samples, 0.0140s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+long_term_forecast_EURUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.09753905236721039, mae:0.2408246248960495, rmse:0.31231242418289185, mape:0.8946834206581116, mspe:19.749605178833008, r2:0.8385299444198608, dtw:Not calculated, time:19.06s, train_time:1836.48s, inference_time:0.2601ms/sample (497 samples, 0.1293s total), params:28436, trainable_params:28436, gpu_mem_peak_mb:nan
+
+long_term_forecast_DJI_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.049070343375205994, mae:0.17168813943862915, rmse:0.22151826322078705, mape:0.06142923980951309, mspe:0.006814124528318644, r2:0.8136445879936218, dtw:Not calculated, time:16.40s, train_time:1343.83s, inference_time:0.1797ms/sample (479 samples, 0.0861s total), params:28436, trainable_params:28436, gpu_mem_peak_mb:nan
+
+long_term_forecast_BABA_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.08683899790048599, mae:0.20281986892223358, rmse:0.2946845591068268, mape:1.7920401096343994, mspe:188.1626434326172, r2:0.7032182216644287, dtw:Not calculated, time:15.82s, train_time:1140.49s, inference_time:0.1976ms/sample (479 samples, 0.0946s total), params:28436, trainable_params:28436, gpu_mem_peak_mb:nan
+
+long_term_forecast_BABA_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.096296526491642, mae:0.19910083711147308, rmse:0.3103168308734894, mape:1.5817232131958008, mspe:290.5734558105469, r2:0.670896053314209, dtw:Not calculated, time:15.85s, train_time:419.67s, inference_time:0.0989ms/sample (479 samples, 0.0474s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+long_term_forecast_NVO_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.6848299503326416, mae:0.6327958703041077, rmse:0.8275445103645325, mape:0.18490025401115417, mspe:0.08983516693115234, r2:0.8998106718063354, dtw:Not calculated, time:16.29s, train_time:1496.52s, inference_time:0.2132ms/sample (479 samples, 0.1021s total), params:28436, trainable_params:28436, gpu_mem_peak_mb:nan
+
+long_term_forecast_NVO_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.576488196849823, mae:0.5824735760688782, rmse:0.7592682242393494, mape:0.1602357178926468, mspe:0.06848428398370743, r2:0.9156608581542969, dtw:Not calculated, time:16.72s, train_time:1815.80s, inference_time:0.0338ms/sample (479 samples, 0.0162s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+long_term_forecast_TM_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.43751201033592224, mae:0.49538516998291016, rmse:0.6614469289779663, mape:0.1959102749824524, mspe:0.07049226760864258, r2:0.4587984085083008, dtw:Not calculated, time:16.24s, train_time:769.91s, inference_time:0.1795ms/sample (479 samples, 0.0860s total), params:28436, trainable_params:28436, gpu_mem_peak_mb:nan
+
+long_term_forecast_TM_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.3616969585418701, mae:0.4451110363006592, rmse:0.6014124751091003, mape:0.1752377301454544, mspe:0.05840187519788742, r2:0.5525814294815063, dtw:Not calculated, time:14.43s, train_time:1220.08s, inference_time:0.0264ms/sample (479 samples, 0.0126s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+long_term_forecast_SOX_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.19769665598869324, mae:0.3477993607521057, rmse:0.4446309208869934, mape:0.1002127081155777, mspe:0.018547527492046356, r2:0.7036182880401611, dtw:Not calculated, time:17.19s, train_time:1548.76s, inference_time:0.0342ms/sample (479 samples, 0.0164s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+long_term_forecast_BYD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.32645276188850403, mae:0.3379444181919098, rmse:0.5713604688644409, mape:1.4021859169006348, mspe:20.268978118896484, r2:0.634264349937439, dtw:Not calculated, time:17.70s, train_time:1093.94s, inference_time:0.0332ms/sample (458 samples, 0.0152s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+long_term_forecast_BYD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.37740787863731384, mae:0.36634138226509094, rmse:0.614335298538208, mape:1.5377838611602783, mspe:21.430025100708008, r2:0.5771776437759399, dtw:Not calculated, time:17.61s, train_time:1978.08s, inference_time:0.2088ms/sample (458 samples, 0.0956s total), params:28436, trainable_params:28436, gpu_mem_peak_mb:nan
+
+long_term_forecast_BOE_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.033905040472745895, mae:0.1386425644159317, rmse:0.18413321673870087, mape:2.512316942214966, mspe:140.95028686523438, r2:0.08330696821212769, dtw:Not calculated, time:17.14s, train_time:2136.24s, inference_time:0.2042ms/sample (457 samples, 0.0933s total), params:28436, trainable_params:28436, gpu_mem_peak_mb:nan
+
+long_term_forecast_BOE_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.03248347342014313, mae:0.13477109372615814, rmse:0.1802317202091217, mape:2.4707319736480713, mspe:116.57893371582031, r2:0.12174201011657715, dtw:Not calculated, time:16.82s, train_time:2074.55s, inference_time:0.0440ms/sample (457 samples, 0.0201s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+long_term_forecast_EASTMONEY_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.14295682311058044, mae:0.21788658201694489, rmse:0.3780963122844696, mape:1.659595012664795, mspe:107.74610137939453, r2:0.7383366823196411, dtw:Not calculated, time:16.21s, train_time:1913.28s, inference_time:0.0304ms/sample (457 samples, 0.0139s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+long_term_forecast_EASTMONEY_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.14257870614528656, mae:0.22305406630039215, rmse:0.3775959610939026, mape:1.7979413270950317, mspe:119.62220001220703, r2:0.7390287518501282, dtw:Not calculated, time:16.64s, train_time:1969.53s, inference_time:0.5485ms/sample (457 samples, 0.2507s total), params:28436, trainable_params:28436, gpu_mem_peak_mb:nan
+
+long_term_forecast_YANGHE_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.01737188920378685, mae:0.09998966753482819, rmse:0.13180246949195862, mape:0.10890597850084305, mspe:0.02432316727936268, r2:0.7591822147369385, dtw:Not calculated, time:18.67s, train_time:2002.39s, inference_time:0.0371ms/sample (458 samples, 0.0170s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+long_term_forecast_YANGHE_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0  
+mse:0.01876777783036232, mae:0.10453889518976212, rmse:0.13699553906917572, mape:0.11211109906435013, mspe:0.02525039203464985, r2:0.7398317456245422, dtw:Not calculated, time:18.53s, train_time:2062.80s, inference_time:0.7095ms/sample (458 samples, 0.3250s total), params:28436, trainable_params:28436, gpu_mem_peak_mb:nan
+

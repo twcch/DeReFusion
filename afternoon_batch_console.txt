@@ -1,0 +1,9 @@
+=== afternoon batch start 13:51:21 ===
+existing training finished 14:16:26
+BTCUSD stratification done 14:16:29
+==== START DeReFusion-gatev1-volatilityaware seed2021 14:16:29 ====
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_GSPC_96_24_DeReFusion-gatev1-volatilityaware_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_dashboard.png  (253045 bytes)
+
+Figures complete: 6/6 -> C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_GSPC_96_24_DeReFusion-gatev1-volatilityaware_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0
+==== END DeReFusion-gatev1-volatilityaware seed2021 14:37:54 ====
+==== START DeReFusion seed2022 14:37:54 ====

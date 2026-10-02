@@ -1,0 +1,50 @@
+{
+  "all_arrays_finite": true,
+  "asset": "BONDETF",
+  "command": "C:\\Users\\26843\\Documents\\ChatGPT\\redefusion\\.venv\\Scripts\\python.exe run.py --task_name long_term_forecast --is_training 1 --model_id phase1A_BONDETF_h24_s2021 --model revin-iTransformer --data custom --root_path dataset/ --data_path BONDETF-2016-2025.csv --features MS --target Close --freq b --seq_len 96 --label_len 48 --pred_len 24 --enc_in 4 --dec_in 4 --c_out 1 --d_model 32 --n_heads 8 --e_layers 2 --d_layers 1 --d_ff 2048 --moving_avg 25 --factor 1 --dropout 0.1 --embed timeF --train_epochs 30 --batch_size 32 --patience 5 --learning_rate 0.0001 --lradj cosine --rand_seed 2021 --num_workers 0 --no_use_gpu --des phase1A_calibration --result_log reproduction/logs/phase1/calibration_result_log.txt --deterministic",
+  "dataset_sha256": "5d2d1da9cdfb89cb3b506bfc9a3c043720f672ea1ce40667767950c22ac849ed",
+  "diagnostics": {
+    "gpu_peak_memory_mb": null,
+    "inference_ms_per_sample": 0.1755,
+    "parameter_count": 278976,
+    "train_time_seconds": 31.59
+  },
+  "environment": {
+    "device": "cpu",
+    "numpy": "2.1.2",
+    "pandas": "2.3.3",
+    "python": "3.11.15",
+    "scikit_learn": "1.7.2",
+    "torch": "2.5.1+cpu"
+  },
+  "git_commit": "18b738a2d4aed533294261d32156734b9ddaac0c",
+  "horizon": 24,
+  "model": "revin-iTransformer",
+  "protocol_version": "phase1-v1.1-2026-09-19",
+  "scientific_use": "none; execution calibration only",
+  "seed": 2021,
+  "sha256": {
+    "checkpoint.pth": "f8b0ecbe5a052ae4c26e64f88d1d4c5903d35309321b8e150668872320f4576d",
+    "metrics.npy": "b128b26322cd19c8b91c57334764ab76659542cc16ea65822d3b38c3a0c5104b",
+    "pred.npy": "fc3979e5f110b0d603ba815677a7055e305019cb30eea99523773b6c07fcce02",
+    "run.log": "88189bce2b70837032ae7439ef199b756fbae02fae81350c74e933625966d430",
+    "true.npy": "67582022977414302629e1a25b9c4b6828031313cbfc6fd4fa987b66b86f65b1"
+  },
+  "shapes": {
+    "metrics.npy": [
+      6
+    ],
+    "pred.npy": [
+      458,
+      24,
+      1
+    ],
+    "true.npy": [
+      458,
+      24,
+      1
+    ]
+  },
+  "split_mode": "ratio",
+  "status": "calibration_pass"
+}

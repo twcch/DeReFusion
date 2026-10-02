@@ -1,0 +1,30 @@
+﻿  pred.shape=(482, 24, 1), true.shape=(482, 24, 1)
+  metrics=[0.34632307 0.20325366 0.45083663 0.13002765 0.03463237 0.8137698 ]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_FTSE_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2023_0\fig_prediction_curves.png  (324687 bytes)
+
+Generating error_analysis...
+  pred.shape=(482, 24, 1), true.shape=(482, 24, 1)
+  metrics=[0.34632307 0.20325366 0.45083663 0.13002765 0.03463237 0.8137698 ]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_FTSE_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2023_0\fig_error_analysis.png  (98388 bytes)
+
+Generating metrics_radar...
+  pred.shape=(482, 24, 1), true.shape=(482, 24, 1)
+  metrics=[0.34632307 0.20325366 0.45083663 0.13002765 0.03463237 0.8137698 ]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_FTSE_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2023_0\fig_metrics_radar.png  (149076 bytes)
+
+Generating error_heatmap...
+  pred.shape=(482, 24, 1), true.shape=(482, 24, 1)
+  metrics=[0.34632307 0.20325366 0.45083663 0.13002765 0.03463237 0.8137698 ]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_FTSE_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2023_0\fig_error_heatmap.png  (128793 bytes)
+
+Generating pred_true...
+  pred.shape=(482, 24, 1), true.shape=(482, 24, 1)
+  metrics=[0.34632307 0.20325366 0.45083663 0.13002765 0.03463237 0.8137698 ]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_FTSE_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2023_0\fig_pred_true.png  (152274 bytes)
+
+Generating dashboard...
+  pred.shape=(482, 24, 1), true.shape=(482, 24, 1)
+  metrics=[0.34632307 0.20325366 0.45083663 0.13002765 0.03463237 0.8137698 ]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_FTSE_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2023_0\fig_dashboard.png  (230574 bytes)
+
+Figures complete: 6/6 -> C:\Users\geng\DeReFusion\test_results\long_term_forecast_FTSE_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2023_0

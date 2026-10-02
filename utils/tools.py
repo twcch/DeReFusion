@@ -60,6 +60,21 @@ class EarlyStopping:
         torch.save(model.state_dict(), path + '/' + 'checkpoint.pth')
         self.val_loss_min = val_loss
 
+    def state_dict(self):
+        """The part of the early-stopping decision a resume has to reproduce.
+
+        ``val_loss_min`` is not here because it is only a printing aid; the
+        decision reads ``best_score`` and ``counter``.
+        """
+        return {"counter": self.counter, "best_score": self.best_score,
+                "early_stop": self.early_stop, "val_loss_min": self.val_loss_min}
+
+    def load_state_dict(self, state):
+        self.counter = state["counter"]
+        self.best_score = state["best_score"]
+        self.early_stop = state["early_stop"]
+        self.val_loss_min = state["val_loss_min"]
+
 
 class dotdict(dict):
     """dot.notation access to dictionary attributes"""

@@ -1,0 +1,204 @@
+Using cpu or mps
+Args in experiment:
+[1mBasic Config[0m
+  Task Name:          long_term_forecast  Is Training:        1                   
+  Model ID:           USDJPY_96_24        Model:              revin-DLinear       
+
+[1mData Loader[0m
+  Data:               custom              Root Path:          ./dataset/          
+  Data Path:          USDJPY-2016-2025.csvFeatures:           MS                  
+  Target:             Close               Freq:               b                   
+  Checkpoints:        ./checkpoints/      
+
+[1mForecasting Task[0m
+  Seq Len:            96                  Label Len:          48                  
+  Pred Len:           24                  Seasonal Patterns:  Monthly             
+  Inverse:            0                   
+
+[1mModel Parameters[0m
+  Top k:              5                   Num Kernels:        6                   
+  Enc In:             4                   Dec In:             4                   
+  C Out:              1                   d model:            32                  
+  n heads:            8                   e layers:           2                   
+  d layers:           1                   d FF:               2048                
+  Moving Avg:         25                  Factor:             1                   
+  Distil:             1                   Dropout:            0.1                 
+  Embed:              timeF               Activation:         gelu                
+
+[1mRun Parameters[0m
+  Num Workers:        10                  Itr:                1                   
+  Train Epochs:       30                  Batch Size:         32                  
+  Patience:           5                   Learning Rate:      0.0001              
+  Des:                test                Loss:               MSE                 
+  Lradj:              cosine              Use Amp:            0                   
+
+[1mGPU[0m
+  Use GPU:            0                   GPU:                0                   
+  Use Multi GPU:      0                   Devices:            0,1,2,3             
+
+[1mDe-stationary Projector Params[0m
+  P Hidden Dims:      128, 128            P Hidden Layers:    2                   
+
+Use CPU
+[Lazy Loading] revin-DLinear ...
+>>>>>>>start training : long_term_forecast_USDJPY_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 1702
+val 238
+test 497
+Epoch: 1 cost time: 31.556283950805664
+Epoch: 1, Steps: 54 | Train Loss: 0.2060280 Vali Loss: 0.3162286 Test Loss: 0.3362786
+Validation loss decreased (inf --> 0.316229).  Saving model ...
+Updating learning rate to 9.972609476841367e-05
+Epoch: 2 cost time: 32.82082986831665
+Epoch: 2, Steps: 54 | Train Loss: 0.1585061 Vali Loss: 0.2344469 Test Loss: 0.2972599
+Validation loss decreased (0.316229 --> 0.234447).  Saving model ...
+Updating learning rate to 9.890738003669029e-05
+Epoch: 3 cost time: 31.16193437576294
+Epoch: 3, Steps: 54 | Train Loss: 0.1344585 Vali Loss: 0.1887953 Test Loss: 0.2768913
+Validation loss decreased (0.234447 --> 0.188795).  Saving model ...
+Updating learning rate to 9.755282581475769e-05
+Epoch: 4 cost time: 32.55940103530884
+Epoch: 4, Steps: 54 | Train Loss: 0.1182054 Vali Loss: 0.1697973 Test Loss: 0.2654518
+Validation loss decreased (0.188795 --> 0.169797).  Saving model ...
+Updating learning rate to 9.567727288213005e-05
+Epoch: 5 cost time: 31.691246032714844
+Epoch: 5, Steps: 54 | Train Loss: 0.1064387 Vali Loss: 0.1569454 Test Loss: 0.2570644
+Validation loss decreased (0.169797 --> 0.156945).  Saving model ...
+Updating learning rate to 9.330127018922194e-05
+Epoch: 6 cost time: 37.711350440979004
+Epoch: 6, Steps: 54 | Train Loss: 0.1013987 Vali Loss: 0.1463776 Test Loss: 0.2492376
+Validation loss decreased (0.156945 --> 0.146378).  Saving model ...
+Updating learning rate to 9.045084971874738e-05
+Epoch: 7 cost time: 38.13091778755188
+Epoch: 7, Steps: 54 | Train Loss: 0.0968584 Vali Loss: 0.1430109 Test Loss: 0.2423914
+Validation loss decreased (0.146378 --> 0.143011).  Saving model ...
+Updating learning rate to 8.715724127386972e-05
+Epoch: 8 cost time: 37.17108488082886
+Epoch: 8, Steps: 54 | Train Loss: 0.0940554 Vali Loss: 0.1381152 Test Loss: 0.2352265
+Validation loss decreased (0.143011 --> 0.138115).  Saving model ...
+Updating learning rate to 8.345653031794292e-05
+Epoch: 9 cost time: 35.876636028289795
+Epoch: 9, Steps: 54 | Train Loss: 0.0914731 Vali Loss: 0.1355339 Test Loss: 0.2285831
+Validation loss decreased (0.138115 --> 0.135534).  Saving model ...
+Updating learning rate to 7.938926261462366e-05
+Epoch: 10 cost time: 36.21589708328247
+Epoch: 10, Steps: 54 | Train Loss: 0.0898043 Vali Loss: 0.1328482 Test Loss: 0.2208533
+Validation loss decreased (0.135534 --> 0.132848).  Saving model ...
+Updating learning rate to 7.500000000000001e-05
+Epoch: 11 cost time: 35.84499955177307
+Epoch: 11, Steps: 54 | Train Loss: 0.0882905 Vali Loss: 0.1288715 Test Loss: 0.2155357
+Validation loss decreased (0.132848 --> 0.128871).  Saving model ...
+Updating learning rate to 7.033683215379002e-05
+Epoch: 12 cost time: 36.22290086746216
+Epoch: 12, Steps: 54 | Train Loss: 0.0867491 Vali Loss: 0.1239326 Test Loss: 0.2101556
+Validation loss decreased (0.128871 --> 0.123933).  Saving model ...
+Updating learning rate to 6.545084971874738e-05
+Epoch: 13 cost time: 36.70565462112427
+Epoch: 13, Steps: 54 | Train Loss: 0.0862491 Vali Loss: 0.1232711 Test Loss: 0.2063807
+Validation loss decreased (0.123933 --> 0.123271).  Saving model ...
+Updating learning rate to 6.0395584540887963e-05
+Epoch: 14 cost time: 38.769699811935425
+Epoch: 14, Steps: 54 | Train Loss: 0.0844292 Vali Loss: 0.1244607 Test Loss: 0.2021077
+EarlyStopping counter: 1 out of 5
+Updating learning rate to 5.522642316338268e-05
+Epoch: 15 cost time: 37.444735050201416
+Epoch: 15, Steps: 54 | Train Loss: 0.0867933 Vali Loss: 0.1209637 Test Loss: 0.1991249
+Validation loss decreased (0.123271 --> 0.120964).  Saving model ...
+Updating learning rate to 5e-05
+Epoch: 16 cost time: 36.289992809295654
+Epoch: 16, Steps: 54 | Train Loss: 0.0821409 Vali Loss: 0.1188767 Test Loss: 0.1962949
+Validation loss decreased (0.120964 --> 0.118877).  Saving model ...
+Updating learning rate to 4.477357683661734e-05
+Epoch: 17 cost time: 36.8779935836792
+Epoch: 17, Steps: 54 | Train Loss: 0.0810695 Vali Loss: 0.1172965 Test Loss: 0.1940106
+Validation loss decreased (0.118877 --> 0.117297).  Saving model ...
+Updating learning rate to 3.960441545911204e-05
+Epoch: 18 cost time: 35.59764003753662
+Epoch: 18, Steps: 54 | Train Loss: 0.0811254 Vali Loss: 0.1188144 Test Loss: 0.1917734
+EarlyStopping counter: 1 out of 5
+Updating learning rate to 3.4549150281252636e-05
+Epoch: 19 cost time: 36.14028263092041
+Epoch: 19, Steps: 54 | Train Loss: 0.0806201 Vali Loss: 0.1165906 Test Loss: 0.1907845
+Validation loss decreased (0.117297 --> 0.116591).  Saving model ...
+Updating learning rate to 2.9663167846209994e-05
+Epoch: 20 cost time: 36.228490114212036
+Epoch: 20, Steps: 54 | Train Loss: 0.0793891 Vali Loss: 0.1162526 Test Loss: 0.1895245
+Validation loss decreased (0.116591 --> 0.116253).  Saving model ...
+Updating learning rate to 2.500000000000001e-05
+Epoch: 21 cost time: 35.26118564605713
+Epoch: 21, Steps: 54 | Train Loss: 0.0797450 Vali Loss: 0.1148069 Test Loss: 0.1882816
+Validation loss decreased (0.116253 --> 0.114807).  Saving model ...
+Updating learning rate to 2.061073738537635e-05
+Epoch: 22 cost time: 35.47160005569458
+Epoch: 22, Steps: 54 | Train Loss: 0.0786565 Vali Loss: 0.1159470 Test Loss: 0.1873469
+EarlyStopping counter: 1 out of 5
+Updating learning rate to 1.6543469682057106e-05
+Epoch: 23 cost time: 36.61857581138611
+Epoch: 23, Steps: 54 | Train Loss: 0.0785159 Vali Loss: 0.1157181 Test Loss: 0.1868338
+EarlyStopping counter: 2 out of 5
+Updating learning rate to 1.2842758726130283e-05
+Epoch: 24 cost time: 35.319316148757935
+Epoch: 24, Steps: 54 | Train Loss: 0.0782210 Vali Loss: 0.1169345 Test Loss: 0.1860379
+EarlyStopping counter: 3 out of 5
+Updating learning rate to 9.549150281252633e-06
+Epoch: 25 cost time: 35.934818744659424
+Epoch: 25, Steps: 54 | Train Loss: 0.0778700 Vali Loss: 0.1165706 Test Loss: 0.1856153
+EarlyStopping counter: 4 out of 5
+Updating learning rate to 6.698729810778065e-06
+Epoch: 26 cost time: 35.32930827140808
+Epoch: 26, Steps: 54 | Train Loss: 0.0793770 Vali Loss: 0.1127641 Test Loss: 0.1852463
+Validation loss decreased (0.114807 --> 0.112764).  Saving model ...
+Updating learning rate to 4.322727117869951e-06
+Epoch: 27 cost time: 36.28005290031433
+Epoch: 27, Steps: 54 | Train Loss: 0.0789251 Vali Loss: 0.1162033 Test Loss: 0.1850723
+EarlyStopping counter: 1 out of 5
+Updating learning rate to 2.4471741852423237e-06
+Epoch: 28 cost time: 35.91170859336853
+Epoch: 28, Steps: 54 | Train Loss: 0.0782275 Vali Loss: 0.1177693 Test Loss: 0.1849785
+EarlyStopping counter: 2 out of 5
+Updating learning rate to 1.0926199633097157e-06
+Epoch: 29 cost time: 36.342122316360474
+Epoch: 29, Steps: 54 | Train Loss: 0.0780615 Vali Loss: 0.1185885 Test Loss: 0.1849084
+EarlyStopping counter: 3 out of 5
+Updating learning rate to 2.7390523158633554e-07
+Epoch: 30 cost time: 37.94569754600525
+Epoch: 30, Steps: 54 | Train Loss: 0.0781719 Vali Loss: 0.1133479 Test Loss: 0.1848942
+EarlyStopping counter: 4 out of 5
+Updating learning rate to 0.0
+>>>>>>>testing : long_term_forecast_USDJPY_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 497
+test shape: (497, 24, 1) (497, 24, 1)
+test shape: (497, 24, 1) (497, 24, 1)
+mse:0.18949031829833984, mae:0.3271960914134979, rmse:0.4353048503398895, mape:0.08167268335819244, mspe:0.012552008964121342, r2:0.2943575978279114, dtw:Not calculated, time:21.50s, train_time:2237.76s, inference_time:0.0551ms/sample (497 samples, 0.0274s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+Generating prediction_curves...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[0.3271961  0.18949032 0.43530485 0.08167268 0.01255201 0.2943576 ]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_USDJPY_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_prediction_curves.png  (328217 bytes)
+
+Generating error_analysis...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[0.3271961  0.18949032 0.43530485 0.08167268 0.01255201 0.2943576 ]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_USDJPY_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_error_analysis.png  (100996 bytes)
+
+Generating metrics_radar...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[0.3271961  0.18949032 0.43530485 0.08167268 0.01255201 0.2943576 ]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_USDJPY_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_metrics_radar.png  (147835 bytes)
+
+Generating error_heatmap...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[0.3271961  0.18949032 0.43530485 0.08167268 0.01255201 0.2943576 ]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_USDJPY_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_error_heatmap.png  (128504 bytes)
+
+Generating pred_true...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[0.3271961  0.18949032 0.43530485 0.08167268 0.01255201 0.2943576 ]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_USDJPY_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_pred_true.png  (195157 bytes)
+
+Generating dashboard...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[0.3271961  0.18949032 0.43530485 0.08167268 0.01255201 0.2943576 ]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_USDJPY_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_dashboard.png  (228315 bytes)
+
+Figures complete: 6/6 -> C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_USDJPY_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0

@@ -1,0 +1,118 @@
+Using cpu or mps
+Args in experiment:
+[1mBasic Config[0m
+  Task Name:          long_term_forecast  Is Training:        1                   
+  Model ID:           BABA_96_24          Model:              revin-DLinear       
+
+[1mData Loader[0m
+  Data:               custom              Root Path:          ./dataset/          
+  Data Path:          BABA-2016-2025.csv  Features:           MS                  
+  Target:             Close               Freq:               b                   
+  Checkpoints:        ./checkpoints/      
+
+[1mForecasting Task[0m
+  Seq Len:            96                  Label Len:          48                  
+  Pred Len:           24                  Seasonal Patterns:  Monthly             
+  Inverse:            0                   
+
+[1mModel Parameters[0m
+  Top k:              5                   Num Kernels:        6                   
+  Enc In:             4                   Dec In:             4                   
+  C Out:              1                   d model:            32                  
+  n heads:            8                   e layers:           2                   
+  d layers:           1                   d FF:               2048                
+  Moving Avg:         25                  Factor:             1                   
+  Distil:             1                   Dropout:            0.1                 
+  Embed:              timeF               Activation:         gelu                
+
+[1mRun Parameters[0m
+  Num Workers:        10                  Itr:                1                   
+  Train Epochs:       30                  Batch Size:         32                  
+  Patience:           5                   Learning Rate:      0.0001              
+  Des:                test                Loss:               MSE                 
+  Lradj:              cosine              Use Amp:            0                   
+
+[1mGPU[0m
+  Use GPU:            0                   GPU:                0                   
+  Use Multi GPU:      0                   Devices:            0,1,2,3             
+
+[1mDe-stationary Projector Params[0m
+  P Hidden Dims:      128, 128            P Hidden Layers:    2                   
+
+Use CPU
+[Lazy Loading] revin-DLinear ...
+>>>>>>>start training : long_term_forecast_BABA_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 1640
+val 229
+test 479
+Epoch: 1 cost time: 28.4159095287323
+Epoch: 1, Steps: 52 | Train Loss: 0.1676133 Vali Loss: 0.0340384 Test Loss: 0.1048622
+Validation loss decreased (inf --> 0.034038).  Saving model ...
+Updating learning rate to 9.972609476841367e-05
+Epoch: 2 cost time: 28.73687195777893
+Epoch: 2, Steps: 52 | Train Loss: 0.1303834 Vali Loss: 0.0333799 Test Loss: 0.0961858
+Validation loss decreased (0.034038 --> 0.033380).  Saving model ...
+Updating learning rate to 9.890738003669029e-05
+Epoch: 3 cost time: 28.38216471672058
+Epoch: 3, Steps: 52 | Train Loss: 0.1076287 Vali Loss: 0.0340882 Test Loss: 0.0929760
+EarlyStopping counter: 1 out of 5
+Updating learning rate to 9.755282581475769e-05
+Epoch: 4 cost time: 28.453945636749268
+Epoch: 4, Steps: 52 | Train Loss: 0.0944122 Vali Loss: 0.0342853 Test Loss: 0.0915958
+EarlyStopping counter: 2 out of 5
+Updating learning rate to 9.567727288213005e-05
+Epoch: 5 cost time: 27.835094213485718
+Epoch: 5, Steps: 52 | Train Loss: 0.0869872 Vali Loss: 0.0345037 Test Loss: 0.0910542
+EarlyStopping counter: 3 out of 5
+Updating learning rate to 9.330127018922194e-05
+Epoch: 6 cost time: 28.136149883270264
+Epoch: 6, Steps: 52 | Train Loss: 0.0833546 Vali Loss: 0.0372141 Test Loss: 0.0904681
+EarlyStopping counter: 4 out of 5
+Updating learning rate to 9.045084971874738e-05
+Epoch: 7 cost time: 28.62708306312561
+Epoch: 7, Steps: 52 | Train Loss: 0.0801193 Vali Loss: 0.0377498 Test Loss: 0.0892505
+EarlyStopping counter: 5 out of 5
+Early stopping
+>>>>>>>testing : long_term_forecast_BABA_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 479
+test shape: (479, 24, 1) (479, 24, 1)
+test shape: (479, 24, 1) (479, 24, 1)
+mse:0.096296526491642, mae:0.19910083711147308, rmse:0.3103168308734894, mape:1.5817232131958008, mspe:290.5734558105469, r2:0.670896053314209, dtw:Not calculated, time:15.85s, train_time:419.67s, inference_time:0.0989ms/sample (479 samples, 0.0474s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+Generating prediction_curves...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[1.9910084e-01 9.6296526e-02 3.1031683e-01 1.5817232e+00 2.9057346e+02
+ 6.7089605e-01]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_BABA_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_prediction_curves.png  (315236 bytes)
+
+Generating error_analysis...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[1.9910084e-01 9.6296526e-02 3.1031683e-01 1.5817232e+00 2.9057346e+02
+ 6.7089605e-01]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_BABA_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_error_analysis.png  (95917 bytes)
+
+Generating metrics_radar...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[1.9910084e-01 9.6296526e-02 3.1031683e-01 1.5817232e+00 2.9057346e+02
+ 6.7089605e-01]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_BABA_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_metrics_radar.png  (134751 bytes)
+
+Generating error_heatmap...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[1.9910084e-01 9.6296526e-02 3.1031683e-01 1.5817232e+00 2.9057346e+02
+ 6.7089605e-01]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_BABA_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_error_heatmap.png  (118454 bytes)
+
+Generating pred_true...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[1.9910084e-01 9.6296526e-02 3.1031683e-01 1.5817232e+00 2.9057346e+02
+ 6.7089605e-01]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_BABA_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_pred_true.png  (151506 bytes)
+
+Generating dashboard...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[1.9910084e-01 9.6296526e-02 3.1031683e-01 1.5817232e+00 2.9057346e+02
+ 6.7089605e-01]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_BABA_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_dashboard.png  (239516 bytes)
+
+Figures complete: 6/6 -> C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_BABA_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0

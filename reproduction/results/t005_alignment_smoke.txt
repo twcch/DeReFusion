@@ -1,0 +1,19 @@
+--- AAPL seed2021
+    source : C:\Users\26843\lobster-link\geng-lobster\T005-c1\2021\AAPL_DeReFusion
+    placed : results/long_term_forecast_AAPL_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0
+    shapes : pred(479, 24) true(479, 24) finite=True
+    cohort : n=2514 num_train=1759 border1=1916 expected_samples=479
+    true vs recomputed-from-locked-CSV: max|diff|=2.329e-07 (relative 5.552e-08) -> MATCH
+    metrics (6 frozen values): [0.223061 0.084365 0.290456 0.081368 0.012086 0.732897]
+    shape convention vs an existing project run: existing (479, 24, 1) vs delivered (479, 24, 1)
+--- HSI seed2021
+    source : C:\Users\26843\lobster-link\geng-lobster\T005-c1\2021\HSI_DeReFusion
+    placed : results/long_term_forecast_HSI_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0
+    shapes : pred(468, 24) true(468, 24) finite=True
+    cohort : n=2459 num_train=1721 border1=1872 expected_samples=468
+    true vs recomputed-from-locked-CSV: max|diff|=1.178e-07 (relative 4.003e-08) -> MATCH
+    metrics (6 frozen values): [ 0.271949  0.142634  0.377669  1.091013 73.491905  0.854216]
+    shape convention vs an existing project run: existing (479, 24, 1) vs delivered (468, 24, 1)
+
+PLUMBING VERDICT: OK - artefacts are wired correctly
+(no interaction effect, no statistic, no verdict: this is a wiring check only)

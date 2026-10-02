@@ -1,0 +1,353 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "DeReFusion 仓库架构：训练运行时与复现门禁",
+    "locale": "zh-CN",
+    "output": ".archify/architecture-derefusion-system-20261002-135338/derefusion-architecture.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/Alastair-Jiang/DeReFusion",
+      "provider": "github",
+      "link_mode": "local-only",
+      "revision": "001717222fb50f588ec28746e0deb2cd66bb07ef"
+    },
+    "views": [
+      {
+        "id": "training-path",
+        "label": "训练主线",
+        "focus": ["researcher", "run-entry", "exp-loop", "derefusion-model"],
+        "note": "先读 run.py 的参数与设备选择，再看实验类的 train/vali/test，最后读模型的 forecast。"
+      },
+      {
+        "id": "gate-path",
+        "label": "冻结实验门禁",
+        "focus": ["docs-prereg", "auth-gate", "stage-runner", "frozen-manifests", "attempt-archive"],
+        "note": "默认只读预览；授权、环境指纹与 git 提交全部匹配后才 spawn 训练子进程。"
+      },
+      {
+        "id": "verification-path",
+        "label": "复算与证据",
+        "focus": ["data-loader", "dataset-csv", "run-artifacts", "analysis"],
+        "note": "对照数据注册表与 attempts 收据，理解结论能被追查到哪一步。"
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "docs-prereg",
+      "type": "external",
+      "label": "冻结方案与教条",
+      "sublabel": "先定判据再看结果",
+      "tag": "防事后挑选",
+      "pos": [40, 40],
+      "size": [150, 62],
+      "sources": [
+        { "path": "docs/PHASE1_PREREGISTRATION.md", "label": "冻结判据原文" },
+        { "path": "docs/EXPERIMENTAL_DOCTRINE.md", "label": "研究流程约束" },
+        { "path": "reproduction/batches/run_phase1_stages.py", "line": 308, "end_line": 309, "label": "须引用决策记录" }
+      ]
+    },
+    {
+      "id": "auth-gate",
+      "type": "security",
+      "label": "授权记录与环境指纹",
+      "sublabel": "版本与硬件须匹配",
+      "tag": "失败即停",
+      "pos": [270, 40],
+      "size": [150, 62],
+      "sources": [
+        { "path": "reproduction/batches/run_phase1_stages.py", "line": 295, "end_line": 318, "label": "提交与指纹校验" },
+        { "path": "reproduction/batches/run_phase1_stages.py", "line": 322, "end_line": 331, "label": "GPU 型号与 UUID" },
+        { "path": "reproduction/batches/run_phase1_stages.py", "line": 264, "end_line": 293, "label": "禁止合并排名" }
+      ]
+    },
+    {
+      "id": "stage-runner",
+      "type": "backend",
+      "label": "阶段门禁启动器",
+      "sublabel": "只派发不训练·默认预览",
+      "tag": "默认 dry-run",
+      "pos": [500, 40],
+      "size": [150, 62],
+      "sources": [
+        { "path": "reproduction/batches/run_phase1_stages.py", "line": 1, "end_line": 4, "label": "fail-closed 说明" },
+        { "path": "reproduction/batches/run_phase1_stages.py", "line": 471, "label": "--execute 开关" },
+        { "path": "reproduction/batches/run_phase1_stages.py", "line": 570, "end_line": 574, "label": "预览即返回" }
+      ]
+    },
+    {
+      "id": "frozen-manifests",
+      "type": "database",
+      "label": "冻结清单与注册表",
+      "sublabel": "该跑哪些组合",
+      "tag": "哈希可核",
+      "pos": [730, 40],
+      "size": [150, 62],
+      "sources": [
+        { "path": "reproduction/analysis/build_phase1_manifest.py", "line": 114, "end_line": 119 },
+        { "path": "reproduction/analysis/dataset_audit.py", "line": 94, "end_line": 103, "label": "数据注册表" },
+        { "path": "reproduction/batches/run_phase1_stages.py", "line": 30, "end_line": 39, "label": "清单与键路径" }
+      ]
+    },
+    {
+      "id": "analysis",
+      "type": "backend",
+      "label": "审计与复算脚本",
+      "sublabel": "重算而不重训",
+      "tag": "不改写行情",
+      "pos": [960, 40],
+      "size": [150, 62],
+      "sources": [
+        { "path": "reproduction/analysis/dataset_audit.py", "line": 1, "end_line": 4, "label": "只做描述性审计" },
+        { "path": "reproduction/analysis/build_phase1_manifest.py", "line": 122, "end_line": 139 },
+        { "path": "reproduction/analysis/phase1_stage_c_descriptive_summary.py", "line": 61, "end_line": 67 }
+      ]
+    },
+    {
+      "id": "attempt-archive",
+      "type": "database",
+      "label": "尝试归档",
+      "sublabel": "含失败与中断记录",
+      "tag": "拒绝覆盖",
+      "pos": [500, 180],
+      "size": [150, 62],
+      "sources": [
+        { "path": "reproduction/batches/run_phase1_stages.py", "line": 41 },
+        { "path": "reproduction/batches/run_phase1_stages.py", "line": 66, "end_line": 82, "label": "原子写与拒覆盖" },
+        { "path": "reproduction/batches/run_phase1_stages.py", "line": 386, "end_line": 431, "label": "异常与中断留档" }
+      ]
+    },
+    {
+      "id": "researcher",
+      "type": "external",
+      "label": "研究者与执行轨道",
+      "sublabel": "换机器即换轨道",
+      "pos": [40, 320],
+      "size": [150, 62],
+      "sources": [
+        { "path": "README.md", "line": 152, "end_line": 165, "label": "示例命令" },
+        { "path": "reproduction/batches/run_phase1_stages.py", "line": 326, "end_line": 336, "label": "轨道锁定硬件" },
+        { "path": "README.md", "line": 119, "end_line": 128, "label": "各阶段核实进度" }
+      ]
+    },
+    {
+      "id": "run-entry",
+      "type": "backend",
+      "label": "命令行入口",
+      "sublabel": "参数 · 种子 · 设备",
+      "tag": "一次一个 setting",
+      "pos": [270, 320],
+      "size": [150, 62],
+      "sources": [
+        { "path": "run.py", "line": 170, "end_line": 199, "label": "种子与设备" },
+        { "path": "run.py", "line": 211, "end_line": 231, "label": "任务分派" },
+        { "path": "run.py", "line": 233, "end_line": 263, "label": "setting 命名" }
+      ]
+    },
+    {
+      "id": "exp-loop",
+      "type": "backend",
+      "label": "训练验证测试循环",
+      "sublabel": "早停只看验证损失",
+      "pos": [500, 320],
+      "size": [150, 62],
+      "sources": [
+        { "path": "exp/exp_long_term_forecasting.py", "line": 91, "end_line": 104 },
+        { "path": "exp/exp_long_term_forecasting.py", "line": 171, "end_line": 196, "label": "测试集不再每轮打印" },
+        { "path": "exp/exp_long_term_forecasting.py", "line": 310, "end_line": 363, "label": "指标与产物写出" }
+      ]
+    },
+    {
+      "id": "derefusion-model",
+      "type": "backend",
+      "label": "DeReFusion 模型",
+      "sublabel": "基分支加残差相加",
+      "tag": "先归一后还原",
+      "pos": [730, 320],
+      "size": [150, 62],
+      "sources": [
+        { "path": "models/derefusion/DeReFusion.py", "line": 93, "end_line": 115, "label": "forecast 相加融合" },
+        { "path": "layers/RevIN.py", "line": 18, "end_line": 46, "label": "窗口统计归一化" }
+      ]
+    },
+    {
+      "id": "model-variants",
+      "type": "backend",
+      "label": "消融门控与基线",
+      "sublabel": "去掉某块会怎样",
+      "tag": "含零样本适配器",
+      "pos": [960, 320],
+      "size": [150, 62],
+      "sources": [
+        { "path": "models/revin-DLinear.py", "line": 28, "end_line": 29, "label": "RevIN 包装基线" },
+        { "path": "models/derefusion/ablation_variant/DeReFusion-woLSTM.py", "label": "消融变体" },
+        { "path": "models/Chronos.py", "line": 36, "label": "零样本任务分支" }
+      ]
+    },
+    {
+      "id": "exp-basic",
+      "type": "backend",
+      "label": "模型发现与设备",
+      "sublabel": "按文件名找模型",
+      "tag": "新增模型免注册",
+      "pos": [730, 460],
+      "size": [150, 62],
+      "sources": [
+        { "path": "exp/exp_basic.py", "line": 20, "end_line": 27 },
+        { "path": "exp/exp_basic.py", "line": 28, "end_line": 57, "label": "递归扫描 models/" },
+        { "path": "exp/exp_basic.py", "line": 96, "end_line": 128, "label": "惰性导入 Model 类" }
+      ]
+    },
+    {
+      "id": "data-loader",
+      "type": "backend",
+      "label": "数据提供层",
+      "sublabel": "只用训练段拟合",
+      "tag": "防数据泄漏",
+      "pos": [270, 460],
+      "size": [150, 62],
+      "sources": [
+        { "path": "data_provider/data_factory.py", "line": 22, "end_line": 46, "label": "按 --data 选类" },
+        { "path": "data_provider/data_loader.py", "line": 338, "end_line": 380, "label": "切分与 scaler 拟合" },
+        { "path": "run.py", "line": 36, "end_line": 43, "label": "显式日期边界" }
+      ]
+    },
+    {
+      "id": "dataset-csv",
+      "type": "database",
+      "label": "日频 OHLC 数据",
+      "sublabel": "开高低收四列",
+      "tag": "61 份样本",
+      "pos": [270, 600],
+      "size": [150, 62],
+      "sources": [
+        { "path": "data_provider/data_loader.py", "line": 339, "end_line": 344 },
+        { "path": "README.md", "line": 88, "end_line": 92, "label": "数据范围与质量" }
+      ]
+    },
+    {
+      "id": "checkpoints",
+      "type": "database",
+      "label": "权重检查点",
+      "sublabel": "早停写 · 测试读",
+      "tag": "含可选逐轮快照",
+      "pos": [500, 600],
+      "size": [150, 62],
+      "sources": [
+        { "path": "run.py", "line": 33 },
+        { "path": "utils/tools.py", "line": 42, "end_line": 60, "label": "真正的写入点" },
+        { "path": "exp/exp_long_term_forecasting.py", "line": 205, "end_line": 236, "label": "快照续跑" }
+      ]
+    },
+    {
+      "id": "run-artifacts",
+      "type": "database",
+      "label": "运行产物目录",
+      "sublabel": "预测与真值数组",
+      "tag": "追加式指标日志",
+      "pos": [960, 600],
+      "size": [150, 62],
+      "sources": [
+        { "path": "exp/exp_long_term_forecasting.py", "line": 317, "end_line": 363 },
+        { "path": "run.py", "line": 34, "end_line": 35 }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "复现门禁与证据链",
+      "wraps": ["docs-prereg", "auth-gate", "stage-runner", "frozen-manifests", "analysis", "attempt-archive"]
+    },
+    {
+      "kind": "region",
+      "label": "训练运行时单进程",
+      "wraps": ["run-entry", "exp-loop", "derefusion-model", "model-variants", "exp-basic", "data-loader"]
+    }
+  ],
+  "connections": [
+    { "id": "docs-to-auth", "from": "docs-prereg", "to": "auth-gate", "label": "冻结判据", "variant": "security" },
+    { "id": "auth-to-runner", "from": "auth-gate", "to": "stage-runner", "label": "校验放行", "variant": "security" },
+    { "id": "manifests-to-runner", "from": "frozen-manifests", "to": "stage-runner", "label": "读批次", "fromSide": "left", "toSide": "right" },
+    { "id": "analysis-to-manifests", "from": "analysis", "to": "frozen-manifests", "label": "写清单", "fromSide": "left", "toSide": "right", "variant": "dashed" },
+    { "id": "runner-to-attempts", "from": "stage-runner", "to": "attempt-archive", "label": "打包收据" },
+    { "id": "attempts-to-analysis", "from": "attempt-archive", "to": "analysis", "label": "复算输入", "fromSide": "right", "toSide": "bottom", "variant": "dashed" },
+    { "id": "runner-spawn-entry", "from": "stage-runner", "to": "run-entry", "label": "启动训练", "fromSide": "bottom", "toSide": "top" },
+    { "id": "researcher-to-entry", "from": "researcher", "to": "run-entry", "label": "命令行", "variant": "emphasis" },
+    { "id": "entry-to-exp-loop", "from": "run-entry", "to": "exp-loop", "label": "实例化", "variant": "emphasis" },
+    { "id": "exp-loop-to-model", "from": "exp-loop", "to": "derefusion-model", "label": "逐批前向", "variant": "emphasis" },
+    { "id": "exp-loop-to-exp-basic", "from": "exp-loop", "to": "exp-basic", "label": "扫描模型", "fromSide": "right", "toSide": "left" },
+    { "id": "exp-basic-to-model", "from": "exp-basic", "to": "derefusion-model", "label": "惰性导入", "fromSide": "top", "toSide": "bottom" },
+    { "id": "exp-basic-to-variants", "from": "exp-basic", "to": "model-variants", "label": "同一扫描", "fromSide": "right", "toSide": "bottom" },
+    { "id": "exp-loop-to-data-loader", "from": "exp-loop", "to": "data-loader", "label": "取批次", "fromSide": "bottom", "toSide": "top" },
+    { "id": "data-loader-to-dataset", "from": "data-loader", "to": "dataset-csv", "label": "读 CSV" },
+    { "id": "exp-loop-to-checkpoints", "from": "exp-loop", "to": "checkpoints", "label": "早停保存", "fromSide": "bottom", "toSide": "top" },
+    { "id": "exp-loop-to-artifacts", "from": "exp-loop", "to": "run-artifacts", "label": "写产物", "fromSide": "bottom", "toSide": "top" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "概念速查：先懂这五个词",
+      "items": [
+        "RevIN：只用当前输入窗口的均值与标准差做缩放，预测完再还原，削弱不同时间段的水平漂移",
+        "分解：移动平均把序列拆成趋势与季节两部分，DLinear 基分支对两部分各用一条线性层",
+        "残差：基分支没解释掉的部分；这里用特征线性层、单层 LSTM 与单层 Transformer 编码器去建模，最后与基预测直接相加",
+        "早停：只按验证损失决定何时停止并保存最优权重，测试集留到最后一次评估",
+        "setting：由任务、模型、数据、窗口长度等参数拼出的目录名，一次运行对应一份权重与一组产物"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "执行链所有权：谁真正动手",
+      "items": [
+        "run.py 解析参数、设定随机种子并选择设备，再按 task_name 实例化实验类",
+        "exp_basic 递归扫描 models/ 目录，按文件名惰性导入并挑出 Model 类；新增模型不必改注册表",
+        "utils/tools.py 的 EarlyStopping 才是 checkpoints 下权重文件的写入者，测试阶段再把它读回来",
+        "启动器用子进程调用 run.py，自身不训练，只校验清单、打包产物并写收据"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "门禁条件：什么时候才会真跑",
+      "items": [
+        "未加 --execute 时只打印预览，不启动任何训练",
+        "授权记录须匹配当前 git 提交、阶段集合、执行设备与批准凭据",
+        "环境指纹须匹配冻结的 Python 与 PyTorch 版本锁，GPU 轨道锁定型号或 UUID",
+        "补充轨道的清单要求 pooling_authorized 为假，不得与其他轨道合并排名"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "反思：为什么代码长成这样",
+      "items": [
+        "训练循环删掉了每轮打印 test loss：即使选权重只看验证损失，人看见测试损失本身就是一条泄漏通道",
+        "门禁放在子进程外面：授权、环境指纹与产物打包必须绑定一次真实运行，而不是绑定一次 import",
+        "收据与归档用临时文件写入、fsync 后原子改名，并且拒绝覆盖已存在的产物：读者永远看不到半张收据",
+        "非有限数值或真值数组与冻结目标不对齐时，尝试被保留并标记，而不是删掉重跑成一次\"干净\"的结果",
+        "被时间预算打断的尝试就地续跑：不新建第二次尝试，也不额外申请授权，避免用重试次数掩盖成本"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "反思：结论能说到哪一步",
+      "items": [
+        "程序跑完、数据与产物核验通过、统计结论成立，是三件不同的事，仓库分开记录",
+        "Stage C 的 360 次运行配对通过，但冻结方案没能在结果之前固定 bootstrap 参数，报告因此只给分层描述性点估计",
+        "Stage D 时间稳健性 0/144，清单仍是 planned，没有本阶段的执行授权",
+        "不同硬件执行轨道不得合并成一张排名，也不得声称数值等价",
+        "Gate A 与 C1 的 FAIL、以及否定结果和异常记录都留在仓库里：它们是研究记录的一部分，不是需要清理的失败"
+      ]
+    },
+    {
+      "dot": "slate",
+      "title": "边界与未接入部分",
+      "items": [
+        "数据只按时间顺序切分，标准化器仅在训练段拟合，测试集不参与模型选择",
+        "研究运营站点 research-ops-site 是独立前端原型，页面内嵌样本状态，尚未读取清单与收据",
+        "容器镜像 Dockerfile 为 torch 2.5.1+cu121，与 Stage C 锁定的 torch 2.7.1+cu128 不是同一环境",
+        "依赖按 requirements/ 分组安装，零样本适配器需要额外的 foundation 组"
+      ]
+    }
+  ]
+}

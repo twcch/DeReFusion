@@ -1,0 +1,112 @@
+Using cpu or mps
+Args in experiment:
+[1mBasic Config[0m
+  Task Name:          long_term_forecast  Is Training:        1                   
+  Model ID:           DJI_96_24           Model:              revin-DLinear       
+
+[1mData Loader[0m
+  Data:               custom              Root Path:          ./dataset/          
+  Data Path:          DJI-2016-2025.csv   Features:           MS                  
+  Target:             Close               Freq:               b                   
+  Checkpoints:        ./checkpoints/      
+
+[1mForecasting Task[0m
+  Seq Len:            96                  Label Len:          48                  
+  Pred Len:           24                  Seasonal Patterns:  Monthly             
+  Inverse:            0                   
+
+[1mModel Parameters[0m
+  Top k:              5                   Num Kernels:        6                   
+  Enc In:             4                   Dec In:             4                   
+  C Out:              1                   d model:            32                  
+  n heads:            8                   e layers:           2                   
+  d layers:           1                   d FF:               2048                
+  Moving Avg:         25                  Factor:             1                   
+  Distil:             1                   Dropout:            0.1                 
+  Embed:              timeF               Activation:         gelu                
+
+[1mRun Parameters[0m
+  Num Workers:        10                  Itr:                1                   
+  Train Epochs:       30                  Batch Size:         32                  
+  Patience:           5                   Learning Rate:      0.0001              
+  Des:                test                Loss:               MSE                 
+  Lradj:              cosine              Use Amp:            0                   
+
+[1mGPU[0m
+  Use GPU:            0                   GPU:                0                   
+  Use Multi GPU:      0                   Devices:            0,1,2,3             
+
+[1mDe-stationary Projector Params[0m
+  P Hidden Dims:      128, 128            P Hidden Layers:    2                   
+
+Use CPU
+[Lazy Loading] revin-DLinear ...
+>>>>>>>start training : long_term_forecast_DJI_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 1640
+val 229
+test 479
+Epoch: 1 cost time: 32.633551836013794
+Epoch: 1, Steps: 52 | Train Loss: 0.0861588 Vali Loss: 0.0341499 Test Loss: 0.1231552
+Validation loss decreased (inf --> 0.034150).  Saving model ...
+Updating learning rate to 9.972609476841367e-05
+Epoch: 2 cost time: 31.318439722061157
+Epoch: 2, Steps: 52 | Train Loss: 0.0731718 Vali Loss: 0.0312813 Test Loss: 0.0975429
+Validation loss decreased (0.034150 --> 0.031281).  Saving model ...
+Updating learning rate to 9.890738003669029e-05
+Epoch: 3 cost time: 31.525323629379272
+Epoch: 3, Steps: 52 | Train Loss: 0.0653597 Vali Loss: 0.0315696 Test Loss: 0.0827117
+EarlyStopping counter: 1 out of 5
+Updating learning rate to 9.755282581475769e-05
+Epoch: 4 cost time: 32.04814648628235
+Epoch: 4, Steps: 52 | Train Loss: 0.0633026 Vali Loss: 0.0349874 Test Loss: 0.0734060
+EarlyStopping counter: 2 out of 5
+Updating learning rate to 9.567727288213005e-05
+Epoch: 5 cost time: 31.589048862457275
+Epoch: 5, Steps: 52 | Train Loss: 0.0581154 Vali Loss: 0.0363740 Test Loss: 0.0674992
+EarlyStopping counter: 3 out of 5
+Updating learning rate to 9.330127018922194e-05
+Epoch: 6 cost time: 31.852166414260864
+Epoch: 6, Steps: 52 | Train Loss: 0.0552608 Vali Loss: 0.0361414 Test Loss: 0.0633071
+EarlyStopping counter: 4 out of 5
+Updating learning rate to 9.045084971874738e-05
+Epoch: 7 cost time: 31.888218641281128
+Epoch: 7, Steps: 52 | Train Loss: 0.0534828 Vali Loss: 0.0327223 Test Loss: 0.0602347
+EarlyStopping counter: 5 out of 5
+Early stopping
+>>>>>>>testing : long_term_forecast_DJI_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 479
+test shape: (479, 24, 1) (479, 24, 1)
+test shape: (479, 24, 1) (479, 24, 1)
+mse:0.09758605062961578, mae:0.26718777418136597, rmse:0.3123876750469208, mape:0.09419964998960495, mspe:0.0129663972184062, r2:0.6293954849243164, dtw:Not calculated, time:18.31s, train_time:483.62s, inference_time:0.0293ms/sample (479 samples, 0.0140s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+Generating prediction_curves...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[0.26718777 0.09758605 0.31238768 0.09419965 0.0129664  0.6293955 ]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_DJI_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_prediction_curves.png  (317108 bytes)
+
+Generating error_analysis...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[0.26718777 0.09758605 0.31238768 0.09419965 0.0129664  0.6293955 ]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_DJI_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_error_analysis.png  (93619 bytes)
+
+Generating metrics_radar...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[0.26718777 0.09758605 0.31238768 0.09419965 0.0129664  0.6293955 ]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_DJI_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_metrics_radar.png  (146197 bytes)
+
+Generating error_heatmap...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[0.26718777 0.09758605 0.31238768 0.09419965 0.0129664  0.6293955 ]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_DJI_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_error_heatmap.png  (123750 bytes)
+
+Generating pred_true...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[0.26718777 0.09758605 0.31238768 0.09419965 0.0129664  0.6293955 ]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_DJI_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_pred_true.png  (162287 bytes)
+
+Generating dashboard...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[0.26718777 0.09758605 0.31238768 0.09419965 0.0129664  0.6293955 ]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_DJI_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_dashboard.png  (245676 bytes)
+
+Figures complete: 6/6 -> C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_DJI_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0

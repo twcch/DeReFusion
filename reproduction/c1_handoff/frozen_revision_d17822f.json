@@ -1,0 +1,123 @@
+{
+  "revision": "d17822f6a5040d0271e13ad3a192792d4085a635",
+  "revision_short": "d17822f",
+  "branch": "main",
+  "frozen_values": {
+    "pred_len": 24,
+    "seq_len": 96,
+    "label_len": 48,
+    "d_model": 32,
+    "moving_avg": 25,
+    "train_epochs": 30,
+    "batch_size": 32,
+    "learning_rate": 0.0001,
+    "patience": 5,
+    "lradj": "cosine",
+    "features": "MS",
+    "target": "Close",
+    "freq": "b",
+    "enc_in": 4,
+    "dec_in": 4,
+    "c_out": 1,
+    "no_use_gpu": true,
+    "threads_per_process": 14
+  },
+  "files": [
+    {
+      "path": "run.py",
+      "blob_sha1": "56fd53c6687a311cfbbbcc3574f3f1cf3da5502c",
+      "bytes": 15518
+    },
+    {
+      "path": "exp/exp_long_term_forecasting.py",
+      "blob_sha1": "4d3395b4a597420a93867a1f38991327dcc07998",
+      "bytes": 14484
+    },
+    {
+      "path": "exp/exp_basic.py",
+      "blob_sha1": "4a1dbd9da06c6b298f51c2517939ff1652c8cc3d",
+      "bytes": 4646
+    },
+    {
+      "path": "data_provider/data_factory.py",
+      "blob_sha1": "457bbec55b947e931ac83017e528a2e95dffd8a5",
+      "bytes": 2717
+    },
+    {
+      "path": "data_provider/data_loader.py",
+      "blob_sha1": "527fd111b866c931295f37515c6773725f7c68c8",
+      "bytes": 37289
+    },
+    {
+      "path": "utils/metrics.py",
+      "blob_sha1": "e4c9762c83424154c669c33e537eee1bb218fbaf",
+      "bytes": 1091
+    },
+    {
+      "path": "utils/tools.py",
+      "blob_sha1": "ea06f1a77a99e2369db29778021a25f6ee87bf34",
+      "bytes": 3814
+    },
+    {
+      "path": "models/derefusion/DeReFusion.py",
+      "blob_sha1": "debad29490e4568eea6f18f82d055c72c2e4b8e7",
+      "bytes": 4337
+    },
+    {
+      "path": "models/revin-DLinear.py",
+      "blob_sha1": "e24c220558fd339fcf7985a7851d01a68c19540f",
+      "bytes": 5047
+    },
+    {
+      "path": "reproduction/batches/run_afternoon_batch.ps1",
+      "blob_sha1": "49a65acc92412a692fa3308fda81b9eeeef81f5b",
+      "bytes": 3920
+    },
+    {
+      "path": "reproduction/batches/run_asset_sweep.ps1",
+      "blob_sha1": "9d4ab017ca4f3a00acfa7c55f81e81b4195e4277",
+      "bytes": 3436
+    },
+    {
+      "path": "reproduction/batches/run_batch_repro.ps1",
+      "blob_sha1": "e74eb17088fa39ac24d158e84291131844826ba5",
+      "bytes": 1710
+    },
+    {
+      "path": "reproduction/batches/run_batch_repro2.ps1",
+      "blob_sha1": "5f59f67340bc68a29202de4e869aaef493de51fb",
+      "bytes": 1388
+    },
+    {
+      "path": "reproduction/batches/run_btc_repro.ps1",
+      "blob_sha1": "f111783d14ce7b3f8972273fbf7cfb7dff8e0e26",
+      "bytes": 1025
+    },
+    {
+      "path": "reproduction/batches/run_btc_revin.ps1",
+      "blob_sha1": "9babd7473790cf5544322f99d782f9964062faca",
+      "bytes": 827
+    },
+    {
+      "path": "reproduction/batches/run_remaining_batch.ps1",
+      "blob_sha1": "103aa945583f52395ad12f3e2607664d78c973a4",
+      "bytes": 2153
+    },
+    {
+      "path": "reproduction/batches/run_structural_validation.ps1",
+      "blob_sha1": "5441b68c71021f8d5247a2b19e63836dd732dfac",
+      "bytes": 3102
+    },
+    {
+      "path": "run_sv_batch.cmd",
+      "blob_sha1": "4000c30d10b9ed2f926b21944e9e77eab7f8e2fa",
+      "bytes": 360
+    },
+    {
+      "path": "run_sv_batch_guard.ps1",
+      "blob_sha1": "e147ac3301376f8f84d3e201f903d73a2ca2c893",
+      "bytes": 892
+    }
+  ],
+  "note": "Blob hashes identify the exact code the executor ran at this revision. Intake verification independently checks each run's stored command line against frozen_values. The upstream sample scripts under scripts/ are excluded: they are not part of the C1 execution path."
+}

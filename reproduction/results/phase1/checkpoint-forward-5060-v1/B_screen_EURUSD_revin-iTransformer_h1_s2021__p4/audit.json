@@ -1,0 +1,356 @@
+{
+  "checkpoint_sha256": "14397898b4d150505566f931bdf373fa845b2e9a8be8e879757995e20022b8de",
+  "differences": {
+    "bitwise_equal": false,
+    "max_absolute_prediction_difference": 4.398822784423828e-05,
+    "mean_squared_prediction_difference": 9.753418414795498e-11,
+    "numerical_equivalence_claim": false,
+    "numerical_equivalence_threshold": "TBD",
+    "prediction_difference_l2": 0.0002252060739787819,
+    "reference_mse_float64": 0.014139880282413692,
+    "relative_prediction_difference_l2": 1.0821384303431031e-05,
+    "replay_mse_float64": 0.014140055075270443,
+    "signed_mse_difference_float64": 1.7479285675109368e-07
+  },
+  "effective_root_path": "C:\\Users\\26843\\Documents\\ChatGPT\\redefusion\\dataset",
+  "elapsed_seconds": 0.09400000000096043,
+  "inference": {
+    "amp": false,
+    "batch_size": 32,
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "dataset_arrays_sha256": {
+      "data_stamp": "7a5dda1f0de80483c01e02fa920004b4763df730114c6139da67e328eaf49269",
+      "data_x": "9c2ff71830ad10a262bdf0737dfef21c60db4ca507ba9ed65fe7544e8a59897e",
+      "data_y": "9c2ff71830ad10a262bdf0737dfef21c60db4ca507ba9ed65fe7544e8a59897e"
+    },
+    "deterministic_algorithms": true,
+    "deterministic_warn_only": true,
+    "drop_last": false,
+    "gradient_mode": "inference_mode",
+    "input_batches": [
+      {
+        "batch_index": 0,
+        "float32_tensors_sha256": [
+          "639d923599d9c550f071f1900c1f021cdea08ca791c19c77eb4c68c726b3d33f",
+          "dbbbab840521d03807dbda89e096abbe618d91747ee42c0fadb0e91131c1c79f",
+          "01d508a64703680b261aef294bbcbb35622ceeda4a8310654aaf6055e2cf6142",
+          "54d488aca64e8916b9395f0bc4cdb9e040c5bd3e1676ca8224fd6ad43bb0eef8"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 1,
+        "float32_tensors_sha256": [
+          "bd8d551f922c39f452490512dafb048b89bcf9bfac8387edb939416e21892fcf",
+          "d728ff14ae56fc6f22daa53cd9706bd879ba5465ca113ba1402fd5d5a2782fc2",
+          "8ea3caee3435837340dacc3250ce30d5b640ab905919997f2655c9d79830dd94",
+          "decd9bf57538705be0d4bfab9f2a026c4ac6060993c4772d3f3dbf9bceccd88f"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 2,
+        "float32_tensors_sha256": [
+          "c95a5e2631d4a1382e7f98bcc0176e170f7fc94428d25b66e400a100a292993c",
+          "b9fbd590dd3c8e48bedce02dedc8e4b41db6bc8ffc8d997c286532fbcac6dc02",
+          "5478d20ace8e1dda38668d67e73aed7479da1cd82b35ece8aade49b3d409596e",
+          "f6b5760ea296132109448ac5ff7eb050a71458cfc9bd1d5b6ce3feff0f9ea728"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 3,
+        "float32_tensors_sha256": [
+          "de5e92116970d9316a6c2130e8a9123ab05691636bc1871b1e87491759aa3d68",
+          "6bebc224f649551c4947cd8bbc9f5102209a393bcf93a2db780106f1d23c4ee9",
+          "caf45a6859c0110a9b7de9cc33c707bb6664a71408479cd479ac6e5ea4e841e7",
+          "6a588acd6a3b480fb2c76af89ef14e0de682acdb1494491ed7266970f007087e"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 4,
+        "float32_tensors_sha256": [
+          "8748517db0f802d026772754d2d87026e67ba3dc90a172b9d4c73e2c105fce75",
+          "5e92246da6a2a98050219a8813909b98b9af1f6b5889d8915d144d4ab57d9284",
+          "a7bdd616f7c0fbeb9ae03d61afba73ac8e147f59b092798b9f6265bd085d2f2e",
+          "704ee4028716078e73ffd04b44320bc405060e3fc597cb53b760394b90cd7249"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 5,
+        "float32_tensors_sha256": [
+          "0aa4d3ef9f0b7984315552f345c2424d63f92bf1705e30a30a0031fff41c2daa",
+          "9d247b1e10ab44c737aaf687c792d0c3b24ea927489e50ffcda7e4441311f5b4",
+          "185b4c5b3a112f509a4d8a853adcdf57769e87ee97ca5d666a7f036ab7e2335c",
+          "77fae818b44845526d5b16385a8a9f69011af0c492ec12fad4c4629428da0c85"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 6,
+        "float32_tensors_sha256": [
+          "fb208bbf434d6ebb9db550161540fd604bc5e2f7e3c8943013e4a16597297ba5",
+          "e9ee8f9ea2b5c3bb75b97e28cd4be110f82baa34a295f34c680e28c152a4432d",
+          "233c7034261be6876403d1ed65de9514ee7142cbc2fb93b34f023f4767ee9be2",
+          "a7771973f2d8255cf3e6147b727d0401a437228e6762a23327090a81e24dc83e"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 7,
+        "float32_tensors_sha256": [
+          "3e30ec4cce7e6a09e0916e74c15960b679b43c6af9215a6d2a9942f3717ecdcc",
+          "b3e71b253e2769dd487d304343a1c8af98d893f2a5b8d5f9287c97ffaee0aca7",
+          "0c74bd3d0022b8914e2812cc02634338d74a575bea3099f85749bc45f5e9147e",
+          "a70436977e841dbea011360d95c98f51c948bfa5653ed7a35abcc90c9a654ed5"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 8,
+        "float32_tensors_sha256": [
+          "d6f87f3e500f659f7f4593b70ab74d79df65a20bae97eda7a6ac114dfc1b2031",
+          "b26f5f36e6ffaf4a2bfc4e81bc514bcd969f97fff6c71be9ebff5fac5c416ee3",
+          "e6feb24b6fcd5f59f0d28e2d62d5c609f60048f8dfb4fc5dfc8e441ae1df60ab",
+          "f7024aefa6ec7f55fa9694726d4de71b6053e5e3b61585724cb85af142649e1b"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 9,
+        "float32_tensors_sha256": [
+          "1aa9ae1646925b73b7f8e18c22d1ea3e986f79d956a6c06b280f37e5d9ddf065",
+          "976554fb42d1c30887b196893485e40b5aba44873e32fb9e1dbda31eb7b2b922",
+          "520ff5fd7969f29de6f56919624570dc77b4e3c99881aa836c6fcb1b831359f9",
+          "d09537f42c80d9342528a19af92a3f4a01f379bf40692a86224f1300d2ed66b6"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 10,
+        "float32_tensors_sha256": [
+          "1d6074aec19b9b81ca3ccf85c31a25fef662e57a05482ed95f8f8c0b5d63b1c1",
+          "75478bc74e4ff825185dfd23f056b086ce9917e49f0ddaa1da1e5c16b582c6fe",
+          "64a5980152577888827f8422f40d43d6ca6b95f2a59dc99fba88de300fa9efed",
+          "9fc241a827f7ca957b0a5a476815302777278d32e2eac3f7c95cce14329b9317"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 11,
+        "float32_tensors_sha256": [
+          "8153108024631040ff2d0dbb201c571893478590361bd804a56e41c0ef59500f",
+          "9b57d20bc9ae5adc1507b13dd884e3af91477f09181d0a05c44a72bf9738acee",
+          "a8329690d3f14727aa18baa72ec3d45dd71ec3af3f57341db112bd59504fd632",
+          "25ccdeb35bb95f32c9a0534a962bf5247a2d4a6e0c0a656450dcb1f2d4dfacbe"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 12,
+        "float32_tensors_sha256": [
+          "788b8bb62e98dff6b40b2899c9b74d1ccf60328c734e47dc55a99fa0f172c6bc",
+          "94c157d70c827ad48601239f619120b6f0e726efd65d31fc7fa50bcd85fab5c9",
+          "db45d46c029ace0bb91f16111ff53c360d4e7547655cdb8ae743edce50c07f67",
+          "c8bf4f91cabd808290bbdeabbed72af36b94ada622bfec1dc1172ba7870a61c7"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 13,
+        "float32_tensors_sha256": [
+          "45239261b19830448affca246fd556d50186aa741e5b43e646c29f3726795527",
+          "ac811bf697f55bcfdcbed3937e47145ac479dfd5ac964799d494585aa153d1be",
+          "cee0ce71539dfa02724da241732628d63e321fb47e6d876f447917f03f5a9ab1",
+          "5ec417a1b349e7b0787d238448890785918d2ac035fabfcff1a6275eaf7e62b4"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 14,
+        "float32_tensors_sha256": [
+          "3a39a7909509899ab07bfd7b85cb33efdc66441a6b4ccae4937bef61307874fa",
+          "77c9cb3a0344861852001e401d72a0ebd4f35c7dbba86a326ccf5feabe64ea02",
+          "cbc4f837421775b760592a26c618804138e4b7c13d1ed9d94315e844ba7109ee",
+          "ccc4abfa7f33be9a48d892f31b967e055b658a8f7dd69a79e0bd44e63018de01"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 15,
+        "float32_tensors_sha256": [
+          "1f90ababbc47e002003538f088c5c5d0a68a05f2940fc17443ac4a1425d44978",
+          "0af9edc022daf2d3996f77f2090fa8b7f73313ff9542d38c5b5fabbefdc7fad2",
+          "4fd1d261df68e3a7a4f67967c08f670d48b4755870de70fe15b7c993c6ac233e",
+          "b6d76d51c0a9400a105b127a9500ad5794c538ec3929f7468e6d1b3f9de0baa2"
+        ],
+        "samples": 32
+      },
+      {
+        "batch_index": 16,
+        "float32_tensors_sha256": [
+          "cdaf597850419222f3b173d25c400f56c203510cf9108dea68c2e05ee84d6e49",
+          "a18ad4ec42f9dc84d19ba8141474eebbe4bf32a20be92a51788f1174e3df7eed",
+          "beecf86e49216c7620193d2d53ff80d63023144799e09c4ed4f9f31a1a942644",
+          "79a706f107b00a077aa444e09a4fcf8679bb33faebbbeff14e5071f598879ae5"
+        ],
+        "samples": 8
+      }
+    ],
+    "input_batches_sha256": "85de3c0f267556991f8f8b74b18d67d5624e5fd38b2d871b203d15e2a8dfcc21",
+    "last_batch_samples": 8,
+    "parameters": 278217,
+    "samples": 520,
+    "scaler_arrays_sha256": {
+      "mean_": "557222517c91b3bf7c61ca3050cc0de4f37843bc04a6d72e6bd0bbbe83735c2f",
+      "n_samples_seen_": "c17aeef9c3b4f196dbc8cfd9c59412d7ff59bdefb6f23f04b5dd3c79726a5be8",
+      "scale_": "cc71518ccdccdf62b14bb2705c68e426dfe6696bbd0ec053dffade525b13f8a7",
+      "var_": "1d5b6570d1d2a5d839a10721267df8cfdeb5a44792bb6d263445220e13d4a083"
+    },
+    "scaler_reconstruction": "Dataset_Custom historical training-prefix StandardScaler; no model fitting",
+    "scaler_sha256": "ce9d56497779381011df3e6d7c43b6647d4ba2dc9e44d3cc778d46ec9050261f",
+    "shuffle": false,
+    "split_metadata": {
+      "flag": "test",
+      "mode": "ratio",
+      "slice_start": 1986,
+      "slice_stop": 2602,
+      "test_rows": 520,
+      "train_rows": 1821,
+      "val_rows": 261
+    },
+    "strict_load": true,
+    "tf32": {
+      "cudnn_allow_tf32": true,
+      "matmul_allow_tf32": false
+    },
+    "weights_only": true
+  },
+  "logical_run_id": "B_screen_EURUSD_revin-iTransformer_h1_s2021",
+  "prediction_keys_sha256": "7b520db1e2eea61170ab5589eeac893ed3a596e6c352e07815204545efdf72cf",
+  "receipt_command": "/data/miniconda/envs/derefusion-p1/bin/python run.py --task_name long_term_forecast --is_training 1 --model_id B_screen_EURUSD_revin-iTransformer_h1_s2021__attempt-01 --model revin-iTransformer --data custom --root_path /data/coding/DeReFusion/dataset/ --data_path EURUSD-2016-2025.csv --features MS --target Close --freq b --seq_len 96 --label_len 48 --pred_len 1 --enc_in 4 --dec_in 4 --c_out 1 --d_model 32 --n_heads 8 --e_layers 2 --d_layers 1 --d_ff 2048 --moving_avg 25 --factor 1 --dropout 0.1 --embed timeF --train_epochs 30 --batch_size 32 --patience 5 --learning_rate 0.0001 --lradj cosine --rand_seed 2021 --num_workers 0 --des phase1_frozen --result_log reproduction/logs/phase1/B_screen.txt --deterministic --gpu_type cuda --gpu 0 --enable_recovery",
+  "receipt_config": {
+    "activation": "gelu",
+    "alpha": 0.1,
+    "anomaly_ratio": 0.25,
+    "augmentation_ratio": 0,
+    "batch_size": 32,
+    "c_out": 1,
+    "channel_independence": 1,
+    "checkpoints": "./checkpoints/",
+    "conv_channel": 32,
+    "d_conv": 4,
+    "d_ff": 2048,
+    "d_layers": 1,
+    "d_model": 32,
+    "data": "custom",
+    "data_path": "EURUSD-2016-2025.csv",
+    "dec_in": 4,
+    "decomp_method": "moving_avg",
+    "des": "phase1_frozen",
+    "deterministic": true,
+    "devices": "0,1,2,3",
+    "discdtw": false,
+    "discsdtw": false,
+    "distil": true,
+    "down_sampling_layers": 0,
+    "down_sampling_method": null,
+    "down_sampling_window": 1,
+    "dropout": 0.1,
+    "dtwwarp": false,
+    "e_layers": 2,
+    "embed": "timeF",
+    "enable_recovery": true,
+    "enc_in": 4,
+    "expand": 2,
+    "extra_tag": "",
+    "factor": 1,
+    "features": "MS",
+    "freq": "b",
+    "gcn_depth": 2,
+    "gcn_dropout": 0.3,
+    "gpu": 0,
+    "gpu_type": "cuda",
+    "individual": false,
+    "inverse": false,
+    "is_training": 1,
+    "itr": 1,
+    "jitter": false,
+    "label_len": 48,
+    "learning_rate": 0.0001,
+    "loss": "MSE",
+    "lradj": "cosine",
+    "magwarp": false,
+    "mask_rate": 0.25,
+    "model": "revin-iTransformer",
+    "model_id": "B_screen_EURUSD_revin-iTransformer_h1_s2021__attempt-01",
+    "moving_avg": 25,
+    "n_heads": 8,
+    "node_dim": 10,
+    "num_kernels": 6,
+    "num_workers": 0,
+    "p_hidden_dims": [
+      128,
+      128
+    ],
+    "p_hidden_layers": 2,
+    "patch_len": 16,
+    "patience": 5,
+    "permutation": false,
+    "pos": 1,
+    "pred_len": 1,
+    "propalpha": 0.3,
+    "rand_seed": 2021,
+    "randompermutation": false,
+    "result_log": "reproduction/logs/phase1/B_screen.txt",
+    "root_path": "/data/coding/DeReFusion/dataset/",
+    "rotation": false,
+    "scaling": false,
+    "seasonal_patterns": "Monthly",
+    "seed": 2,
+    "seg_len": 96,
+    "seq_len": 96,
+    "shapedtwwarp": false,
+    "skip_channel": 32,
+    "spawner": false,
+    "split_mode": "ratio",
+    "target": "Close",
+    "task_name": "long_term_forecast",
+    "test_end": null,
+    "timewarp": false,
+    "top_k": 5,
+    "top_p": 0.5,
+    "train_end": null,
+    "train_epochs": 30,
+    "tv_B": 0,
+    "tv_C": 0,
+    "tv_dt": 0,
+    "use_D": 0,
+    "use_amp": false,
+    "use_dtw": false,
+    "use_gpu": true,
+    "use_multi_gpu": false,
+    "use_norm": 1,
+    "val_end": null,
+    "wdba": false,
+    "windowslice": false,
+    "windowwarp": false
+  },
+  "reference_attempt": "C:\\Users\\26843\\Documents\\ChatGPT\\redefusion\\reproduction\\results\\phase1\\p4-partial-20260929\\attempts\\B_screen_EURUSD_revin-iTransformer_h1_s2021__attempt-01",
+  "reference_pred_array_sha256": "42402859fc31c5e546f1e6179562701c397a387f6ed78b5f72c27724daaa589c",
+  "reference_pred_file_sha256": "6c9772cea87893ced8a911b07fa292049b7e44ea73ba00e7a75c36d7d7831988",
+  "reference_track": "p4",
+  "reference_true_file_sha256": "19b83e5502a20939547cc3b415bcefc6288e7cf0df7041fe3d4d17ba38fbe84f",
+  "replay_pred_array_sha256": "7f8c18ce7b774c5f91ebd45e031ee3fab91c8fee508f744649367ca3dc9844fe",
+  "replay_pred_file_sha256": "6ebca431313818fa3cdd47177d59b87b70eb39e8811260211a955e91481348ee",
+  "replay_true_array_sha256": "869445c5d378cb02b417cc26aa47f1e0b6be133ff33734823e2675be7e1d29d1",
+  "shape": [
+    520,
+    1,
+    1
+  ],
+  "truth_bitwise_equal": true
+}

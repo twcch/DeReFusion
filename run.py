@@ -10,6 +10,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='TimesNet')
 
     parser.add_argument('--rand_seed', type=int, default=2021, help='random seed')
+    parser.add_argument('--deterministic', action='store_true', default=False,
+                        help='request deterministic PyTorch algorithms and deterministic cuDNN settings')
 
     # basic config
     parser.add_argument('--task_name', type=str, required=True, default='long_term_forecast',
@@ -29,6 +31,16 @@ if __name__ == '__main__':
     parser.add_argument('--freq', type=str, default='h',
                         help='freq for time features encoding, options:[s:secondly, t:minutely, h:hourly, d:daily, b:business days, w:weekly, m:monthly], you can also use more detailed freq like 15min or 3h')
     parser.add_argument('--checkpoints', type=str, default='./checkpoints/', help='location of model checkpoints')
+    parser.add_argument('--result_log', type=str, default='result_long_term_forecast.txt',
+                        help='append-only summary log for long-term forecast results')
+    parser.add_argument('--split_mode', type=str, choices=['ratio', 'dates'], default='ratio',
+                        help='custom-data split: legacy 70/10/20 ratio or explicit end-exclusive dates')
+    parser.add_argument('--train_end', type=str, default=None,
+                        help='first date excluded from training when --split_mode dates')
+    parser.add_argument('--val_end', type=str, default=None,
+                        help='first date excluded from validation when --split_mode dates')
+    parser.add_argument('--test_end', type=str, default=None,
+                        help='first date excluded from testing when --split_mode dates')
 
     # forecasting task
     parser.add_argument('--seq_len', type=int, default=96, help='input sequence length')
@@ -92,6 +104,8 @@ if __name__ == '__main__':
     parser.add_argument('--loss', type=str, default='MSE', help='loss function')
     parser.add_argument('--lradj', type=str, default='type1', help='adjust learning rate')
     parser.add_argument('--use_amp', action='store_true', help='use automatic mixed precision training', default=False)
+    parser.add_argument('--enable_recovery', action='store_true', default=False,
+                        help='write a per-epoch snapshot and resume this run from it if one exists')
 
     # GPU
     parser.add_argument('--use_gpu', action='store_true', default=True, help='use gpu (default: on)')
@@ -155,9 +169,24 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
+    split_suffix = ''
+    if args.split_mode == 'dates':
+        required_boundaries = (args.train_end, args.val_end, args.test_end)
+        if any(value in (None, '') for value in required_boundaries):
+            parser.error('--split_mode dates requires --train_end, --val_end and --test_end')
+        compact = [value.replace('-', '') for value in required_boundaries]
+        split_suffix = '_splitdates_te{}_ve{}_xe{}'.format(*compact)
+
     random.seed(args.rand_seed)
     torch.manual_seed(args.rand_seed)
     np.random.seed(args.rand_seed)
+    if args.deterministic:
+        torch.use_deterministic_algorithms(True, warn_only=True)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed_all(args.rand_seed)
+        if hasattr(torch.backends, 'cudnn'):
+            torch.backends.cudnn.deterministic = True
+            torch.backends.cudnn.benchmark = False
 
     if torch.cuda.is_available() and args.use_gpu:
         args.device = torch.device('cuda:{}'.format(args.gpu))
@@ -225,6 +254,7 @@ if __name__ == '__main__':
                 args.embed,
                 args.distil,
                 args.des, args.rand_seed, ii)
+            setting += split_suffix
 
             print('>>>>>>>start training : {}>>>>>>>>>>>>>>>>>>>>>>>>>>'.format(setting))
             _, train_time = exp.train(setting)
@@ -259,6 +289,7 @@ if __name__ == '__main__':
             args.embed,
             args.distil,
             args.des, args.rand_seed, ii)
+        setting += split_suffix
 
         print('>>>>>>>testing : {}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'.format(setting))
         exp.test(setting, test=1)

@@ -1,0 +1,30 @@
+﻿  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[0.2243532  0.08378543 0.28945714 0.08130883 0.01168443 0.73473084]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_AAPL_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0\fig_prediction_curves.png  (316475 bytes)
+
+Generating error_analysis...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[0.2243532  0.08378543 0.28945714 0.08130883 0.01168443 0.73473084]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_AAPL_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0\fig_error_analysis.png  (99771 bytes)
+
+Generating metrics_radar...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[0.2243532  0.08378543 0.28945714 0.08130883 0.01168443 0.73473084]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_AAPL_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0\fig_metrics_radar.png  (148215 bytes)
+
+Generating error_heatmap...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[0.2243532  0.08378543 0.28945714 0.08130883 0.01168443 0.73473084]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_AAPL_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0\fig_error_heatmap.png  (124245 bytes)
+
+Generating pred_true...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[0.2243532  0.08378543 0.28945714 0.08130883 0.01168443 0.73473084]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_AAPL_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0\fig_pred_true.png  (176742 bytes)
+
+Generating dashboard...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[0.2243532  0.08378543 0.28945714 0.08130883 0.01168443 0.73473084]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_AAPL_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0\fig_dashboard.png  (245528 bytes)
+
+Figures complete: 6/6 -> C:\Users\geng\DeReFusion\test_results\long_term_forecast_AAPL_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0

@@ -1,0 +1,40 @@
+{
+  "status": "calibration_pass",
+  "scientific_use": "none; execution calibration only",
+  "protocol_version": "phase1-v1.1-2026-09-19",
+  "git_commit": "0f7c2c6",
+  "asset": "BOND10Y",
+  "dataset_sha256": "6459aee6e6e995539dd6c2153df26bdac213d5d99477ec9250886c9e22eadd22",
+  "model": "DeReFusion",
+  "horizon": 24,
+  "seed": 2021,
+  "split_mode": "ratio",
+  "command": ".venv\\Scripts\\python.exe run.py --task_name long_term_forecast --is_training 1 --model_id phase1A_BOND10Y_h24_s2021 --model DeReFusion --data custom --root_path ./dataset/ --data_path BOND10Y-2016-2025.csv --features MS --target Close --freq b --seq_len 96 --label_len 48 --pred_len 24 --enc_in 4 --dec_in 4 --c_out 1 --d_model 32 --n_heads 8 --e_layers 2 --d_layers 1 --d_ff 2048 --moving_avg 25 --factor 1 --dropout 0.1 --embed timeF --train_epochs 30 --batch_size 32 --patience 5 --learning_rate 0.0001 --lradj cosine --rand_seed 2021 --deterministic --num_workers 0 --no_use_gpu --des phase1A_calibration --result_log reproduction/logs/phase1/calibration_result_log.txt",
+  "environment": {
+    "python": "3.11.15",
+    "torch": "2.5.1+cpu",
+    "numpy": "2.1.2",
+    "pandas": "2.3.3",
+    "scikit_learn": "1.7.2",
+    "device": "cpu"
+  },
+  "shapes": {
+    "pred.npy": [378, 24, 1],
+    "true.npy": [378, 24, 1],
+    "metrics.npy": [6]
+  },
+  "all_arrays_finite": true,
+  "sha256": {
+    "pred.npy": "5bb429f82c619f644878aca638d2f45ae0e804bc8a46855e19572350b51bf5af",
+    "true.npy": "0392a0cfbc1b9264b1d90c9d8a4d00d6bcce6e94fae1dbf8c8caf965661ebbbb",
+    "metrics.npy": "071cede58f8766fe72c5e64598a9eaf60f229dd344d2136f4fc86ddcee081155",
+    "checkpoint.pth": "64c113c9c7542086d63e492fedd26ae115a7ce8933dd589e5a9185ffe6e2adcb",
+    "run.log": "69b65d7c4a55aa1ff1c6e0d3d8955ff73312aaa741d1696cf33732758afdb5d7"
+  },
+  "diagnostics": {
+    "train_time_seconds": 43.34,
+    "inference_ms_per_sample": 0.5460,
+    "parameter_count": 28436,
+    "gpu_peak_memory_mb": null
+  }
+}

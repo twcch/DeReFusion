@@ -1,0 +1,136 @@
+Using cpu or mps
+Args in experiment:
+[1mBasic Config[0m
+  Task Name:          long_term_forecast  Is Training:        1                   
+  Model ID:           phase1A_CITICSEC_h24_s2021Model:              revin-iTransformer  
+
+[1mData Loader[0m
+  Data:               custom              Root Path:          dataset/            
+  Data Path:          CITICSEC-2016-2025.csvFeatures:           MS                  
+  Target:             Close               Freq:               b                   
+  Checkpoints:        ./checkpoints/      
+
+[1mForecasting Task[0m
+  Seq Len:            96                  Label Len:          48                  
+  Pred Len:           24                  Seasonal Patterns:  Monthly             
+  Inverse:            0                   
+
+[1mModel Parameters[0m
+  Top k:              5                   Num Kernels:        6                   
+  Enc In:             4                   Dec In:             4                   
+  C Out:              1                   d model:            32                  
+  n heads:            8                   e layers:           2                   
+  d layers:           1                   d FF:               2048                
+  Moving Avg:         25                  Factor:             1                   
+  Distil:             1                   Dropout:            0.1                 
+  Embed:              timeF               Activation:         gelu                
+
+[1mRun Parameters[0m
+  Num Workers:        0                   Itr:                1                   
+  Train Epochs:       30                  Batch Size:         32                  
+  Patience:           5                   Learning Rate:      0.0001              
+  Des:                phase1A_calibration Loss:               MSE                 
+  Lradj:              cosine              Use Amp:            0                   
+
+[1mGPU[0m
+  Use GPU:            0                   GPU:                0                   
+  Use Multi GPU:      0                   Devices:            0,1,2,3             
+
+[1mDe-stationary Projector Params[0m
+  P Hidden Dims:      128, 128            P Hidden Layers:    2                   
+
+Use CPU
+[Lazy Loading] revin-iTransformer ...
+>>>>>>>start training : long_term_forecast_phase1A_CITICSEC_h24_s2021_revin-iTransformer_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_phase1A_calibration_seed2021_0>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 1558
+val 217
+test 456
+Epoch: 1 cost time: 1.1542673110961914
+Epoch: 1, Steps: 49 | Train Loss: 0.2501150 Vali Loss: 0.0996951
+Validation loss decreased (inf --> 0.099695).  Saving model ...
+Updating learning rate to 9.972609476841367e-05
+Epoch: 2 cost time: 1.0223066806793213
+Epoch: 2, Steps: 49 | Train Loss: 0.2091093 Vali Loss: 0.0935187
+Validation loss decreased (0.099695 --> 0.093519).  Saving model ...
+Updating learning rate to 9.890738003669029e-05
+Epoch: 3 cost time: 1.0804755687713623
+Epoch: 3, Steps: 49 | Train Loss: 0.1938783 Vali Loss: 0.0892335
+Validation loss decreased (0.093519 --> 0.089234).  Saving model ...
+Updating learning rate to 9.755282581475769e-05
+Epoch: 4 cost time: 1.019071340560913
+Epoch: 4, Steps: 49 | Train Loss: 0.1821252 Vali Loss: 0.0854147
+Validation loss decreased (0.089234 --> 0.085415).  Saving model ...
+Updating learning rate to 9.567727288213005e-05
+Epoch: 5 cost time: 1.1822965145111084
+Epoch: 5, Steps: 49 | Train Loss: 0.1721560 Vali Loss: 0.0854952
+EarlyStopping counter: 1 out of 5
+Updating learning rate to 9.330127018922194e-05
+Epoch: 6 cost time: 1.2555689811706543
+Epoch: 6, Steps: 49 | Train Loss: 0.1631722 Vali Loss: 0.0851752
+Validation loss decreased (0.085415 --> 0.085175).  Saving model ...
+Updating learning rate to 9.045084971874738e-05
+Epoch: 7 cost time: 1.1370213031768799
+Epoch: 7, Steps: 49 | Train Loss: 0.1574380 Vali Loss: 0.0807659
+Validation loss decreased (0.085175 --> 0.080766).  Saving model ...
+Updating learning rate to 8.715724127386972e-05
+Epoch: 8 cost time: 1.0388736724853516
+Epoch: 8, Steps: 49 | Train Loss: 0.1509296 Vali Loss: 0.0782637
+Validation loss decreased (0.080766 --> 0.078264).  Saving model ...
+Updating learning rate to 8.345653031794292e-05
+Epoch: 9 cost time: 1.1005840301513672
+Epoch: 9, Steps: 49 | Train Loss: 0.1455817 Vali Loss: 0.0814552
+EarlyStopping counter: 1 out of 5
+Updating learning rate to 7.938926261462366e-05
+Epoch: 10 cost time: 1.066251516342163
+Epoch: 10, Steps: 49 | Train Loss: 0.1400863 Vali Loss: 0.0820846
+EarlyStopping counter: 2 out of 5
+Updating learning rate to 7.500000000000001e-05
+Epoch: 11 cost time: 1.0648038387298584
+Epoch: 11, Steps: 49 | Train Loss: 0.1353072 Vali Loss: 0.0809867
+EarlyStopping counter: 3 out of 5
+Updating learning rate to 7.033683215379002e-05
+Epoch: 12 cost time: 1.0836310386657715
+Epoch: 12, Steps: 49 | Train Loss: 0.1339002 Vali Loss: 0.0801872
+EarlyStopping counter: 4 out of 5
+Updating learning rate to 6.545084971874738e-05
+Epoch: 13 cost time: 1.0859944820404053
+Epoch: 13, Steps: 49 | Train Loss: 0.1299819 Vali Loss: 0.0816764
+EarlyStopping counter: 5 out of 5
+Early stopping
+>>>>>>>testing : long_term_forecast_phase1A_CITICSEC_h24_s2021_revin-iTransformer_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_phase1A_calibration_seed2021_0<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 456
+test shape: (456, 24, 1) (456, 24, 1)
+test shape: (456, 24, 1) (456, 24, 1)
+mse:0.33357739448547363, mae:0.3477807343006134, rmse:0.577561616897583, mape:0.6600189805030823, mspe:5.5588483810424805, r2:0.7055418491363525, dtw:Not calculated, time:0.29s, train_time:14.90s, inference_time:0.2336ms/sample (456 samples, 0.1065s total), params:278976, trainable_params:278976, gpu_mem_peak_mb:nan
+
+Generating prediction_curves...
+  pred.shape=(456, 24, 1), true.shape=(456, 24, 1)
+  metrics=[0.34778073 0.3335774  0.5775616  0.660019   5.5588484  0.70554185]
+  Saved: C:\Users\26843\Documents\ChatGPT\redefusion\test_results\long_term_forecast_phase1A_CITICSEC_h24_s2021_revin-iTransformer_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_phase1A_calibration_seed2021_0\fig_prediction_curves.png  (399206 bytes)
+
+Generating error_analysis...
+  pred.shape=(456, 24, 1), true.shape=(456, 24, 1)
+  metrics=[0.34778073 0.3335774  0.5775616  0.660019   5.5588484  0.70554185]
+  Saved: C:\Users\26843\Documents\ChatGPT\redefusion\test_results\long_term_forecast_phase1A_CITICSEC_h24_s2021_revin-iTransformer_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_phase1A_calibration_seed2021_0\fig_error_analysis.png  (93107 bytes)
+
+Generating metrics_radar...
+  pred.shape=(456, 24, 1), true.shape=(456, 24, 1)
+  metrics=[0.34778073 0.3335774  0.5775616  0.660019   5.5588484  0.70554185]
+  Saved: C:\Users\26843\Documents\ChatGPT\redefusion\test_results\long_term_forecast_phase1A_CITICSEC_h24_s2021_revin-iTransformer_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_phase1A_calibration_seed2021_0\fig_metrics_radar.png  (143217 bytes)
+
+Generating error_heatmap...
+  pred.shape=(456, 24, 1), true.shape=(456, 24, 1)
+  metrics=[0.34778073 0.3335774  0.5775616  0.660019   5.5588484  0.70554185]
+  Saved: C:\Users\26843\Documents\ChatGPT\redefusion\test_results\long_term_forecast_phase1A_CITICSEC_h24_s2021_revin-iTransformer_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_phase1A_calibration_seed2021_0\fig_error_heatmap.png  (117659 bytes)
+
+Generating pred_true...
+  pred.shape=(456, 24, 1), true.shape=(456, 24, 1)
+  metrics=[0.34778073 0.3335774  0.5775616  0.660019   5.5588484  0.70554185]
+  Saved: C:\Users\26843\Documents\ChatGPT\redefusion\test_results\long_term_forecast_phase1A_CITICSEC_h24_s2021_revin-iTransformer_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_phase1A_calibration_seed2021_0\fig_pred_true.png  (165890 bytes)
+
+Generating dashboard...
+  pred.shape=(456, 24, 1), true.shape=(456, 24, 1)
+  metrics=[0.34778073 0.3335774  0.5775616  0.660019   5.5588484  0.70554185]
+  Saved: C:\Users\26843\Documents\ChatGPT\redefusion\test_results\long_term_forecast_phase1A_CITICSEC_h24_s2021_revin-iTransformer_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_phase1A_calibration_seed2021_0\fig_dashboard.png  (249168 bytes)
+
+Figures complete: 6/6 -> C:\Users\26843\Documents\ChatGPT\redefusion\test_results\long_term_forecast_phase1A_CITICSEC_h24_s2021_revin-iTransformer_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_phase1A_calibration_seed2021_0
