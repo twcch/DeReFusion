@@ -1,0 +1,9 @@
+==== START revin-DLinear BTC T=24 13:45:52 ====
+Generating dashboard...
+  pred.shape=(707, 24, 1), true.shape=(707, 24, 1)
+  metrics=[0.36219084 0.22321707 0.47245854 0.09287405 0.01493226 0.8725357 ]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_BTCUSD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_dashboard.png  (226499 bytes)
+
+Figures complete: 6/6 -> C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_BTCUSD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0
+==== END revin-DLinear BTC T=24 14:16:06 ====
+BTC REVIN DONE

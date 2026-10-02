@@ -11,9 +11,11 @@ ENV http_proxy=${http_proxy}
 ENV https_proxy=${https_proxy}
 ENV PYTHONPATH=/workspace/Time-Series-Library:$PYTHONPATH
 
-COPY requirements.txt .
+COPY requirements/torch-cu121.txt requirements/core.txt requirements/foundation.txt /tmp/requirements/
 RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install -r requirements.txt
+    pip install -r /tmp/requirements/torch-cu121.txt && \
+    pip install -r /tmp/requirements/core.txt && \
+    pip install -r /tmp/requirements/foundation.txt
 
 # mamba-ssm (cxx11abiFALSE) （Time-Series-Library/models/Mamba.py）
 RUN --mount=type=cache,target=/root/.cache/pip \

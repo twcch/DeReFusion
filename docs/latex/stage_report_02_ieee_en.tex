@@ -1,0 +1,246 @@
+%% Stage report II (IEEEtran, English) — independent prospective cohort (C1): lock, execution, verification
+%% Compile: pdflatex -interaction=nonstopmode stage_report_02_ieee_en.tex  (twice)
+%% Companion: stage_report_02_ieee_zh.tex (independent, xelatex + xeCJK)
+\documentclass[conference]{IEEEtran}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{url}
+
+\begin{document}
+
+\title{Stage Report II: Independent Prospective Cohort (C1)\\\ Lock, Execution and Verification Status}
+
+\author{\IEEEauthorblockN{Dongxu Jiang}
+\IEEEauthorblockA{Email: jiangdongxu04@gmail.com}}
+
+\maketitle
+
+\begin{abstract}
+This report records the \emph{execution status} of the independent prospective cohort study (C1)
+as of 2026-09-14: a locked twenty-asset, single-provider cohort; a predictor frozen before any
+outcome exists; a 120-run panel delegated to a peer machine that is offline-capable and idempotent;
+and the intake protocol that accepts or rejects each returned batch. It deliberately contains
+\textbf{no analysis of C1 outcomes}.
+\end{abstract}
+
+\begin{IEEEkeywords}
+prospective validation, pre-registration, blinded analysis, cohort locking, execution provenance,
+intake verification.
+\end{IEEEkeywords}
+
+\section{Purpose and Scope}
+
+The programme has moved from exploratory diagnostics to a \emph{prospective} test. This report
+documents the state of that test's \emph{machinery} and nothing else.
+
+\section{Programme Sequence and Current Position}
+\label{sec:seq}
+
+Four stages have been executed in order, each gated by the previous one:
+
+\begin{table}[!t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{0.07\columnwidth}p{0.55\columnwidth}p{0.24\columnwidth}@{}}
+\toprule
+Stage & Content & Status \\
+\midrule
+S1 & Reproduction and controlled diagnostics & complete \\
+S2 & Structural validation (candidate regularity) & \textbf{FAIL} \\
+S3 & Capacity-controlled breadth panel (F1) & \textbf{SUCCESS} \\
+S4 & Independent prospective cohort (C1) & executing \\
+\bottomrule
+\end{tabular}
+\caption{Programme sequence. Each stage is gated by the previous one; S4 is the subject of this
+report.}
+\label{tab:seq}
+\end{table}
+
+S1 established the reproduction and the operator-specialisation diagnostics. S2 tested the candidate
+structural regularity on four pre-registered assets and returned a failure, triggered by a capacity
+contradiction: an asset-level operator preference whose sign is not stable across model widths. S3
+then asked the more basic question and answered it in the narrow sense that asset-level preference
+replicates on a majority of a seven-asset panel while remaining a \emph{tendency}, not a property of
+an asset. S4 --- the present stage --- tests the candidate association \emph{prospectively} on a
+genuinely independent cohort.
+
+\section{The Locked Cohort}
+\label{sec:cohort}
+
+The cohort was locked before any outcome was inspected, and the lock is a table of hashes rather than
+a list of intentions.
+
+\begin{table}[!t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{0.26\columnwidth}p{0.20\columnwidth}p{0.40\columnwidth}@{}}
+\toprule
+Property & Value & Note \\
+\midrule
+Assets & 20 & pre-named universe \\
+Provider & Yahoo & single source \\
+Window & 2016-01-04/01 -- 2025-12-31 & daily OHLC, unadjusted \\
+Exclusions & 0 & all 20 accepted \\
+Rows per asset & 2444--2602 & exchange calendars \\
+Hash table & per file & verified on intake \\
+\bottomrule
+\end{tabular}
+\caption{Cohort lock summary. The per-file SHA-256 table is the authoritative record; row counts
+differ across assets because exchange calendars differ, not because data were imputed.}
+\label{tab:cohort}
+\end{table}
+
+Two properties matter for what follows. The cohort shares the \emph{provider} of the discovery set
+while differing in \emph{market}: its assets exclude both the original ten and the four assets used in
+S2. Rows were dropped only where the provider returned all-null price rows and were never
+interpolated, with the drop counts documented per file. Acquisition was performed by the peer machine,
+because the analysing host cannot reach the provider.
+
+\section{The Frozen Predictor}
+\label{sec:pred}
+
+The predictor is frozen \emph{before} any outcome exists, which is the difference between a
+prospective test and a descriptive one. Its construction rule:
+
+\begin{itemize}
+\item a feature window covering closes $[i, i+96)$ is usable only if the whole window ends at or
+before the decision point, i.e.\ $i+96 \le \mathrm{border1\_test}$;
+\item the decision point follows the frozen split convention,
+$\mathrm{border1\_test} = n - \lfloor 0.2n \rfloor - 96$ with $\mathrm{num\_train} = \lfloor 0.7n
+\rfloor$;
+\item the asset-level predictor aggregates the window features over the usable windows only, so the
+last close index touched is $\mathrm{border1\_test} - 1$.
+\end{itemize}
+
+A leakage check is executed and printed: it asserts that every index used by the predictor lies
+strictly below the decision point. The check passed for all twenty assets. A contemporaneous
+analogue computed over the test windows is carried as a \emph{contrast only} and is never used for
+the primary test. Because the predictor is frozen, it may not be recomputed with a different window,
+estimator or cutoff once outcomes are seen.
+
+\section{Delegated Execution}
+\label{sec:exec}
+
+S4 requires 120 training runs ($20$ assets $\times$ $2$ arms $\times$ $3$ seeds) under the unchanged
+protocol, with per-run predictions and ground truth retained for the paired analysis.
+\begin{table}[!t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{0.26\columnwidth}p{0.20\columnwidth}p{0.40\columnwidth}@{}}
+\toprule
+Property & Value & Note \\
+\midrule
+Runs & 120 & $20 \times 2 \times 3$ \\
+Concurrency & 2 lanes & widening declined \\
+Threads & 14 & unchanged mid-campaign \\
+Retained & metrics, pred, true & + command line, log tail \\
+Checkpoints & not transferred & not needed \\
+Batch reporting & 40 runs / 6 h & manifest per batch \\
+Progress & 0/120 & launched 13:36 \\
+\bottomrule
+\end{tabular}
+\caption{Execution configuration. Throughput changes that would alter run comparability mid-campaign
+(thread count, loader workers, extra lanes) were declined and deferred.}
+\label{tab:exec}
+\end{table}
+
+The executor was selected because its network reaches the provider while the analysing host does not.
+Its runner is \emph{offline-capable} by construction: everything is staged once, after which training
+reads only local files, so a network outage cannot interrupt the campaign. Resilience rests on four
+mechanisms: idempotent skipping; a watchdog that restarts lanes without ever
+duplicating a run; stall detection by \emph{process-tree CPU time} rather than log output;
+and a contingency plan that pre-authorises self-recovery while forbidding any protocol or data
+change. One genuine defect was found and fixed: a restart orphaned two
+finished runs that no lane recorded, which would have left a silent two-run gap; the runner now
+ingests such runs and flags them in the manifest, so the process, not merely the content, is
+auditable.
+
+\section{Intake Verification}
+\label{sec:verify}
+
+Nothing enters the evidence chain unverified. Each returned batch is checked mechanically before any
+file is accepted:
+\begin{enumerate}
+\item \textbf{Protocol conformance per run:} the stored command line must contain every frozen
+hyperparameter value together with that run's own seed, model and data path.
+\item \textbf{Content integrity:} predictions and ground truth must match the batch manifest hashes.
+\item \textbf{Metric integrity:} the metric array must parse as the frozen six-value order.
+\item \textbf{Whole-batch rejection:} if any run, manifest row, hash or command line disagrees, the
+\emph{entire} batch is rejected and returned with a difference list; partial results are never
+copied. The verifier's default mode is a dry run.
+\item \textbf{Handoff inventory:} an accepted batch yields a per-file SHA-256 inventory and a handoff
+receipt recording the frozen revision actually executed.
+\end{enumerate}
+
+One gap cannot be closed by the receiving side alone: transferred files can be shown to match the
+batch manifest, but only the executor can show that its local originals match what was transferred.
+That confirmation is therefore a required handoff item, not an optional courtesy.
+
+\section{Independence and Governance}
+\label{sec:gov}
+
+Three roles are kept separate: the \emph{executor} runs the panel and returns raw artefacts without
+performing any analysis; the \emph{analyst} computes the predictor and the headline statistic; a
+\emph{blind third party}, which has seen neither the analysis nor its own expectations, recomputes
+the headline statistic from the raw artefacts and reports a difference list, with the explicit rule
+that a discrepancy is a finding and never something to be tuned away. Executor and analyst are both
+excluded from that third role, and readers of this report are asked not to treat it as evidence
+about C1's outcome.
+
+\section{Milestones and Status}
+\label{sec:mil}
+
+\begin{table}[!t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{0.07\columnwidth}p{0.51\columnwidth}p{0.28\columnwidth}@{}}
+\toprule
+\# & Milestone & Status \\
+\midrule
+M1 & Cohort acquired (peer machine) & done \\
+M2 & Intake validation & done, 20/20 \\
+M3 & Cohort locked (hash table) & done \\
+M4 & Predictor frozen (leak check) & done \\
+M5 & Verifier hardened, smoke-tested & done \\
+M6 & Panel launched (120 runs) & running, 0/120 \\
+M7 & First batch verified & pending \\
+M8 & Blind third-party recomputation & pending \\
+\bottomrule
+\end{tabular}
+\caption{Milestones. M7 gates M8, and no stage beyond M7 is attempted before the panel completes.}
+\label{tab:mil}
+\end{table}
+
+\section{Next Steps}
+\label{sec:next}
+
+\begin{enumerate}
+\item Continue execution and health monitoring; keep the campaign's conditions constant.
+\item Verify each returned batch under the intake protocol; reject whole batches on any mismatch.
+\item On completion, assemble the handoff: runs, prediction and ground-truth arrays, the batch
+manifest, the frozen revision actually executed, the per-file hash inventory, and the executor's
+local-origin hash confirmation.
+\item Release the artefact set to the blind third party and await its difference list; only then read
+the pre-committed interpretation of whichever branch the outcome falls into.
+\end{enumerate}
+
+\section{What This Report Deliberately Omits}
+\label{sec:omit}
+
+No estimate of the headline statistic appears here, no per-asset interaction effect, no reading of
+either branch of the pre-committed interpretation, and no claim about the eligibility of any
+structured operator. Those omissions are not gaps: they are the condition under which the report is
+useful, and the same applies to any progress summary written while the panel runs.
+
+\end{document}

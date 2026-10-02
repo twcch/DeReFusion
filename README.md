@@ -1,436 +1,232 @@
-# DeReFusion
+# DeReFusion：金融时间序列预测研究项目
 
-**Official code for the paper**
-**[_DeReFusion: A Controlled Comparison of Soft Computing Fusion Strategies for Financial Time Series Forecasting via a Decomposition-Residual Architecture_](https://doi.org/10.1016/j.asoc.2026.116252)** (*Applied Soft Computing*, 2026)
+> 给第一次接触本项目的计算机专业读者：本 README 先解释项目在解决什么问题，再介绍模型、代码、数据、实验结果、复现方式和当前限制。除专有名称、命令与代码标识外，正文使用中文。
 
-[![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.asoc.2026.116252-blue.svg)](https://doi.org/10.1016/j.asoc.2026.116252)
-[![Python 3.11](https://img.shields.io/badge/Python-3.11-blue.svg)](https://www.python.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.5.1-EE4C2C.svg)](https://pytorch.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
-[![Built on Time-Series-Library](https://img.shields.io/badge/Built%20on-Time--Series--Library-8A2BE2.svg)](https://github.com/thuml/Time-Series-Library)
+- **项目性质：** 基于公开 DeReFusion 与 THUML Time-Series-Library 代码的独立研究分支，不是论文作者发布的官方代码包。
+- **报告更新：** 2026-10-02；实验进度依据仓库中截至 2026-09-30 的阶段报告。
+- **主要语言与框架：** Python、PyTorch。
+- **研究主题：** 金融 OHLC 时间序列的多步预测，以及预测模型复杂度是否带来稳定收益。
 
-This repository contains everything needed to reproduce the experiments in the paper: the proposed **DeReFusion** model with its **ablation** and **fusion-gate** variants, the **RevIN-wrapped baseline models** and **pretrained foundation models** they are compared against, the **daily OHLC stock/index/crypto/forex datasets**, and the **shared training and evaluation pipeline** that makes the comparison fair.
+参考论文：Chih-Chien Hsieh、Mu-Yen Chen，*DeReFusion: A Controlled Comparison of Soft Computing Fusion Strategies for Financial Time Series Forecasting via a Decomposition-Residual Architecture*，Applied Soft Computing 203 (2026), 116252，[DOI](https://doi.org/10.1016/j.asoc.2026.116252)。使用原论文方法时请引用原论文，并同时说明本仓库是独立研究分支。
 
----
+## 1. 一分钟了解项目
 
-## Table of Contents
+金融市场每天会产生按时间排列的数据。例如某只股票每天有开盘价、最高价、最低价和收盘价。我们希望用过去一段时间的数据，预测未来若干天的收盘价。这属于**时间序列预测**。
 
-- [Overview](#overview)
-- [What makes the benchmark _fair_](#what-makes-the-benchmark-fair)
-- [DeReFusion — the architecture](#derefusion--the-architecture)
-- [Benchmark models](#benchmark-models)
-- [Datasets](#datasets)
-- [Repository structure](#repository-structure)
-- [Installation](#installation)
-- [Reproducing the benchmark](#reproducing-the-benchmark)
-- [Evaluation and outputs](#evaluation-and-outputs)
-- [Adding a model](#adding-a-model)
-- [Citation](#citation)
-- [Acknowledgements](#acknowledgements)
-- [License](#license)
-- [Contributing](#contributing)
+这个仓库研究一个具体问题：把一个简单、可解释的线性预测分支，与一个更复杂的神经网络分支组合，能否比简单模型稳定地预测得更好？仓库既包含模型代码，也保存数据清单、实验规则、分析程序和结果审计记录。它的重点不是宣称某个模型“永远最好”，而是让读者能够追查每个结论是如何得到的、结论又有哪些边界。
 
----
+对第一次阅读的人，可以先记住三点：
 
-## Overview
+1. **模型主意：** DeReFusion 先用 DLinear 得到一个基础预测，再让 LSTM 与 Transformer 组成的残差分支预测基础模型没有解释的部分，最后将两个预测相加。
+2. **科学结论需要克制：** 现有结果没有证明 DeReFusion 对所有资产、预测期限或环境都更好；若干探索性假设没有通过预先规定的检验。
+3. **“跑完实验”不等于“证明假设”：** 仓库严格区分程序运行完成、数据与产物核验通过，以及统计结论得到支持这几件事。
 
-Daily financial prices — equities, indices, crypto, and forex alike — are strongly **non-stationary**: their mean and variance drift over time and the raw `Close` series carries a unit root (see [`utils/ADFtest.py`](./utils/ADFtest.py)). One way to attack this is to keep stacking capacity — deeper Transformers, recurrent–attention hybrids, learned fusion gates. This paper asks the opposite question:
+## 2. 问题背景与基本术语
 
-> **On non-stationary financial series, how far does a deliberately simple recipe go — a linear decomposition base, a learned residual, and plain additive fusion — and does anything more elaborate actually buy accuracy?**
+### 什么是 OHLC 数据？
 
-To answer it, the repo provides two things:
+OHLC 是一段时间内四种价格的缩写：Open（开盘）、High（最高）、Low（最低）、Close（收盘）。本项目的数据主要是日频金融数据。模型在每个预测窗口中读入四个价格字段，并以 Close（收盘价）作为预测目标。数据身份、日期范围、行数和文件哈希以 [`reproduction/results/dataset_registry.csv`](reproduction/results/dataset_registry.csv) 为准。
 
-1. A **fair benchmark** — a single data pipeline, normalization scheme, training protocol, and metric set shared by every model, so differences in results reflect the **backbone**, not the harness.
-2. **DeReFusion plus its probes** — the proposed model splits the forecast into a **DLinear base branch** and a **hybrid (LSTM → Transformer) residual branch**, combined by **direct additive fusion**, all wrapped in RevIN. It ships with **ablation variants** that remove one branch or one residual component at a time, and **fusion-gate variants** that replace the plain `base + residual` with a learned gate. Sliding DeReFusion across these two axes isolates *which branches matter* and *whether a smarter fusion is worth its parameters*.
+### 什么是训练、验证和测试？
 
-The repository is a focused fork of [thuml/Time-Series-Library (TSLib)](https://github.com/thuml/Time-Series-Library): it keeps TSLib's experiment harness and reuses its layer library, but trims the model set down to exactly what the paper studies.
+为了评价模型是否能预测未来，时间数据按先后顺序切分：
 
----
+- **训练集**用于调整模型参数；
+- **验证集**用于选择训练轮数或检查训练过程；
+- **测试集**模拟模型从未见过的未来数据，只在训练完成后用于最终评估。
 
-## What makes the benchmark _fair_
+如果未来测试数据提前参与训练、归一化参数计算或模型选择，就会产生数据泄漏，让成绩看起来比真实情况好。本项目的冻结方案要求按时间切分，并且只使用训练部分拟合标准化器。历史审计也明确记录了早期流程的局限，不会把旧结果包装成完全没有这些问题。
 
-Every model in this repository is evaluated under an **identical protocol**, so accuracy differences are attributable to the architecture and not to incidental advantages.
+### 什么是 MSE？
 
-| Dimension | Shared setting |
-|---|---|
-| **Data loader** | `Dataset_Custom` ([`data_provider/data_loader.py`](./data_provider/data_loader.py)) for all models |
-| **Splits** | Chronological **70% / 10% / 20%** train / validation / test; validation and test windows are extended back by `seq_len` for lookback context |
-| **Scaling** | `StandardScaler` **fit on the training split only**, then applied to all splits |
-| **Normalization** | **RevIN** (Reversible Instance Normalization) applied to _every_ trained model — DeReFusion and all RevIN baselines — so the comparison isolates backbone complexity rather than the normalization scheme |
-| **Inputs / target** | `--features MS`: all four OHLC columns as input, single `Close` target (`--target Close`) |
-| **Training** | Adam optimizer, MSE loss, early stopping on validation loss (`--patience`), learning-rate schedule (`--lradj`) |
-| **Seeds** | Controlled by `--rand_seed` (default `2021`); the seed is embedded in each run's `setting` string so multi-seed runs are tracked separately |
-| **Metrics** | MAE, MSE, RMSE, MAPE, MSPE, R² (optionally DTW), plus parameter count, train time, inference ms/sample, and GPU peak memory |
+MSE（均方误差）是预测值与真实值之差的平方平均值，越小代表该组数据上的误差越小。MSE 对大误差比较敏感。项目还会记录 MAE、RMSE 等指标。不同资产、不同预测期限或不同执行环境的 MSE 不能不加说明地混在一起比较；指标低也不自动代表统计显著、未来可获利或普遍优越。
 
-> **Reproducibility note.** `run.py` seeds Python `random`, NumPy, and PyTorch (`torch.manual_seed`). It does **not** set `torch.backends.cudnn.deterministic`, so results on CUDA are reproducible up to cuDNN non-determinism. Run several seeds (e.g. `2020`–`2024`) and report mean ± std, as the paper does.
+## 3. DeReFusion 模型如何工作
 
----
+一个输入窗口经过以下步骤：
 
-## DeReFusion — the architecture
-
-**File:** [`models/derefusion/DeReFusion.py`](./models/derefusion/DeReFusion.py) · **`--model DeReFusion`**
-
-DeReFusion is a **decomposition–residual dual-branch** forecaster. A linear **DLinear base branch** captures the trend/seasonal structure of the lookback window; a **hybrid residual branch** (per-feature projection → LSTM → Transformer encoder → projection) models what the linear base leaves behind. The two are combined by **direct additive fusion**, and the whole forecast is produced in RevIN-normalized space and denormalized back to the original price scale.
-
-**Forward pass** (`B` = batch, `D` = `d_model`, `C` = `enc_in` = 4):
-
-```
-x_enc [B, seq_len, 4]                              # OHLC input window
-  │
-  ├─ RevIN(norm) ──► x_norm [B, seq_len, 4]        # per-instance normalize (stats reused for denorm)
-  │
-  ├─ DLinear base branch ───────────────────────────────────────────
-  │     seasonal, trend = x_norm − MA(x_norm),  MA(x_norm)   # moving-avg kernel = --moving_avg
-  │     base = Linearₛ(seq_len→pred_len)·seasonalᵀ
-  │              + Linearₜ(seq_len→pred_len)·trendᵀ          ──► base [B, pred_len, 4]
-  │
-  ├─ Hybrid residual branch ────────────────────────────────────────
-  │     Linear(4→D) → LSTM(D→D) → TransformerEncoder(D)
-  │       → Linear(seq_len→pred_len) over time
-  │       → Linear(D→4) over channels                        ──► residual [B, pred_len, 4]
-  │
-  ├─ fused = base + residual                        # direct additive fusion
-  └─ RevIN(denorm) ──────► forecast [B, pred_len, 4]   (target = Close column)
-```
-
-The two design choices that define the model — and that the variants probe — are:
-
-- **Decomposition–residual split:** the linear base and the learned residual are produced by separate branches over the *same* normalized window, rather than by one monolithic backbone.
-- **Direct additive fusion:** the branches are combined as plain `base + residual` — a parameter-free fusion. The gate variants below replace it with a learned gate to test whether that simplicity costs accuracy.
-
-RevIN is the standalone Reversible Instance Normalization layer at [`layers/RevIN.py`](./layers/RevIN.py), shared with every RevIN baseline.
-
-### Ablation variants
-
-**Folder:** [`models/derefusion/ablation_variant/`](./models/derefusion/ablation_variant/). Each is a valid `--model` name (filename without `.py`).
-
-| `--model` | Removes / changes | Resulting behavior |
-|---|---|---|
-| `DeReFusion-woDy` | Hybrid residual branch + fusion | DLinear base only — tests whether the residual branch contributes at all |
-| `DeReFusion-woLSTM` | LSTM from the residual branch | `base +` Transformer-only residual — isolates the LSTM's contribution |
-| `DeReFusion-woTransformer` | Transformer from the residual branch | `base +` LSTM-only residual — isolates the Transformer's contribution |
-
-### Fusion-gate variants
-
-**Folder:** [`models/derefusion/gate_variant/`](./models/derefusion/gate_variant/). These keep both branches but replace the additive `base + residual` with a **gated fusion** `(1 − gate) · base + gate · residual`, asking whether a learned gate beats plain addition on small, non-stationary financial datasets.
-
-| `--model` | Gate | Mechanism |
-|---|---|---|
-| `DeReFusion-gatev1-volatilityaware` | **VolatilityAwareGate** | Gate driven by the **raw** input's per-channel std (computed before RevIN); a single volatility scalar must set per-timestep, per-channel weights |
-| `DeReFusion-gatev2-learnable` | **LearnableGate** | Per-channel learnable scalar `gate = sigmoid(α)`; **static** across samples and timesteps |
-| `DeReFusion-gatev3-inputconditioned` | **InputConditionedGate** | Sample-adaptive bottleneck net (`seq_len → --gate_bottleneck → pred_len`) producing per-sample / per-channel / per-timestep weights |
-
----
-
-## Benchmark models
-
-DeReFusion is compared against two families of baselines, all run through the same pipeline.
-
-### (a) RevIN-wrapped baselines — `models/`
-
-Ten TSLib backbones, each wrapped with the shared [`layers/RevIN.py`](./layers/RevIN.py) normalize/denormalize so they sit on a clean **complexity ladder** alongside DeReFusion. Names are case-sensitive and the hyphen is part of the model name (e.g. `--model revin-DLinear`).
-
-| Complexity tier | `--model` | Backbone |
-|---|---|---|
-| **Linear / MLP** | `revin-DLinear` | Series decomposition + per-component linear maps |
-| | `revin-LightTS` | Lightweight MLP with interval/continuous sampling |
-| **CNN** | `revin-TimesNet` | 2D temporal blocks over multi-period reshapes |
-| **Transformer** | `revin-Informer` | ProbSparse attention + distilling |
-| | `revin-Reformer` | LSH-attention efficient Transformer |
-| | `revin-iTransformer` | Inverted Transformer (attention across variates) |
-| | `revin-PatchTST` | Patching + channel-independent Transformer |
-| | `revin-Autoformer` | Decomposition + AutoCorrelation attention |
-| | `revin-FEDformer` | Frequency-enhanced decomposition Transformer |
-| | `revin-ETSformer` | Exponential-smoothing attention |
-
-### (b) Pretrained foundation models — `models/`
-
-Run **zero-shot** (no training) through the `zero_shot_forecast` task with `--is_training 0`.
-
-| `--model` | File |
-|---|---|
-| `Chronos` | [`models/Chronos.py`](./models/Chronos.py) |
-| `Moirai` | [`models/Moirai.py`](./models/Moirai.py) |
-| `TimesFM` | [`models/TimesFM.py`](./models/TimesFM.py) |
-
----
-
-## Datasets
-
-Ten daily **OHLC** series under [`dataset/`](./dataset/), spanning **2016-01-01 → 2025-12-31**. All files share the header `date,Open,High,Low,Close` (`date` is `YYYY-MM-DD`; values are split/adjusted floats). **There is no Volume column.** Row counts differ because each market follows its own trading calendar — crypto trades on weekends, equities/indices/forex do not.
-
-| Ticker | Instrument | Type | Rows |
-|---|---|---|---|
-| [BABA](./dataset/BABA-2016-2025.csv) | Alibaba | Stock | 2514 |
-| [NVO](./dataset/NVO-2016-2025.csv) | Novo Nordisk | Stock | 2514 |
-| [TM](./dataset/TM-2016-2025.csv) | Toyota Motor | Stock | 2514 |
-| [GSPC](./dataset/GSPC-2016-2025.csv) | S&P 500 | Index | 2514 |
-| [DJI](./dataset/DJI-2016-2025.csv) | Dow Jones Industrial Average | Index | 2514 |
-| [SOX](./dataset/SOX-2016-2025.csv) | PHLX Semiconductor | Index | 2514 |
-| [EURUSD](./dataset/EURUSD-2016-2025.csv) | Euro / US Dollar | Forex | 2602 |
-| [USDJPY](./dataset/USDJPY-2016-2025.csv) | US Dollar / Japanese Yen | Forex | 2602 |
-| [BTCUSD](./dataset/BTCUSD-2016-2025.csv) | Bitcoin | Crypto | 3653 |
-| [ETHUSD](./dataset/ETHUSD-2016-2025.csv) | Ethereum | Crypto | 2975 |
-
-**Non-stationarity.** [`utils/ADFtest.py`](./utils/ADFtest.py) runs the Augmented Dickey–Fuller test (via `statsmodels` and `arch`) to quantify the unit-root behavior of each series — the empirical motivation for applying RevIN to every trained model in the benchmark.
-
-**Loading convention.** CSVs are read through the `custom` provider with multivariate-input / single-target settings:
-
-| Flag | Value | Meaning |
-|---|---|---|
-| `--data` | `custom` | use `Dataset_Custom` |
-| `--features` | `MS` | all OHLC columns in, single target out |
-| `--target` | `Close` | predict `Close` (moved to the last column internally) |
-| `--freq` | `b` | business-day frequency for the temporal embedding |
-| `--enc_in` / `--dec_in` / `--c_out` | `4` / `4` / `1` | 4 OHLC inputs, 1 target output |
-
-> `run.py` inherits TSLib's defaults (`--data ETTh1`, `--features M`, `--target OT`, `--freq h`), so the financial configuration must be passed explicitly, as shown below.
-
----
-
-## Repository structure
+1. **RevIN 归一化：** 根据当前输入窗口的统计量调整数据尺度，降低不同时间段数值水平变化造成的影响；预测后再把结果转换回原来的尺度。
+2. **基础分支：** DLinear 对输入序列作分解，并给出一个相对简单的预测。
+3. **残差分支：** 模型计算基础预测没有解释的剩余部分，再用线性层、LSTM 和 Transformer 建模其中的时间关系。
+4. **融合：** 将基础预测与残差预测直接相加，得到最终预测。
 
 ```text
-DeReFusion/
-├── run.py                              # Single entry point — CLI, seeding, device & task dispatch
-├── run_batch_long_term_forecast.py     # Parallel batch sweep runner (DeReFusion + RevIN baselines)
-├── run_batch_zero_shot_forecast.py     # Batch sweep runner (foundation models, zero-shot)
-├── models/
-│   ├── revin-Autoformer.py             # 10 RevIN-wrapped baselines (revin-*.py)
-│   ├── revin-DLinear.py
-│   ├── revin-ETSformer.py
-│   ├── revin-FEDformer.py
-│   ├── revin-Informer.py
-│   ├── revin-iTransformer.py
-│   ├── revin-LightTS.py
-│   ├── revin-PatchTST.py
-│   ├── revin-Reformer.py
-│   ├── revin-TimesNet.py
-│   ├── Chronos.py · Moirai.py · TimesFM.py   # pretrained foundation models (zero-shot)
-│   └── derefusion/
-│       ├── DeReFusion.py                # proposed model
-│       ├── ablation_variant/            # 3 ablation variants (woDy / woLSTM / woTransformer)
-│       └── gate_variant/                # 3 fusion-gate variants (gatev1 / gatev2 / gatev3)
-├── exp/                                # Task pipelines + Exp_Basic model registry
-│   ├── exp_basic.py                    # auto-discovers models under models/ (lazy import)
-│   ├── exp_long_term_forecasting.py    # the pipeline used by the paper
-│   └── exp_zero_shot_forecasting.py    # foundation-model zero-shot pipeline
-├── layers/                             # Reusable layers (RevIN, attention, embeddings, …)
-├── data_provider/                      # data_factory.py, data_loader.py (Dataset_Custom)
-├── dataset/                            # 10 OHLC CSVs (2016–2025)
-├── utils/                              # metrics.py, visualization.py, ADFtest.py, tools.py
-├── scripts/                            # Inherited TSLib reproduction scripts (standard benchmarks — see note)
-├── requirements/                       # Ordered install files reqs_1..4.txt
-├── Dockerfile                          # CUDA 12.1 / PyTorch 2.5.1 image
-└── docker-compose.yml                  # dev service with GPU passthrough
+过去的 OHLC 窗口
+       │
+   RevIN 归一化
+       ├─────────────┐
+       ▼             ▼
+   DLinear 基础预测   LSTM + Transformer 残差预测
+       └────── 相加 ─┘
+              │
+       RevIN 还原尺度
+              │
+         未来收盘价预测
 ```
 
-> **Note on `scripts/`.** These shell scripts are inherited from upstream TSLib and target the _standard_ academic benchmarks (ETT, ECL, Weather, M4, anomaly/classification datasets). They are **not** the financial experiments of this paper — the benchmark is run through `run.py` and the batch runners as documented below.
+这里的“残差”是基础模型与实际序列之间未解释的部分，并不表示代码错误。LSTM 是处理序列信息的循环神经网络；Transformer 使用注意力机制处理序列中不同位置之间的关系。仓库还包含去除某个组件的消融模型、若干可学习融合门控变体、RevIN 包装的基线模型和可选的零样本基础模型适配器。
 
----
+## 4. 项目结构导航
 
-## Installation
+| 路径 | 内容 | 初学者可以怎样理解 |
+|---|---|---|
+| [`run.py`](run.py) | 训练与评估命令行入口 | 运行一次模型实验的总入口 |
+| [`models/`](models/) | DeReFusion、消融、门控、基线和适配器 | 模型结构定义 |
+| [`layers/`](layers/) | RevIN、注意力、嵌入等组件 | 神经网络积木 |
+| [`exp/`](exp/) | 训练、验证和测试流程 | 实验循环与模型调用 |
+| [`data_provider/`](data_provider/) | 数据集读取、切分和批次加载 | 将 CSV 转成模型输入 |
+| [`dataset/`](dataset/) | 已纳入版本管理的 OHLC 数据文件 | 本项目使用的数据样本 |
+| [`requirements/`](requirements/) | 分组的软件依赖 | 安装运行环境所需的 Python 包 |
+| [`reproduction/analysis/`](reproduction/analysis/) | 数据检查与结果复算脚本 | 审核数据、重算已保存的统计结果 |
+| [`reproduction/results/`](reproduction/results/) | 小型表格、数据注册表和分析摘要 | 可版本管理的结构化结果 |
+| [`reproduction/c1_handoff/`](reproduction/c1_handoff/) | C1 阶段交接、清单和复算资料 | 该实验的审计材料 |
+| [`docs/`](docs/) | 研究审计、预注册与方法说明 | 项目的规范和深入说明 |
+| [`reports/`](reports/) | 阶段报告和证据链 | 结果、审查与决策记录 |
+| [`reports/evidence_closure/`](reports/evidence_closure/) | 编号的历史证据链 | 按时间追溯探索、规则和结论 |
+| [`research-ops-site/`](research-ops-site/) | 研究运行状态展示网站的源代码 | 独立的前端项目，不是模型训练入口 |
 
-**Recommended Python: 3.11.** Dependencies are split into four ordered files in [`requirements/`](./requirements/).
+大型训练日志、模型检查点和部分原始预测产物可能仅保存在运行机器，不一定随 GitHub 仓库发布。远程仓库中的报告会注明结论所依据的产物和限制；如报告需要未随仓库发布的本地文件，克隆代码仓库本身并不足以完整重现该项实验。
 
-### Minimal install (DeReFusion + RevIN baselines)
+## 5. 数据范围与注意事项
 
-The proposed model and the RevIN baselines depend only on PyTorch and the standard scientific/attention stack — **not** on the Mamba or foundation-model libraries.
+仓库数据注册表列出 **61 个日频 OHLC CSV 文件、合计 149,474 行**。每个文件的哈希、行数、日期范围和质量审查可在数据注册表与历史审计报告中核查。数据来源、分组和使用边界也应结合具体报告阅读；不能因为某个 CSV 存在于目录中，就默认它获准进入每一项正式比较。
+
+已记录的数据质量问题包括：
+
+- 五份外汇数据存在少量 OHLC 高低价包络不一致。原始数据保留，没有悄悄修改；
+- WTI 原油数据保留了 2020 年 4 月的非正价格。涉及对数收益的计算在这些位置没有定义，不能通过加常数或删行来隐去；
+- 部分数据被标为 supporting-unregistered（仅供支持用途、未注册为正式样本），不应事后加入确认性分析；
+- 数据质量问题可能影响特定特征或目标定义，需要由相应实验报告逐项说明，不能只看总体模型分数。
+
+详细说明：[`reproduction/results/dataset_registry.csv`](reproduction/results/dataset_registry.csv)、[`docs/REPOSITORY_AUDIT_2026-09-18.md`](docs/REPOSITORY_AUDIT_2026-09-18.md)。
+
+## 6. 研究问题、实验和当前结论
+
+### 6.1 早期融合与结构探索
+
+- **学习式融合门控：** 在已测试设置下，波动率门控没有优于直接相加；这不代表所有可能的门控都已被排除。
+- **按样本动态路由：** 没有获得足够稳定的支持，因此当前不能声称已经找到可靠的逐窗口模型选择器。
+- **Gate A（结构特征检验）：** 按事先冻结的规则判定为 **FAIL**。其中 `|ACF1|` 与算子偏好的探索性联系不能作为已验证的选择规律。
+- **F1（更多资产上的宽度检验）：** 7 个追加资产中，4 个符合预先定义的种子与模型宽度稳定条件，3 个不符合。结果只支持有限的资产异质性倾向，不能说每个资产都具有固定的算子偏好。
+- **C1（前瞻性检验）：** 120/120 次运行完成，但预先指定的候选关系未能复现，结果为 **FAIL**（报告记录 `rho=-0.1519, p=0.5227`）。独立盲复算支持失败结论的稳健性，同时指出交接规则曾有缺口；详细范围见编号报告 26–29。
+
+以上 FAIL 表示对应的预先声明假设没有通过规则，并不是“项目代码运行失败”。否定结果与执行异常被保留下来，因为它们是研究记录的一部分。
+
+### 6.2 DeReFusion 与现代基线：Phase 1
+
+Phase 1 的主要问题是：在固定数据、切分与训练条件下，DeReFusion 是否比 RevIN-DLinear 基线持续带来足够收益，以证明较复杂残差分支值得承担其成本？方案将工作分成校准、筛查、主要配对比较和时间稳健性四个阶段。
+
+| 阶段 | 计划规模 | 截至 2026-09-30 的核实进度 | 可以怎样解读 |
+|---|---:|---|---|
+| Stage A：运行校准 | 15 次 | 15/15 正式 GPU 校准收据通过 | 说明规定任务能运行、张量形状和产物流程可用；按方案，校准分数不是模型效果证据。 |
+| Stage B：现代基线筛查 | 300 项 | P4 轨道 245 项 + RTX 8000 补充轨道 55 项，合计覆盖 300/300 个设置 | 两条硬件/软件执行轨道不得合并排名或声称数值等价。P4 四模型子面板有独立描述性复核，但不是完整五模型确认性排名。 |
+| Stage C：主模型配对比较 | 360 次 | 360/360 次；30 个资产、2 个预测期限、3 个随机种子 | 预测键、目标数组与文件哈希配对核验通过；现有报告只给分层描述性点估计。 |
+| Stage D：时间稳健性 | 144 次 | 0/144，清单仍为 planned | 尚未运行；没有本阶段专属执行授权。 |
+
+Stage C 的指标是 `DeReFusion MSE − RevIN-DLinear MSE`，按样本组、期限和随机种子分开报告；负值表示该分层中的 DeReFusion 平均点估计较低。现有 12 个分层点估计从大多数层为负，到部分层接近零或为正，因而不宜用单一平均数概括。更关键的是，冻结方案要求资产聚类 bootstrap 区间，但没有在结果产生前固定所需的随机种子、重抽样次数、区间算法和跨期限/种子汇总规则。报告因此**没有**事后补造这些参数，也**没有**声称 DeReFusion 已得到确认性优越结论。
+
+读者应区分：产物覆盖完整、预测数组配对通过，说明数据与文件链条经核验；它们本身不能替代已完整预先规定的统计判据。Stage B 的跨硬件排名、Stage C 的确认性区间、Stage D 的启动均受报告中的门控限制。
+
+- [Phase 1 总进度和结果边界](reports/phase1/phase1-experiment-data-and-progress-20260930.md)
+- [下一步门控与允许动作](reports/phase1/phase1-next-steps-gate-20260930.md)
+- [冻结预注册方案](docs/PHASE1_PREREGISTRATION.md)
+- [Phase 1 描述性证据索引](reports/README.md)
+
+### 6.3 关于 Navier–Stokes 的边界
+
+Navier–Stokes 是描述流体运动的一组方程。有过把其算子结构作为神经网络架构灵感的研究设想，但本仓库没有证明金融 OHLC 数据满足相应物理状态变量、守恒律、边界条件或偏微分方程残差。因此，Navier–Stokes 相关模型目前是**未经测试的想法**：既没有被本仓库验证，也不能说已经被本仓库否定。不得把它描述成金融市场的真实物理定律或本项目已经实现的成果。
+
+## 7. 安装环境与运行一个示例
+
+建议使用 Python 3.11，并根据自己的硬件安装匹配的 PyTorch。依赖分为核心、CUDA 和可选基础模型几组，不需要为了运行核心模型而一次安装全部大型可选依赖。
 
 ```bash
-# 1. PyTorch (CUDA 12.1 build — torch==2.5.1)
-pip install -r requirements/reqs_1.txt
+# 先安装与你的系统及硬件相匹配的 PyTorch。
+# 以下文件示例对应 CUDA 12.1；CPU 或其他 GPU 环境请选用适配版本。
+pip install -r requirements/torch-cu121.txt
 
-# 2. Core scientific + attention stack
-#    (numpy, scipy, scikit-learn, pandas, matplotlib, einops, reformer-pytorch,
-#     sktime, sympy, PyWavelets, tqdm, …)
-pip install -r requirements/reqs_2.txt
+# 安装核心模型与分析依赖
+pip install -r requirements/core.txt
 ```
 
-> **CPU / Apple Silicon:** `requirements/reqs_1.txt` pins the CUDA 12.1 wheel. If you do not have an NVIDIA GPU, install the matching CPU or MPS build of `torch==2.5.1` from [pytorch.org](https://pytorch.org/get-started/locally/) instead of step 1, then run step 2.
-
-### Foundation-model + Mamba extras (only for the zero-shot baselines)
-
-`requirements/reqs_2.txt` also pulls the foundation-model stack (`transformers`, `chronos-forecasting`, `timesfm`, `tirex-ts`, `gluonts`, `lightning`, `jax`, …) needed to run `Chronos` / `Moirai` / `TimesFM`. The pinned Mamba state-space wheel and `uni2ts` live in the remaining files and are **not** imported by DeReFusion or the RevIN baselines, so you can skip them unless you need those backends.
-
-```bash
-pip install -r requirements/reqs_3.txt          # mamba_ssm — Linux x86_64 + CUDA 12 + Python 3.11 + torch 2.5 ONLY
-pip install -r requirements/reqs_4.txt           # uni2ts and friends
-```
-
-> `reqs_3.txt` pins a `mamba_ssm` wheel built for `cu12 / torch2.5 / cp311 / linux_x86_64` only; it will not install on macOS, Windows, ARM, or other Python versions.
-
-### Docker (optional)
-
-A CUDA environment is provided for full-stack reproduction:
-
-```bash
-# The Dockerfile installs from a single consolidated requirements.txt:
-cat requirements/reqs_*.txt > requirements.txt
-docker compose up -d --build
-docker compose exec dev_tslib bash
-```
-
-The image builds on `pytorch/pytorch:2.5.1-cuda12.1-cudnn9-devel`, runs with GPU passthrough (`NVIDIA_VISIBLE_DEVICES=all`), `shm_size: 8gb`, and a `/workspace` volume. It targets the _complete_ stack including the optional Mamba / foundation dependencies.
-
----
-
-## Reproducing the benchmark
-
-All experiments run through [`run.py`](./run.py), which seeds the RNGs, selects the device, and dispatches to the appropriate task pipeline.
-
-### Train and evaluate the proposed model
+在仓库根目录运行以下单次训练示例（需要已安装匹配的 PyTorch，并可访问示例数据）：
 
 ```bash
 python run.py \
-  --task_name long_term_forecast \
-  --is_training 1 \
-  --model_id GSPC_96_24 \
-  --model DeReFusion \
-  --data custom \
-  --root_path ./dataset/ \
-  --data_path GSPC-2016-2025.csv \
+  --task_name long_term_forecast --is_training 1 \
+  --model_id GSPC_96_24 --model DeReFusion \
+  --data custom --root_path ./dataset/ --data_path GSPC-2016-2025.csv \
   --features MS --target Close --freq b \
   --seq_len 96 --label_len 48 --pred_len 24 \
   --enc_in 4 --dec_in 4 --c_out 1 \
-  --d_model 32 --moving_avg 25 \
-  --train_epochs 30 --batch_size 32 --learning_rate 0.0001 \
-  --patience 5 --lradj cosine \
-  --rand_seed 2021
+  --d_model 32 --moving_avg 25 --train_epochs 30 --batch_size 32 \
+  --learning_rate 0.0001 --patience 5 --lradj cosine \
+  --rand_seed 2021 --no_use_gpu
 ```
 
-### Run a baseline, ablation, or fusion-gate variant
+参数含义：`seq_len=96` 表示输入过去 96 个时间步；`pred_len=24` 表示预测未来 24 个时间步；`label_len` 是解码器使用的历史部分长度；`--no_use_gpu` 强制使用 CPU。数据参数的准确含义由 `run.py` 与相应数据加载器实现。这个示例用于说明如何调用代码，并不等于任何冻结研究方案的完整复现，也不能直接与报告中的确认性阶段互换。
 
-Swap `--model` for any name from the [benchmark set](#benchmark-models), the [ablation table](#ablation-variants), or the [gate table](#fusion-gate-variants); every other flag stays the same:
+Chronos、Moirai、TimesFM 等零样本模型需要可选依赖：
 
 ```bash
-python run.py --model revin-DLinear                     ... # a linear baseline
-python run.py --model revin-PatchTST                    ... # a Transformer baseline
-python run.py --model DeReFusion-woDy                   ... # an ablation (base branch only)
-python run.py --model DeReFusion-gatev3-inputconditioned ... # a fusion-gate variant
+pip install -r requirements/foundation.txt
 ```
 
-### Zero-shot foundation models
+Linux/CUDA 环境下的 Mamba 依赖也单独列出。依赖版本、平台差异和隔离环境建议见 [`requirements/README.md`](requirements/README.md)。在 Windows CPU 环境可将上面的反斜线续行改成 PowerShell 反引号，或将命令写在一行。
 
-Run a pretrained foundation model with no training (`--is_training 0`, `--task_name zero_shot_forecast`):
+## 8. 检查数据与复算已有分析
+
+以下命令用于核对数据或根据已留存的小型结果表复算摘要；它们不会替代模型训练，也不会自动授权新的正式实验：
 
 ```bash
-python run.py \
-  --task_name zero_shot_forecast \
-  --is_training 0 \
-  --model_id BTCUSD_zeroshot \
-  --model TimesFM \
-  --data custom \
-  --root_path ./dataset/ \
-  --data_path BTCUSD-2016-2025.csv \
-  --features MS --target Close --freq b \
-  --seq_len 96 --label_len 48 --pred_len 7
+# 审查 61 份数据的结构、日期和哈希
+python reproduction/analysis/dataset_audit.py
+
+# 根据保留的 F1 结果表复算摘要
+python reproduction/analysis/f1_analysis.py
+
+# 验证 Phase 1 冻结清单（不启动训练）
+python reproduction/analysis/build_phase1_manifest.py
+
+# 审计冻结的日期切分（不启动训练）
+python reproduction/analysis/audit_phase1_date_splits.py
 ```
 
-> Swap `--model TimesFM` for `Chronos` or `Moirai` to try the other foundation models.
+Phase 1 训练启动器默认是只读预览；真正训练还需要与代码提交、实验阶段和设备绑定的独立版本化授权以及通过的环境指纹。不要把修改参数后重跑得到的结果称为同一冻结方案的复现。
 
-### Device selection
+## 9. 建议阅读顺序
 
-- **CUDA** is auto-detected and used by default.
-- **Apple Silicon:** add `--gpu_type mps`.
-- **CPU:** add `--no_use_gpu`.
+如果你刚克隆项目，建议按这个顺序阅读：
 
-### Full sweep
+1. 本 README，了解项目问题、模型、数据和结论边界；
+2. [`docs/REPOSITORY_AUDIT_2026-09-18.md`](docs/REPOSITORY_AUDIT_2026-09-18.md)，了解仓库审计、数据质量和历史方法问题；
+3. [`reports/README.md`](reports/README.md)，查看权威结论索引与证据时间线；
+4. [`reports/phase1/phase1-experiment-data-and-progress-20260930.md`](reports/phase1/phase1-experiment-data-and-progress-20260930.md)，了解最近阶段进度；
+5. [`docs/PHASE1_PREREGISTRATION.md`](docs/PHASE1_PREREGISTRATION.md)，了解哪些比较在看到结果前已冻结；
+6. [`docs/LITERATURE_AND_NEXT_PLAN.md`](docs/LITERATURE_AND_NEXT_PLAN.md)，了解相关工作与后续研究边界；
+7. 对某个历史假设感兴趣时，再沿 `reports/evidence_closure/` 的编号报告从预注册读到结果与审计。
 
-The paper reports results over **all 10 instruments × multiple forecast horizons × several seeds**. The two batch runners automate this:
+较早报告可能记录当时的历史状态，后续报告会修正或补充它们。请优先看 `reports/README.md` 指向的当前权威报告，不要把历史计划或旧的运行快照误读为当前结论。
 
-```bash
-# DeReFusion + RevIN baselines (trained); parallel, MAX_PARALLEL=6, seeds 2020–2024
-python run_batch_long_term_forecast.py
+## 10. 可复现性与结论边界
 
-# Foundation models (zero-shot): TimesFM / Chronos / Moirai
-python run_batch_zero_shot_forecast.py
-```
+本项目尽量保存冻结配置、代码版本、数据 SHA-256、预测键、原始预测/真值、指标与收据，从而让其他人检查样本是否配对、数组是否对应同一预测目标、保存指标能否由数组复算。小型摘要和注册表随 Git 管理；检查点、完整训练产物等大型文件可能留在本地执行目录，不承诺仅凭 GitHub 克隆即可重建每一次训练。
 
-Both runners shell out to `run.py`, key each completed experiment by an MD5 of its command, record progress in `run_batch_progress.log` and failures in `run_batch_failed.log`, write per-experiment stdout/stderr into `run_batch_logs/`, and **resume** where they left off. The dataset list, horizon grid (`pred_len`), seed list, and the active `--model` set are edited at the top of each script — comment blocks there hold the DeReFusion presets (the 2016–2025 instruments and horizons `[1, 7, 12, 24, 36]`).
+复现时特别留意：
 
----
+- 不要把训练完成数当作模型显著优越的证据；
+- 不要合并不同硬件轨道并称它们数值等价；
+- 不要从已经观察到的测试结果挑资产、特征、阈值或资源预算；
+- 不要把描述性点估计改称置信区间、显著性检验或确认性结论；
+- 不要静默改写数据、隐藏负结果或把未测试想法写成验证成果；
+- 对新的实验，先固定问题、数据、切分、比较对象、统计规则和资源安排，再开始查看结果。
 
-## Evaluation and outputs
+研究流程的更严格约束见 [`docs/EXPERIMENTAL_DOCTRINE.md`](docs/EXPERIMENTAL_DOCTRINE.md) 与 [`docs/PHASE1_PREREGISTRATION.md`](docs/PHASE1_PREREGISTRATION.md)。
 
-The long-term-forecasting pipeline ([`exp/exp_long_term_forecasting.py`](./exp/exp_long_term_forecasting.py)) reports an extended set of metrics and diagnostics.
+## 11. 引用、来源与许可
 
-**Metrics** ([`utils/metrics.py`](./utils/metrics.py)): `MAE, MSE, RMSE, MAPE, MSPE, R²` — and optionally **DTW** with `--use_dtw` (off by default; time-consuming).
-
-**Diagnostics** (printed and appended to the result log):
-- **GPU peak memory** — `gpu_mem_peak_mb` via `torch.cuda.max_memory_allocated` (CUDA only).
-- **Training wall time** and **inference speed** — `inference_speed_ms` (ms/sample, guarded by `torch.cuda.synchronize()`).
-- **Parameter counts** — total and trainable.
-
-**Output layout** (relative to the working directory; all are git-ignored):
-
-| Path | Contents |
-|---|---|
-| `results/<setting>/` | `pred.npy`, `true.npy`, `metrics.npy` (the 6 core metrics) |
-| `test_results/<setting>/` | auto-generated figures + per-window preview PDFs |
-| `checkpoints/<setting>/checkpoint.pth` | best model by validation loss |
-| `result_long_term_forecast.txt` | appended one-line summary per run (all metrics + diagnostics) |
-
-**Publication figures** ([`utils/visualization.py`](./utils/visualization.py), 300 DPI, serif/journal style, PNG):
-
-| File | Content |
-|---|---|
-| `fig_prediction_curves.png` | Sample ground-truth vs. prediction windows with error band |
-| `fig_error_analysis.png` | MSE-per-horizon-step bars + error-distribution histogram |
-| `fig_metrics_radar.png` | Radar over MAE / MSE / RMSE / MAPE / MSPE / R² |
-| `fig_error_heatmap.png` | Absolute-error heatmap (sample × horizon) |
-| `fig_pred_true.png` | Continuous ground-truth vs. prediction curve |
-| `fig_dashboard.png` | 4-panel summary |
-
-Figures can be regenerated standalone from saved arrays:
-
-```bash
-python -m utils.visualization --input results/<setting>/ --output test_results/<setting>/
-```
+引用 DeReFusion 方法时请引用上方 2026 年论文，并明确说明代码来自独立研究分支。代码许可见 [`LICENSE`](LICENSE)；THUML Time-Series-Library 的来源记录在相关源文件头部和 Git 历史中。数据和预训练模型可能有各自的使用条款，使用前需核对对应来源。
 
 ---
 
-## Adding a model
-
-The registry ([`exp/exp_basic.py`](./exp/exp_basic.py)) **auto-discovers** models: drop a `.py` file anywhere under [`models/`](./models/) that defines a class named `Model`, and its filename (without `.py`) becomes the `--model` string — no manual registration, and the module is lazily imported only when selected. This is exactly how the RevIN baselines (`revin-*.py`) and the DeReFusion family are wired in. An unknown `--model` name raises a `ValueError` listing the discovered models.
-
----
-
-## Citation
-
-If you use this code or build on the benchmark, please cite the paper:
-
-```bibtex
-@article{hsieh2026derefusion,
-  title   = {{DeReFusion}: A controlled comparison of soft computing fusion strategies for financial time series forecasting via a decomposition-residual architecture},
-  author  = {Hsieh, Chih-Chien and Chen, Mu-Yen},
-  journal = {Applied Soft Computing},
-  volume  = {203},
-  pages   = {116252},
-  year    = {2026},
-  issn    = {1568-4946},
-  doi     = {10.1016/j.asoc.2026.116252},
-  url     = {https://doi.org/10.1016/j.asoc.2026.116252}
-}
-```
-
----
-
-## Acknowledgements
-
-This project is a focused fork of the [Time-Series-Library (TSLib)](https://github.com/thuml/Time-Series-Library) by THUML @ Tsinghua University. It reuses TSLib's experiment harness and layer library, and adds the financial datasets, the RevIN-wrapped baselines, the foundation-model integrations, and the DeReFusion model family studied in the paper.
-
----
-
-## License
-
-Released under the **MIT License** — see [`LICENSE`](./LICENSE).
-
-- Copyright © 2026 Chih-Chien Hsieh
-- Copyright © 2021 THUML @ Tsinghua University (Time-Series-Library)
-
----
-
-## Contributing
-
-This is a **personal research repository** accompanying a publication, so external pull requests are not accepted (see [`CONTRIBUTING.md`](./CONTRIBUTING.md)). It is open source under MIT and **fork-friendly** — you are welcome to fork it, adapt it, and build on the benchmark. Bug reports and questions can be raised as Issues.
+如果你是第一次读这个仓库，最重要的入口是本页的项目结构、当前结论和报告索引。项目代码回答“如何运行模型”，冻结方案与审计报告回答“实验可以支持什么结论”。

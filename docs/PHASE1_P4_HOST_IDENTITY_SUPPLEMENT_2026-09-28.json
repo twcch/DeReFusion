@@ -1,0 +1,48 @@
+{
+  "record_type": "post_stage_a_p4_runtime_identity_observation",
+  "protocol_context": "phase1-v1.2-2026-09-28",
+  "collected_at_utc": "2026-09-28T16:00:11Z",
+  "remote_observed_at": "2026-09-28T23:53:26+08:00",
+  "source": "Read-only SSH observation of the P4 instance previously used for Stage A",
+  "host": {
+    "hostname": "mcocepnaceurxyhj-snow-6676dfbbc7-cqk5c",
+    "os": "Ubuntu 22.04.4 LTS",
+    "kernel": "Linux 5.19.0-50-generic x86_64",
+    "root_filesystem_source": "/dev/mapper/containerd-devpool-snap-30346",
+    "root_filesystem_type": "xfs"
+  },
+  "stage_a_runtime": {
+    "python_executable": "/data/miniconda/envs/derefusion-p1/bin/python",
+    "python": "3.11.15",
+    "torch": "2.5.1+cu121",
+    "cuda_runtime": "12.1",
+    "cudnn_version_integer": 90100,
+    "gpu_model": "Tesla P4",
+    "gpu_memory_mib": 7680,
+    "gpu_uuid": "GPU-90da15f4-20f5-2067-f375-53d2b59e73e9",
+    "gpu_driver_version": "550.54.15",
+    "gpu_pci_bus_id": "00000000:82:00.0"
+  },
+  "stage_a_volume_binding": {
+    "remote_fingerprint_path": "/data/phase1_logs/20_environment_fingerprint.json",
+    "remote_fingerprint_sha256": "a75184bb08f38d0e6acafaf666f5d0a34147e71eb6b35c6cfd8bc02eca768af0",
+    "local_mirror_path": "C:/Users/26843/Documents/ChatGPT/p4_phase1_artifacts/phase1_logs/20_environment_fingerprint.json",
+    "local_mirror_sha256": "a75184bb08f38d0e6acafaf666f5d0a34147e71eb6b35c6cfd8bc02eca768af0",
+    "stage_a_done_marker_present": true,
+    "supervisor_log_terminal_state": "15 packages present; DONE marker written; supervisor exited at 2026-09-28 18:18:15 host time"
+  },
+  "historical_attestation_limit": "The fingerprint file hash and Stage A completion marker match the local evidence copy on this P4 instance. GPU UUID and driver were observed after training and are host-level corroboration; the original per-run receipts do not contain these fields, so this supplement does not retroactively alter or upgrade their contents.",
+  "immutable_image": {
+    "declared_base_image_tag": "pytorch/pytorch:2.5.1-cuda12.1-cudnn9-devel",
+    "tag_source": "docs/PHASE1_OUTSOURCING_EXECUTION_PLAN.md environment lock",
+    "running_image_digest": null,
+    "status": "requires-resolution",
+    "reason": "The instance exposes no Docker or Podman command, no standard container marker, and no image-digest metadata. The containerd-backed root filesystem source is not an OCI image digest. The declared tag must not be misrepresented as the running immutable digest.",
+    "required_source": "P4 provider or host-level container-runtime metadata"
+  },
+  "gate_status": {
+    "gpu_uuid_and_driver_observed": "eligible",
+    "immutable_image_digest": "requires-resolution",
+    "stage_b_c_d_authorized": false
+  }
+}

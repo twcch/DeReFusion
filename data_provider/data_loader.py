@@ -7,16 +7,97 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from sklearn.preprocessing import StandardScaler
 from utils.timefeatures import time_features
-from data_provider.m4 import M4Dataset, M4Meta
 from data_provider.uea import subsample, interpolate_missing, Normalizer
-from sktime.datasets import load_from_tsfile_to_dataframe
 import warnings
-from utils.augmentation import run_augmentation_single
-from datasets import load_dataset
-from huggingface_hub import hf_hub_download
+
+try:
+    from utils.augmentation import run_augmentation_single
+except ImportError:
+    run_augmentation_single = None
+
+try:
+    from data_provider.m4 import M4Dataset, M4Meta
+except ImportError:
+    M4Dataset = M4Meta = None
+
+try:
+    from sktime.datasets import load_from_tsfile_to_dataframe
+except ImportError:
+    def load_from_tsfile_to_dataframe(*args, **kwargs):
+        raise ImportError("UEA datasets require the optional 'sktime' package")
+
+try:
+    from datasets import load_dataset
+except ImportError:
+    def load_dataset(*args, **kwargs):
+        raise ImportError("remote dataset fallback requires the optional 'datasets' package")
+
+try:
+    from huggingface_hub import hf_hub_download
+except ImportError:
+    def hf_hub_download(*args, **kwargs):
+        raise ImportError("remote dataset fallback requires the optional 'huggingface_hub' package")
 warnings.filterwarnings('ignore')
 
 HUGGINGFACE_REPO = "thuml/Time-Series-Library"
+
+
+def _explicit_date_borders(dates, seq_len, pred_len, train_end, val_end, test_end):
+    """Return leakage-safe, end-exclusive borders for a chronological split.
+
+    ``train_end``, ``val_end`` and ``test_end`` are the first excluded dates of
+    the train, validation and test partitions respectively. Validation and
+    test slices borrow only ``seq_len`` preceding rows as model context; their
+    forecast labels remain inside their declared calendar partitions.
+    """
+    parsed_dates = pd.DatetimeIndex(pd.to_datetime(dates, errors="raise"))
+    if parsed_dates.hasnans:
+        raise ValueError("date split requires non-missing dates")
+    if not parsed_dates.is_monotonic_increasing:
+        raise ValueError("date split requires dates in strictly increasing order")
+    if parsed_dates.has_duplicates:
+        raise ValueError("date split requires unique dates")
+
+    names = ("train_end", "val_end", "test_end")
+    raw_boundaries = (train_end, val_end, test_end)
+    if any(value in (None, "") for value in raw_boundaries):
+        missing = [name for name, value in zip(names, raw_boundaries) if value in (None, "")]
+        raise ValueError("date split is missing required boundaries: " + ", ".join(missing))
+    boundaries = tuple(pd.Timestamp(value) for value in raw_boundaries)
+    if not boundaries[0] < boundaries[1] < boundaries[2]:
+        raise ValueError("date boundaries must satisfy train_end < val_end < test_end")
+
+    train_stop, val_stop, test_stop = (
+        int(parsed_dates.searchsorted(boundary, side="left")) for boundary in boundaries
+    )
+    train_rows = train_stop
+    val_rows = val_stop - train_stop
+    test_rows = test_stop - val_stop
+    if train_rows < seq_len + pred_len:
+        raise ValueError(
+            f"training partition has {train_rows} rows; need at least seq_len + pred_len "
+            f"= {seq_len + pred_len}"
+        )
+    if val_rows < pred_len:
+        raise ValueError(f"validation partition has {val_rows} rows; need at least pred_len={pred_len}")
+    if test_rows < pred_len:
+        raise ValueError(f"test partition has {test_rows} rows; need at least pred_len={pred_len}")
+
+    border1s = [0, train_stop - seq_len, val_stop - seq_len]
+    border2s = [train_stop, val_stop, test_stop]
+    metadata = {
+        "mode": "dates",
+        "train_end": boundaries[0].strftime("%Y-%m-%d"),
+        "val_end": boundaries[1].strftime("%Y-%m-%d"),
+        "test_end": boundaries[2].strftime("%Y-%m-%d"),
+        "train_rows": train_rows,
+        "val_rows": val_rows,
+        "test_rows": test_rows,
+        "train_stop": train_stop,
+        "val_stop": val_stop,
+        "test_stop": test_stop,
+    }
+    return border1s, border2s, metadata
 
 class Dataset_ETT_hour(Dataset):
     def __init__(self, args, root_path, flag='train', size=None,
@@ -81,11 +162,11 @@ class Dataset_ETT_hour(Dataset):
         df_stamp = df_raw[['date']][border1:border2]
         df_stamp['date'] = pd.to_datetime(df_stamp.date)
         if self.timeenc == 0:
-            df_stamp['month'] = df_stamp.date.apply(lambda row: row.month, 1)
-            df_stamp['day'] = df_stamp.date.apply(lambda row: row.day, 1)
-            df_stamp['weekday'] = df_stamp.date.apply(lambda row: row.weekday(), 1)
-            df_stamp['hour'] = df_stamp.date.apply(lambda row: row.hour, 1)
-            data_stamp = df_stamp.drop(['date'], 1).values
+            df_stamp['month'] = df_stamp.date.dt.month
+            df_stamp['day'] = df_stamp.date.dt.day
+            df_stamp['weekday'] = df_stamp.date.dt.weekday
+            df_stamp['hour'] = df_stamp.date.dt.hour
+            data_stamp = df_stamp.drop(columns=['date']).values
         elif self.timeenc == 1:
             data_stamp = time_features(pd.to_datetime(df_stamp['date'].values), freq=self.freq)
             data_stamp = data_stamp.transpose(1, 0) 
@@ -94,6 +175,8 @@ class Dataset_ETT_hour(Dataset):
         self.data_y = data[border1:border2]
 
         if self.set_type == 0 and self.args.augmentation_ratio > 0:
+            if run_augmentation_single is None:
+                raise ImportError("data augmentation requires the optional augmentation dependencies")
             self.data_x, self.data_y, augmentation_tags = run_augmentation_single(self.data_x, self.data_y, self.args)
 
         self.data_stamp = data_stamp
@@ -181,13 +264,13 @@ class Dataset_ETT_minute(Dataset):
         df_stamp = df_raw[['date']][border1:border2]
         df_stamp['date'] = pd.to_datetime(df_stamp.date)
         if self.timeenc == 0:
-            df_stamp['month'] = df_stamp.date.apply(lambda row: row.month, 1)
-            df_stamp['day'] = df_stamp.date.apply(lambda row: row.day, 1)
-            df_stamp['weekday'] = df_stamp.date.apply(lambda row: row.weekday(), 1)
-            df_stamp['hour'] = df_stamp.date.apply(lambda row: row.hour, 1)
-            df_stamp['minute'] = df_stamp.date.apply(lambda row: row.minute, 1)
+            df_stamp['month'] = df_stamp.date.dt.month
+            df_stamp['day'] = df_stamp.date.dt.day
+            df_stamp['weekday'] = df_stamp.date.dt.weekday
+            df_stamp['hour'] = df_stamp.date.dt.hour
+            df_stamp['minute'] = df_stamp.date.dt.minute
             df_stamp['minute'] = df_stamp.minute.map(lambda x: x // 15)
-            data_stamp = df_stamp.drop(['date'], 1).values
+            data_stamp = df_stamp.drop(columns=['date']).values
         elif self.timeenc == 1:
             data_stamp = time_features(pd.to_datetime(df_stamp['date'].values), freq=self.freq)
             data_stamp = data_stamp.transpose(1, 0)
@@ -196,6 +279,8 @@ class Dataset_ETT_minute(Dataset):
         self.data_y = data[border1:border2]
 
         if self.set_type == 0 and self.args.augmentation_ratio > 0:
+            if run_augmentation_single is None:
+                raise ImportError("data augmentation requires the optional augmentation dependencies")
             self.data_x, self.data_y, augmentation_tags = run_augmentation_single(self.data_x, self.data_y, self.args)
 
         self.data_stamp = data_stamp
@@ -269,13 +354,38 @@ class Dataset_Custom(Dataset):
         cols.remove(self.target)
         cols.remove('date')
         df_raw = df_raw[['date'] + cols + [self.target]]
-        num_train = int(len(df_raw) * 0.7)
-        num_test = int(len(df_raw) * 0.2)
-        num_vali = len(df_raw) - num_train - num_test
-        border1s = [0, num_train - self.seq_len, len(df_raw) - num_test - self.seq_len]
-        border2s = [num_train, num_train + num_vali, len(df_raw)]
+        split_mode = getattr(self.args, 'split_mode', 'ratio')
+        if split_mode == 'dates':
+            border1s, border2s, split_metadata = _explicit_date_borders(
+                df_raw['date'],
+                self.seq_len,
+                self.pred_len,
+                getattr(self.args, 'train_end', None),
+                getattr(self.args, 'val_end', None),
+                getattr(self.args, 'test_end', None),
+            )
+        elif split_mode == 'ratio':
+            num_train = int(len(df_raw) * 0.7)
+            num_test = int(len(df_raw) * 0.2)
+            num_vali = len(df_raw) - num_train - num_test
+            border1s = [0, num_train - self.seq_len, len(df_raw) - num_test - self.seq_len]
+            border2s = [num_train, num_train + num_vali, len(df_raw)]
+            split_metadata = {
+                'mode': 'ratio',
+                'train_rows': num_train,
+                'val_rows': num_vali,
+                'test_rows': num_test,
+            }
+        else:
+            raise ValueError(f"unsupported split_mode={split_mode!r}; expected 'ratio' or 'dates'")
         border1 = border1s[self.set_type]
         border2 = border2s[self.set_type]
+        self.split_metadata = dict(split_metadata)
+        self.split_metadata.update({
+            'flag': ('train', 'val', 'test')[self.set_type],
+            'slice_start': border1,
+            'slice_stop': border2,
+        })
 
         if self.features == 'M' or self.features == 'MS':
             cols_data = df_raw.columns[1:]
@@ -290,14 +400,14 @@ class Dataset_Custom(Dataset):
         else:
             data = df_data.values
 
-        df_stamp = df_raw[['date']][border1:border2]
+        df_stamp = df_raw[['date']][border1:border2].copy()
         df_stamp['date'] = pd.to_datetime(df_stamp.date)
         if self.timeenc == 0:
-            df_stamp['month'] = df_stamp.date.apply(lambda row: row.month, 1)
-            df_stamp['day'] = df_stamp.date.apply(lambda row: row.day, 1)
-            df_stamp['weekday'] = df_stamp.date.apply(lambda row: row.weekday(), 1)
-            df_stamp['hour'] = df_stamp.date.apply(lambda row: row.hour, 1)
-            data_stamp = df_stamp.drop(['date'], 1).values
+            df_stamp['month'] = df_stamp.date.dt.month
+            df_stamp['day'] = df_stamp.date.dt.day
+            df_stamp['weekday'] = df_stamp.date.dt.weekday
+            df_stamp['hour'] = df_stamp.date.dt.hour
+            data_stamp = df_stamp.drop(columns=['date']).values
         elif self.timeenc == 1:
             data_stamp = time_features(pd.to_datetime(df_stamp['date'].values), freq=self.freq)
             data_stamp = data_stamp.transpose(1, 0)
@@ -306,9 +416,17 @@ class Dataset_Custom(Dataset):
         self.data_y = data[border1:border2]
 
         if self.set_type == 0 and self.args.augmentation_ratio > 0:
+            if run_augmentation_single is None:
+                raise ImportError("data augmentation requires the optional augmentation dependencies")
             self.data_x, self.data_y, augmentation_tags = run_augmentation_single(self.data_x, self.data_y, self.args)
 
         self.data_stamp = data_stamp
+        self.data_dates = pd.DatetimeIndex(df_stamp['date'])
+        window_count = len(self.data_x) - self.seq_len - self.pred_len + 1
+        self.forecast_start_dates = self.data_dates[self.seq_len:self.seq_len + window_count]
+        self.forecast_end_dates = self.data_dates[
+            self.seq_len + self.pred_len - 1:self.seq_len + self.pred_len - 1 + window_count
+        ]
 
     def __getitem__(self, index):
         s_begin = index
@@ -357,6 +475,8 @@ class Dataset_M4(Dataset):
 
     def __read_data__(self):
         # M4Dataset.initialize()
+        if M4Dataset is None:
+            raise ImportError("M4 datasets require the optional M4 extraction dependencies")
         if self.flag == 'train':
             dataset = M4Dataset.load(training=True, dataset_file=self.root_path)
         else:

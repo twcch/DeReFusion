@@ -1,0 +1,49 @@
+{
+  "decision_id": "phase1-stage-a-provenance-disposition-2026-09-28",
+  "created_at": "2026-09-28T15:25:06Z",
+  "authorizing_decision": "User approved disposition (b) in the Codex task on 2026-09-28. The deviation report §10 is proposal/provenance only; operative authority is this v1.2 amendment and decision record.",
+  "protocol_id": "phase1-v1.2-2026-09-28",
+  "parent_protocol_id": "phase1-v1.1-2026-09-19",
+  "mode": "confirmatory protocol lineage; Stage A remains execution-calibration only",
+  "research_question": "Unchanged from phase1-v1.1-2026-09-19",
+  "estimand": "Unchanged from phase1-v1.1-2026-09-19",
+  "target_population": "Unchanged from phase1-v1.1-2026-09-19",
+  "forecast_target": "Unchanged from phase1-v1.1-2026-09-19",
+  "horizon": "Unchanged from phase1-v1.1-2026-09-19",
+  "aggregation_rule": "Unchanged from phase1-v1.1-2026-09-19",
+  "uncertainty_method": "Unchanged from phase1-v1.1-2026-09-19",
+  "code_hash": "0d05f93198d07dcea64dbcc08e7a783a09152e6f for selected Stage A packages; each future stage authorization must bind its own exact commit",
+  "environment_hash": "P4 Stage A fingerprint file: p4_phase1_artifacts/phase1_logs/20_environment_fingerprint.json; full immutable image/GPU identity remains to be completed before B-D",
+  "evidence_paths": [
+    "docs/PHASE1_STAGE_A_DEVIATION.md",
+    "docs/PHASE1_OUTSOURCING_EXECUTION_PLAN.md",
+    "reproduction/results/phase1/calibration/",
+    "reproduction/results/phase1/calibration-cpu/",
+    "C:/Users/26843/Documents/ChatGPT/p4_phase1_artifacts/phase1_logs/20_environment_fingerprint.json"
+  ],
+  "approved_disposition": {
+    "authoritative_stage_a_package_root": "reproduction/results/phase1/calibration/",
+    "authoritative_package_count": 15,
+    "authoritative_status": "15 calibration_pass packages; receipt hashes verified with zero mismatches",
+    "historical_package_root": "reproduction/results/phase1/calibration-cpu/",
+    "historical_package_count": 14,
+    "historical_status_counts": {
+      "calibration_pass": 13,
+      "resource_blocked": 1
+    },
+    "active_attempt_uniqueness_scope": "P4 authoritative Stage A package root only; CPU package root is preserved historical evidence and excluded",
+    "receipts_modified": false,
+    "raw_or_result_artifacts_deleted": false
+  },
+  "estimand_effect": "None; execution provenance selection only. Stage A results remain non-scientific calibration.",
+  "invariant_effect": "Defines the active Stage A package visibility domain while preserving all CPU evidence unchanged.",
+  "requires_independent_confirmation": false,
+  "approval_status": "approved",
+  "stage_b_c_d_training_authorized": false,
+  "remaining_prelaunch_gates": [
+    "complete worker environment fingerprint including immutable container digest and GPU identity",
+    "runner failure/retry lineage tests and explicit retry authorization path",
+    "P4 worker-side code/data/key preflight on the exact stage commit",
+    "separate signed execution authorization naming the stage and resource scope"
+  ]
+}

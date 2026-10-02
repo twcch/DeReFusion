@@ -1,0 +1,50 @@
+# The C1 blind package is byte-sealed.  Disable Git text normalization for every
+# textual input whose SHA-256 was frozen before handoff; otherwise Windows CRLF
+# working-tree bytes become LF in a source archive and invalidate the seal.
+dataset/*.csv -text
+dataset/AAPL-2016-2025.csv -text
+dataset/AMZN-2016-2025.csv -text
+dataset/AUDUSD-2016-2025.csv -text
+dataset/FTSE-2016-2025.csv -text
+dataset/GBPUSD-2016-2025.csv -text
+dataset/GDAXI-2016-2025.csv -text
+dataset/GLD-2016-2025.csv -text
+dataset/GOLD-2016-2025.csv -text
+dataset/HSI-2016-2025.csv -text
+dataset/JPM-2016-2025.csv -text
+dataset/META-2016-2025.csv -text
+dataset/MSFT-2016-2025.csv -text
+dataset/N225-2016-2025.csv -text
+dataset/RUT-2016-2025.csv -text
+dataset/TLT-2016-2025.csv -text
+dataset/TSLA-2016-2025.csv -text
+dataset/USDCAD-2016-2025.csv -text
+dataset/WMT-2016-2025.csv -text
+dataset/WTI-2016-2025.csv -text
+dataset/XOM-2016-2025.csv -text
+reports/evidence_closure/24a_c1_blind_recomputation_spec.md -text
+reports/evidence_closure/24b_c1_blind_handoff_lock_table.md -text
+reproduction/analysis/analyze_volatility_regimes.py -text
+reproduction/analysis/c1_predictor.py -text
+reproduction/analysis/structure_routing_experiment.py -text
+reproduction/c1_handoff/per_run_manifest.csv -text
+reproduction/c1_handoff/BLIND_STAGE1_MANIFEST.csv -text
+reports/evidence_closure/24c_c1_blind_dependency_addendum.md -text
+
+# Phase 1 handoff inputs and receipts are hashed as raw bytes.  Keep Git from
+# rewriting them on Windows or when source archives are produced.
+reproduction/handoff/phase1_outsourcing/** -text
+reproduction/results/phase1/**/*.json -text
+reproduction/results/phase1/**/*.csv -text
+# run.log is the only textual member of a calibration receipt's sealed set
+# (pred/true/metrics are .npy, the checkpoint is .pth, both binary and left
+# alone by Git).  Without this rule core.autocrlf=true stores LF in the blob
+# while the receipt hashes the CRLF working-tree bytes, so every receipt fails
+# verification on a Linux checkout.
+reproduction/results/phase1/**/*.log -text
+reproduction/logs/phase1/**/*.log -text
+docs/PHASE1_OUTSOURCING_EXECUTION_PLAN.md -text
+
+# Shell scripts are executed on the Linux worker, so their line endings are
+# load-bearing: a CRLF shebang fails with ": command not found".
+*.sh text eol=lf

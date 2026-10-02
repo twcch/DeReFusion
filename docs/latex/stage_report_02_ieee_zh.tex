@@ -1,0 +1,237 @@
+%% 阶段报告 II（IEEEtran，中文）—— 独立前瞻队列（C1）：锁定、执行与验收状态
+%% 编译：xelatex -interaction=nonstopmode stage_report_02_ieee_zh.tex （两遍）
+%% 姊妹件：stage_report_02_ieee_en.tex（独立文件，pdflatex）
+\documentclass[conference]{IEEEtran}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{xeCJK}
+\setCJKmainfont{SimSun}[BoldFont=SimHei,ItalicFont=KaiTi]
+\setCJKsansfont{SimHei}
+\setCJKmonofont{FangSong}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{url}
+
+\begin{document}
+
+\title{阶段报告 II：独立前瞻队列（C1）\\锁定、执行与验收状态}
+
+\author{\IEEEauthorblockN{Dongxu Jiang}
+\IEEEauthorblockA{Email: jiangdongxu04@gmail.com}}
+
+\maketitle
+
+\begin{abstract}
+本报告记录截至 2026-09-14 独立前瞻队列研究（C1）的\textbf{执行状态}：一个已锁定的
+二十资产、单一数据源队列；一个在任何结果出现之前即已冻结的预测变量；一个委派给对等机器执行的
+120 次训练面板（离线可跑、幂等续跑）；以及用于接收/拒收每一批产物的验收规程。本报告\textbf{刻意不包含
+C1 的任何结果分析}：不给出主统计量的估计、不解读交互效应、不预读"结果前预承诺"的任何一个分支。
+这些由其他角色按设计承担，以保持待检验分析的盲性。因此本报告只有一个目的：让这项战役在运行期间
+可被审计。
+\end{abstract}
+
+\begin{IEEEkeywords}
+前瞻性验证、预注册、盲分析、队列锁定、执行溯源、验收规程。
+\end{IEEEkeywords}
+
+\section{目的与范围}
+
+本项目的重心已从探索性诊断转向一次\emph{前瞻性}检验。本报告记录该检验的\emph{机制状态}，
+只覆盖五件事：项目阶段序列与当前位置（\S\ref{sec:seq}）、已锁定队列（\S\ref{sec:cohort}）、
+冻结预测变量（\S\ref{sec:pred}）、委派执行（\S\ref{sec:exec}）以及产物验收规程（\S\ref{sec:verify}）。
+独立性与治理见 \S\ref{sec:gov}，里程碑与状态见 \S\ref{sec:mil}，刻意省略的内容见 \S\ref{sec:omit}。
+
+\section{阶段序列与当前位置}
+\label{sec:seq}
+
+四个阶段依次执行，每一阶段由上一阶段把门：
+
+\begin{table}[!t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{0.07\columnwidth}p{0.55\columnwidth}p{0.24\columnwidth}@{}}
+\toprule
+阶段 & 内容 & 状态 \\
+\midrule
+S1 & 复现与受控诊断 & 完成 \\
+S2 & 候选结构规律的外部验证 & \textbf{FAIL} \\
+S3 & 容量受控广度面板（F1） & \textbf{SUCCESS} \\
+S4 & 独立前瞻队列（C1） & 执行中 \\
+\bottomrule
+\end{tabular}
+\caption{阶段序列。每阶段由上一阶段把门；S4 即本报告的主题。}
+\label{tab:seq}
+\end{table}
+
+S1 建立了复现与算子特化的诊断；S2 在四个预注册资产上检验候选结构规律，返回失败——判定由
+\textbf{容量矛盾}触发，即某资产的算子偏好其符号在不同模型宽度之间并不稳定。S3 随即追问更基本的问题，
+并在"\emph{偏好在七资产面板的多数上可复现，但仍是一种趋势、而非资产的固有属性}"这一窄意义上给出肯定
+答案。S4（本阶段）在一个真正独立的队列上\emph{前瞻地}检验该候选关联。
+
+\section{已锁定队列}
+\label{sec:cohort}
+
+队列在任何结果被查看之前完成锁定，且锁定的形式是一张\textbf{哈希表}，而不是一份意愿清单。
+
+\begin{table}[!t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{0.26\columnwidth}p{0.20\columnwidth}p{0.40\columnwidth}@{}}
+\toprule
+属性 & 取值 & 说明 \\
+\midrule
+资产数 & 20 & 预先命名，未增删 \\
+数据源 & Yahoo & 单一来源，无混合源 \\
+窗口 & 2016-01-04/01--2025-12-31 & 日线 OHLC，未复权 \\
+排除项 & 0 & 20 个全部交付并受理 \\
+每资产行数 & 2444--2602 & 交易所日历差异 \\
+哈希表 & 逐文件 & 已在验收时核对 \\
+\bottomrule
+\end{tabular}
+\caption{队列锁定摘要。逐文件 SHA-256 表为权威记录；行数差异源于交易所日历，而非任何填补。}
+\label{tab:cohort}
+\end{table}
+
+其中两点对后文重要。第一，本队列与发现集\emph{共享数据源}而在\emph{市场}上不同：资产既排除了原有的十个，
+也排除了 S2 使用的四个。第二，行只在数据源返回全空价格时才被剔除，且\textbf{从不插值}；剔除数量逐文件
+有记录。取数由对等机器完成，因为分析主机无法访问该数据源。
+
+\section{冻结的预测变量}
+\label{sec:pred}
+
+预测变量在任何结果出现\emph{之前}冻结——这正是前瞻性检验与描述性分析的分界。其构造规则：
+
+\begin{itemize}
+\item 一个覆盖收盘价区间 $[i, i+96)$ 的特征窗口，只有当整个窗口结束于决策点之前才可用，即
+$i+96 \le \mathrm{border1\_test}$；
+\item 决策点遵循冻结的切分约定：$\mathrm{border1\_test} = n - \lfloor 0.2n \rfloor - 96$，
+其中 $\mathrm{num\_train} = \lfloor 0.7n \rfloor$；
+\item 资产级预测变量只在可用窗口上聚合，因此触及的最后一个收盘索引为
+$\mathrm{border1\_test} - 1$。
+\end{itemize}
+
+运行时会执行并打印\textbf{泄漏检查}：断言预测变量所用的每一个索引都严格早于决策点。该检查在二十个资产上
+全部通过。另有一个在测试窗上计算的\textbf{同期对照}版本，仅作对比、绝不用于主检验。由于预测变量已冻结，
+在看到结果之后不得以不同窗口、估计量或截点重算。
+
+\section{委派执行}
+\label{sec:exec}
+
+S4 需要 120 次训练（$20$ 资产 $\times$ $2$ 臂 $\times$ $3$ 种子），协议不变，并逐次保留预测值与真值以供配对分析。
+
+\begin{table}[!t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{0.26\columnwidth}p{0.20\columnwidth}p{0.40\columnwidth}@{}}
+\toprule
+属性 & 取值 & 说明 \\
+\midrule
+训练次数 & 120 & $20 \times 2 \times 3$ \\
+并发 & 2 lane & 冻结；放宽请求已否决 \\
+每进程线程 & 14 & 战役中途不改 \\
+逐次保留 & metrics/pred/true & 另含命令行与日志尾 \\
+checkpoint & 不回传 & 分析不需要 \\
+批次回报 & 满 40 次或 6 小时 & 每批一份 manifest \\
+撰写时进度 & 0/120 & 13:36 开跑，单次约 60 分钟 \\
+\bottomrule
+\end{tabular}
+\caption{执行配置。任何会改变"同一战役内可比性"的吞吐调整（线程数、DataLoader 工作进程、增加 lane）
+在本战役中一律否决、推迟到下一战役。}
+\label{tab:exec}
+\end{table}
+
+选择该执行方的原因是：它的网络可达数据源，而分析主机不可达。其跑批器在设计上\textbf{离线可跑}——
+一次性备齐之后，训练只读本地文件，因此网络中断不会打断战役。韧性依赖四个机制：已完成 run 的幂等跳过、
+看门狗在\emph{绝不重复起同一 run}的前提下重启 lane、以\textbf{进程树 CPU 时间}（而非日志输出）判定卡死、
+以及一份"预授权自愈、但禁止任何协议或数据改动"的预案。战役期间确实发现并修掉了一个真实缺陷：一次重启
+使两个已完成的 run 成为\emph{孤儿}、未被任何 lane 记录，会造成两次静默缺口；跑批器现在会\textbf{摄入}
+这类 run，并在 manifest 中显式标记，使\textbf{过程}（而非仅内容）也可审计。
+
+\section{验收规程}
+\label{sec:verify}
+
+任何产物在进入证据链之前都必须通过机械校验；每一批回传的检查如下：
+
+\begin{enumerate}
+\item \textbf{逐 run 协议一致性}：留存命令行必须包含全部冻结取值（预测步长、序列与标签长度、模型宽度、
+滑动平均、轮数、批大小、学习率、耐心值、调度、特征/目标/频率、编解码宽度、禁用 CUDA 标志），
+以及该 run 自身的种子、模型与数据路径。
+\item \textbf{内容完整性}：预测与真值数组必须与批次 manifest 中记录的哈希一致。
+\item \textbf{指标完整性}：指标数组必须能按冻结的六值顺序解析。
+\item \textbf{整批拒收}：只要任一 run、manifest 行、哈希或命令行不符，\textbf{整批}拒收并附差异清单；
+\textbf{绝不}复制部分结果。校验器默认处于 dry-run 模式。
+\item \textbf{交接清单}：被接受的批次产出逐文件 SHA-256 清单，以及一份记录\emph{实际执行的冻结版本}的
+交接回执。
+\end{enumerate}
+
+有一处缺口无法由接收方单独闭合：可以证明"收到的文件与批次 manifest 一致"，但只有执行方能证明
+"其\emph{本机原件}与传出的文件一致"。因此，\textbf{执行方本机数组的哈希确认}是必须的交接项，而非可选的礼貌。
+
+\section{独立性与治理}
+\label{sec:gov}
+
+三个角色彼此分离：\emph{执行方}跑面板并只回传原始产物、不做任何分析；\emph{分析方}计算预测变量与主统计量；
+\emph{盲第三方}既未看过分析、也不带自身预期，从原始产物独立重算主统计量并给出差异清单，且有一条明确规则——
+\textbf{差异是发现，绝不是要被"调平"的东西}。执行方与分析方均被排除在该第三方角色之外。
+同样请本报告的读者不要把它当作关于 C1 结果的证据。
+
+\section{里程碑与状态}
+\label{sec:mil}
+
+\begin{table}[!t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{0.07\columnwidth}p{0.51\columnwidth}p{0.28\columnwidth}@{}}
+\toprule
+\# & 里程碑 & 状态 \\
+\midrule
+M1 & 对等机器完成取数 & 完成 \\
+M2 & 队列验收校验 & 完成，20/20 \\
+M3 & 以逐文件哈希表锁定队列 & 完成 \\
+M4 & 冻结预测变量并做泄漏检查 & 完成，全部资产 \\
+M5 & 校验器加固并冒烟测试 & 完成 \\
+M6 & 面板开跑（120 次，2 lane） & 进行中，0/120 \\
+M7 & 首批回传并通过验收 & 待发生 \\
+M8 & 第三方盲复算 & 待发生 \\
+\bottomrule
+\end{tabular}
+\caption{里程碑。M7 为 M8 的前置；在面板完成之前不启动 M7 之后的任何阶段。}
+\label{tab:mil}
+\end{table}
+
+\section{下一步}
+\label{sec:next}
+
+\begin{enumerate}
+\item 继续执行与健康监控，保持战役条件恒定。
+\item 按验收规程逐批校验；任一不符即整批拒收。
+\item 完成后组装交接件：120 次 run、其预测与真值数组、批次 manifest、实际执行的冻结版本、
+逐文件哈希清单，以及执行方本机原件哈希确认。
+\item 将产物集交给盲第三方，等待其差异清单。
+\item 只有在上述之后，才读取"结果前预承诺"中对应分支的解释。
+\end{enumerate}
+
+\section{本报告刻意省略的内容}
+\label{sec:omit}
+
+本报告不含主统计量的估计、不含任何逐资产交互效应、不预读"结果前预承诺"的任一分支、也不对任何结构化算子的
+资格作出主张。这些省略不是报告的缺陷，而是这份报告之所以有用的前提条件。在面板运行期间所写的任何进度摘要，
+同样遵守这一约束。
+
+\section*{可复现说明}
+\addcontentsline{toc}{section}{可复现说明}
+
+本报告引用的全部产物都位于项目仓库中：含逐文件哈希的锁定表；冻结的预测变量脚本及其输出；带协议与哈希校验、
+清单与交接回执的验收校验器；以及对等机器的批次 manifest。每次 run 的执行命令行由执行方保留，并在批次 manifest
+中原样复现，因此协议一致性可以独立于本报告再次核对。
+
+\end{document}

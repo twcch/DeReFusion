@@ -1,0 +1,5 @@
+cohort,horizon,assets,timesnet_p4_fits,timesnet_rtx8000_fits,observed_timesnet_mean_asset_mse,best_observed_other_model,best_observed_other_mean_asset_mse,rtx8000_timesnet_multiplicative_shift_to_tie_best_other,interpretation
+c1-20,1,20,3,17,0.0329958669058,revin-PatchTST,0.0196614587062,-0.440575559223,hypothetical break-even sensitivity; not an estimated hardware correction
+c1-20,24,20,2,18,0.182390615784,revin-PatchTST,0.158807360392,-0.136624795957,hypothetical break-even sensitivity; not an estimated hardware correction
+original-10,1,10,0,10,0.0446296145314,revin-PatchTST,0.0206031699439,-0.53835205255,hypothetical break-even sensitivity; not an estimated hardware correction
+original-10,24,10,0,10,0.234772311426,revin-PatchTST,0.185569478926,-0.209576811682,hypothetical break-even sensitivity; not an estimated hardware correction

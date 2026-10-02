@@ -1,0 +1,120 @@
+Using cpu or mps
+Args in experiment:
+[1mBasic Config[0m
+  Task Name:          long_term_forecast  Is Training:        1                   
+  Model ID:           EURUSD_96_24        Model:              revin-DLinear       
+
+[1mData Loader[0m
+  Data:               custom              Root Path:          ./dataset/          
+  Data Path:          EURUSD-2016-2025.csvFeatures:           MS                  
+  Target:             Close               Freq:               b                   
+  Checkpoints:        ./checkpoints/      
+
+[1mForecasting Task[0m
+  Seq Len:            96                  Label Len:          48                  
+  Pred Len:           24                  Seasonal Patterns:  Monthly             
+  Inverse:            0                   
+
+[1mModel Parameters[0m
+  Top k:              5                   Num Kernels:        6                   
+  Enc In:             4                   Dec In:             4                   
+  C Out:              1                   d model:            32                  
+  n heads:            8                   e layers:           2                   
+  d layers:           1                   d FF:               2048                
+  Moving Avg:         25                  Factor:             1                   
+  Distil:             1                   Dropout:            0.1                 
+  Embed:              timeF               Activation:         gelu                
+
+[1mRun Parameters[0m
+  Num Workers:        10                  Itr:                1                   
+  Train Epochs:       30                  Batch Size:         32                  
+  Patience:           5                   Learning Rate:      0.0001              
+  Des:                test                Loss:               MSE                 
+  Lradj:              cosine              Use Amp:            0                   
+
+[1mGPU[0m
+  Use GPU:            0                   GPU:                0                   
+  Use Multi GPU:      0                   Devices:            0,1,2,3             
+
+[1mDe-stationary Projector Params[0m
+  P Hidden Dims:      128, 128            P Hidden Layers:    2                   
+
+Use CPU
+[Lazy Loading] revin-DLinear ...
+>>>>>>>start training : long_term_forecast_EURUSD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 1702
+val 238
+test 497
+Epoch: 1 cost time: 37.05782389640808
+Epoch: 1, Steps: 54 | Train Loss: 0.2980288 Vali Loss: 0.1918552 Test Loss: 0.2826571
+Validation loss decreased (inf --> 0.191855).  Saving model ...
+Updating learning rate to 9.972609476841367e-05
+Epoch: 2 cost time: 38.377570390701294
+Epoch: 2, Steps: 54 | Train Loss: 0.2331694 Vali Loss: 0.1567446 Test Loss: 0.2211801
+Validation loss decreased (0.191855 --> 0.156745).  Saving model ...
+Updating learning rate to 9.890738003669029e-05
+Epoch: 3 cost time: 38.18681788444519
+Epoch: 3, Steps: 54 | Train Loss: 0.1953852 Vali Loss: 0.1448152 Test Loss: 0.1849742
+Validation loss decreased (0.156745 --> 0.144815).  Saving model ...
+Updating learning rate to 9.755282581475769e-05
+Epoch: 4 cost time: 38.390806436538696
+Epoch: 4, Steps: 54 | Train Loss: 0.1717401 Vali Loss: 0.1369656 Test Loss: 0.1635346
+Validation loss decreased (0.144815 --> 0.136966).  Saving model ...
+Updating learning rate to 9.567727288213005e-05
+Epoch: 5 cost time: 37.9874050617218
+Epoch: 5, Steps: 54 | Train Loss: 0.1592925 Vali Loss: 0.1382265 Test Loss: 0.1497009
+EarlyStopping counter: 1 out of 5
+Updating learning rate to 9.330127018922194e-05
+Epoch: 6 cost time: 35.404292583465576
+Epoch: 6, Steps: 54 | Train Loss: 0.1487788 Vali Loss: 0.1387587 Test Loss: 0.1395630
+EarlyStopping counter: 2 out of 5
+Updating learning rate to 9.045084971874738e-05
+Epoch: 7 cost time: 34.781662940979004
+Epoch: 7, Steps: 54 | Train Loss: 0.1395003 Vali Loss: 0.1399952 Test Loss: 0.1320955
+EarlyStopping counter: 3 out of 5
+Updating learning rate to 8.715724127386972e-05
+Epoch: 8 cost time: 34.776734590530396
+Epoch: 8, Steps: 54 | Train Loss: 0.1348313 Vali Loss: 0.1411385 Test Loss: 0.1263111
+EarlyStopping counter: 4 out of 5
+Updating learning rate to 8.345653031794292e-05
+Epoch: 9 cost time: 34.40796136856079
+Epoch: 9, Steps: 54 | Train Loss: 0.1310429 Vali Loss: 0.1385135 Test Loss: 0.1217834
+EarlyStopping counter: 5 out of 5
+Early stopping
+>>>>>>>testing : long_term_forecast_EURUSD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 497
+test shape: (497, 24, 1) (497, 24, 1)
+test shape: (497, 24, 1) (497, 24, 1)
+mse:0.1677277386188507, mae:0.304410457611084, rmse:0.40954577922821045, mape:1.6566081047058105, mspe:88.88123321533203, r2:0.7223367691040039, dtw:Not calculated, time:20.87s, train_time:701.81s, inference_time:0.0563ms/sample (497 samples, 0.0280s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+Generating prediction_curves...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[ 0.30441046  0.16772774  0.40954578  1.6566081  88.88123     0.72233677]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_EURUSD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_prediction_curves.png  (306069 bytes)
+
+Generating error_analysis...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[ 0.30441046  0.16772774  0.40954578  1.6566081  88.88123     0.72233677]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_EURUSD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_error_analysis.png  (99237 bytes)
+
+Generating metrics_radar...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[ 0.30441046  0.16772774  0.40954578  1.6566081  88.88123     0.72233677]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_EURUSD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_metrics_radar.png  (136152 bytes)
+
+Generating error_heatmap...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[ 0.30441046  0.16772774  0.40954578  1.6566081  88.88123     0.72233677]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_EURUSD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_error_heatmap.png  (126597 bytes)
+
+Generating pred_true...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[ 0.30441046  0.16772774  0.40954578  1.6566081  88.88123     0.72233677]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_EURUSD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_pred_true.png  (171940 bytes)
+
+Generating dashboard...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[ 0.30441046  0.16772774  0.40954578  1.6566081  88.88123     0.72233677]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_EURUSD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_dashboard.png  (226691 bytes)
+
+Figures complete: 6/6 -> C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_EURUSD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0

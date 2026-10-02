@@ -1,0 +1,30 @@
+﻿  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[0.22432412 0.08707049 0.2950771  0.10431156 0.02013131 0.63568676]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_AMZN_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0\fig_prediction_curves.png  (424189 bytes)
+
+Generating error_analysis...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[0.22432412 0.08707049 0.2950771  0.10431156 0.02013131 0.63568676]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_AMZN_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0\fig_error_analysis.png  (99627 bytes)
+
+Generating metrics_radar...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[0.22432412 0.08707049 0.2950771  0.10431156 0.02013131 0.63568676]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_AMZN_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0\fig_metrics_radar.png  (152122 bytes)
+
+Generating error_heatmap...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[0.22432412 0.08707049 0.2950771  0.10431156 0.02013131 0.63568676]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_AMZN_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0\fig_error_heatmap.png  (127647 bytes)
+
+Generating pred_true...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[0.22432412 0.08707049 0.2950771  0.10431156 0.02013131 0.63568676]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_AMZN_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0\fig_pred_true.png  (194820 bytes)
+
+Generating dashboard...
+  pred.shape=(479, 24, 1), true.shape=(479, 24, 1)
+  metrics=[0.22432412 0.08707049 0.2950771  0.10431156 0.02013131 0.63568676]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_AMZN_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0\fig_dashboard.png  (297027 bytes)
+
+Figures complete: 6/6 -> C:\Users\geng\DeReFusion\test_results\long_term_forecast_AMZN_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0

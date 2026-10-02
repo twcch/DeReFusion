@@ -1,0 +1,50 @@
+{
+  "all_arrays_finite": true,
+  "asset": "CITICSEC",
+  "command": "C:\\Users\\26843\\Documents\\ChatGPT\\redefusion\\.venv\\Scripts\\python.exe run.py --task_name long_term_forecast --is_training 1 --model_id phase1A_CITICSEC_h24_s2021 --model DeReFusion --data custom --root_path dataset/ --data_path CITICSEC-2016-2025.csv --features MS --target Close --freq b --seq_len 96 --label_len 48 --pred_len 24 --enc_in 4 --dec_in 4 --c_out 1 --d_model 32 --n_heads 8 --e_layers 2 --d_layers 1 --d_ff 2048 --moving_avg 25 --factor 1 --dropout 0.1 --embed timeF --train_epochs 30 --batch_size 32 --patience 5 --learning_rate 0.0001 --lradj cosine --rand_seed 2021 --num_workers 0 --no_use_gpu --des phase1A_calibration --result_log reproduction/logs/phase1/calibration_result_log.txt --deterministic",
+  "dataset_sha256": "3331e296677b9bb0bda5d7a83d19708f9a0b773568d5e7942bea23d28ce76938",
+  "diagnostics": {
+    "gpu_peak_memory_mb": null,
+    "inference_ms_per_sample": 0.5877,
+    "parameter_count": 28436,
+    "train_time_seconds": 71.09
+  },
+  "environment": {
+    "device": "cpu",
+    "numpy": "2.1.2",
+    "pandas": "2.3.3",
+    "python": "3.11.15",
+    "scikit_learn": "1.7.2",
+    "torch": "2.5.1+cpu"
+  },
+  "git_commit": "18b738a2d4aed533294261d32156734b9ddaac0c",
+  "horizon": 24,
+  "model": "DeReFusion",
+  "protocol_version": "phase1-v1.1-2026-09-19",
+  "scientific_use": "none; execution calibration only",
+  "seed": 2021,
+  "sha256": {
+    "checkpoint.pth": "03feb74eb8ee5bb193313c55f5780d06b90dbaa1eb169ca98ef174d3452e3d98",
+    "metrics.npy": "07ac1a8718883b4017ce28029d1033a3f10222567e5ea31330573bac7fb85a11",
+    "pred.npy": "ccfd3c66b144cec7e0798e94b137810eda359461bc7814ef78ef340ad21f66e5",
+    "run.log": "e39324284a1b06a108f5dd12d60a80645ebf453baffdaf894d6d40f0894dc060",
+    "true.npy": "ea5edb64116df2bc27767d12aa06c1edbfbb1b3f4d7285e31586f2539650cb2b"
+  },
+  "shapes": {
+    "metrics.npy": [
+      6
+    ],
+    "pred.npy": [
+      456,
+      24,
+      1
+    ],
+    "true.npy": [
+      456,
+      24,
+      1
+    ]
+  },
+  "split_mode": "ratio",
+  "status": "calibration_pass"
+}

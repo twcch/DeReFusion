@@ -1,0 +1,7 @@
+==== START DeReFusion BTC T=24 12:41:06 ====
+  metrics=[0.35724604 0.21797292 0.4668757  0.09233373 0.01484557 0.8755303 ]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_BTCUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_dashboard.png  (237949 bytes)
+
+Figures complete: 6/6 -> C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_BTCUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0
+==== END DeReFusion BTC T=24 13:13:49 ====
+==== START revin-DLinear BTC T=24 13:13:49 ====

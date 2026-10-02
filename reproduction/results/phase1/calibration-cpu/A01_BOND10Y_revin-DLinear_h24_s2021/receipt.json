@@ -1,0 +1,40 @@
+{
+  "status": "calibration_pass",
+  "scientific_use": "none; execution calibration only",
+  "protocol_version": "phase1-v1.1-2026-09-19",
+  "git_commit": "f129cf3a683e4de1ff685ed542bf297e864c0bc0",
+  "asset": "BOND10Y",
+  "dataset_sha256": "6459aee6e6e995539dd6c2153df26bdac213d5d99477ec9250886c9e22eadd22",
+  "model": "revin-DLinear",
+  "horizon": 24,
+  "seed": 2021,
+  "split_mode": "ratio",
+  "command": ".venv\\Scripts\\python.exe run.py --task_name long_term_forecast --is_training 1 --model_id phase1A_BOND10Y_h24_s2021 --model revin-DLinear --data custom --root_path ./dataset/ --data_path BOND10Y-2016-2025.csv --features MS --target Close --freq b --seq_len 96 --label_len 48 --pred_len 24 --enc_in 4 --dec_in 4 --c_out 1 --d_model 32 --n_heads 8 --e_layers 2 --d_layers 1 --d_ff 2048 --moving_avg 25 --factor 1 --dropout 0.1 --embed timeF --train_epochs 30 --batch_size 32 --patience 5 --learning_rate 0.0001 --lradj cosine --rand_seed 2021 --deterministic --num_workers 0 --no_use_gpu --des phase1A_calibration",
+  "environment": {
+    "python": "3.11.15",
+    "torch": "2.5.1+cpu",
+    "numpy": "2.1.2",
+    "pandas": "2.3.3",
+    "scikit_learn": "1.7.2",
+    "device": "cpu"
+  },
+  "shapes": {
+    "pred.npy": [378, 24, 1],
+    "true.npy": [378, 24, 1],
+    "metrics.npy": [6]
+  },
+  "all_arrays_finite": true,
+  "sha256": {
+    "pred.npy": "039ed53b92870bc2373e50241ef093b7ba2cb0c5bf3a7413697b7f5fbd0aca14",
+    "true.npy": "0392a0cfbc1b9264b1d90c9d8a4d00d6bcce6e94fae1dbf8c8caf965661ebbbb",
+    "metrics.npy": "70503f8b290dd990a28bc719905c99037215f25843aaca9fd1e9d74f2f4f6a92",
+    "checkpoint.pth": "d0e700418eb8892920b02fe3ce1eb93974ff56ba99896f3872ced5252aac7211",
+    "run.log": "229a94314180e81020f21d93795cc3a4fbc6a308bce16dbb25770c2ff00c909e"
+  },
+  "diagnostics": {
+    "train_time_seconds": 5.32,
+    "inference_ms_per_sample": 0.0453,
+    "parameter_count": 4664,
+    "gpu_peak_memory_mb": null
+  }
+}

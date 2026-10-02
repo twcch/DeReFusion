@@ -1,0 +1,16 @@
+{
+  "status": "frozen_pre_authorization",
+  "protocol_version": "phase1-v1.1-2026-09-19",
+  "manifest_frozen_from_commit": "060f7d98b41a47b183d263b2efb67fc98db16e79",
+  "bridge_batch_id": "local-5060-bridge-v1",
+  "bridge_rows": 34,
+  "bridge_manifest_sha256": "3b16b7f7e749c4d5c9adbf2a51e5d2379b5d6ceea4d1ae05af62e8cc26e5710a",
+  "remaining_timesnet_batch_id": "local-5060-timesnet-remaining-v1",
+  "remaining_timesnet_rows": 55,
+  "remaining_timesnet_manifest_sha256": "50bd0f8a41fbbf7736faf36d30a175254b43397a29496c13414658769da12775",
+  "p4_reference_receipts_audited": 245,
+  "bridge_p4_references": 34,
+  "p4_artifact_hash_mismatches": 0,
+  "pooling_authorized": false,
+  "ranking_authorized": false
+}

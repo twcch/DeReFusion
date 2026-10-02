@@ -1,0 +1,152 @@
+Using cpu or mps
+Args in experiment:
+[1mBasic Config[0m
+  Task Name:          long_term_forecast  Is Training:        1                   
+  Model ID:           BYD_96_24           Model:              revin-DLinear       
+
+[1mData Loader[0m
+  Data:               custom              Root Path:          ./dataset/          
+  Data Path:          BYD-2016-2025.csv   Features:           MS                  
+  Target:             Close               Freq:               b                   
+  Checkpoints:        ./checkpoints/      
+
+[1mForecasting Task[0m
+  Seq Len:            96                  Label Len:          48                  
+  Pred Len:           24                  Seasonal Patterns:  Monthly             
+  Inverse:            0                   
+
+[1mModel Parameters[0m
+  Top k:              5                   Num Kernels:        6                   
+  Enc In:             4                   Dec In:             4                   
+  C Out:              1                   d model:            32                  
+  n heads:            8                   e layers:           2                   
+  d layers:           1                   d FF:               2048                
+  Moving Avg:         25                  Factor:             1                   
+  Distil:             1                   Dropout:            0.1                 
+  Embed:              timeF               Activation:         gelu                
+
+[1mRun Parameters[0m
+  Num Workers:        10                  Itr:                1                   
+  Train Epochs:       30                  Batch Size:         32                  
+  Patience:           5                   Learning Rate:      0.0001              
+  Des:                test                Loss:               MSE                 
+  Lradj:              cosine              Use Amp:            0                   
+
+[1mGPU[0m
+  Use GPU:            0                   GPU:                0                   
+  Use Multi GPU:      0                   Devices:            0,1,2,3             
+
+[1mDe-stationary Projector Params[0m
+  P Hidden Dims:      128, 128            P Hidden Layers:    2                   
+
+Use CPU
+[Lazy Loading] revin-DLinear ...
+>>>>>>>start training : long_term_forecast_BYD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 1565
+val 219
+test 458
+Epoch: 1 cost time: 28.45878291130066
+Epoch: 1, Steps: 49 | Train Loss: 0.1085129 Vali Loss: 0.0413991 Test Loss: 0.6051707
+Validation loss decreased (inf --> 0.041399).  Saving model ...
+Updating learning rate to 9.972609476841367e-05
+Epoch: 2 cost time: 28.882463455200195
+Epoch: 2, Steps: 49 | Train Loss: 0.0896883 Vali Loss: 0.0393585 Test Loss: 0.5074558
+Validation loss decreased (0.041399 --> 0.039359).  Saving model ...
+Updating learning rate to 9.890738003669029e-05
+Epoch: 3 cost time: 28.448139667510986
+Epoch: 3, Steps: 49 | Train Loss: 0.0770791 Vali Loss: 0.0380740 Test Loss: 0.4426970
+Validation loss decreased (0.039359 --> 0.038074).  Saving model ...
+Updating learning rate to 9.755282581475769e-05
+Epoch: 4 cost time: 28.453349828720093
+Epoch: 4, Steps: 49 | Train Loss: 0.0688751 Vali Loss: 0.0377283 Test Loss: 0.4016318
+Validation loss decreased (0.038074 --> 0.037728).  Saving model ...
+Updating learning rate to 9.567727288213005e-05
+Epoch: 5 cost time: 29.711472511291504
+Epoch: 5, Steps: 49 | Train Loss: 0.0630647 Vali Loss: 0.0374540 Test Loss: 0.3754561
+Validation loss decreased (0.037728 --> 0.037454).  Saving model ...
+Updating learning rate to 9.330127018922194e-05
+Epoch: 6 cost time: 29.012842893600464
+Epoch: 6, Steps: 49 | Train Loss: 0.0588665 Vali Loss: 0.0367616 Test Loss: 0.3580478
+Validation loss decreased (0.037454 --> 0.036762).  Saving model ...
+Updating learning rate to 9.045084971874738e-05
+Epoch: 7 cost time: 29.46059823036194
+Epoch: 7, Steps: 49 | Train Loss: 0.0556960 Vali Loss: 0.0366115 Test Loss: 0.3458964
+Validation loss decreased (0.036762 --> 0.036612).  Saving model ...
+Updating learning rate to 8.715724127386972e-05
+Epoch: 8 cost time: 29.28255605697632
+Epoch: 8, Steps: 49 | Train Loss: 0.0531487 Vali Loss: 0.0366131 Test Loss: 0.3367024
+EarlyStopping counter: 1 out of 5
+Updating learning rate to 8.345653031794292e-05
+Epoch: 9 cost time: 29.41190528869629
+Epoch: 9, Steps: 49 | Train Loss: 0.0511569 Vali Loss: 0.0365697 Test Loss: 0.3312923
+Validation loss decreased (0.036612 --> 0.036570).  Saving model ...
+Updating learning rate to 7.938926261462366e-05
+Epoch: 10 cost time: 29.78511905670166
+Epoch: 10, Steps: 49 | Train Loss: 0.0495780 Vali Loss: 0.0365474 Test Loss: 0.3278878
+Validation loss decreased (0.036570 --> 0.036547).  Saving model ...
+Updating learning rate to 7.500000000000001e-05
+Epoch: 11 cost time: 33.1355938911438
+Epoch: 11, Steps: 49 | Train Loss: 0.0482039 Vali Loss: 0.0366725 Test Loss: 0.3230946
+EarlyStopping counter: 1 out of 5
+Updating learning rate to 7.033683215379002e-05
+Epoch: 12 cost time: 31.9845609664917
+Epoch: 12, Steps: 49 | Train Loss: 0.0470459 Vali Loss: 0.0363203 Test Loss: 0.3219843
+Validation loss decreased (0.036547 --> 0.036320).  Saving model ...
+Updating learning rate to 6.545084971874738e-05
+Epoch: 13 cost time: 32.596715688705444
+Epoch: 13, Steps: 49 | Train Loss: 0.0460882 Vali Loss: 0.0365544 Test Loss: 0.3193650
+EarlyStopping counter: 1 out of 5
+Updating learning rate to 6.0395584540887963e-05
+Epoch: 14 cost time: 33.645124673843384
+Epoch: 14, Steps: 49 | Train Loss: 0.0452436 Vali Loss: 0.0366858 Test Loss: 0.3194381
+EarlyStopping counter: 2 out of 5
+Updating learning rate to 5.522642316338268e-05
+Epoch: 15 cost time: 32.74268913269043
+Epoch: 15, Steps: 49 | Train Loss: 0.0445759 Vali Loss: 0.0366212 Test Loss: 0.3178332
+EarlyStopping counter: 3 out of 5
+Updating learning rate to 5e-05
+Epoch: 16 cost time: 33.8884756565094
+Epoch: 16, Steps: 49 | Train Loss: 0.0440425 Vali Loss: 0.0369876 Test Loss: 0.3159768
+EarlyStopping counter: 4 out of 5
+Updating learning rate to 4.477357683661734e-05
+Epoch: 17 cost time: 33.51731276512146
+Epoch: 17, Steps: 49 | Train Loss: 0.0435161 Vali Loss: 0.0367849 Test Loss: 0.3155869
+EarlyStopping counter: 5 out of 5
+Early stopping
+>>>>>>>testing : long_term_forecast_BYD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 458
+test shape: (458, 24, 1) (458, 24, 1)
+test shape: (458, 24, 1) (458, 24, 1)
+mse:0.32645276188850403, mae:0.3379444181919098, rmse:0.5713604688644409, mape:1.4021859169006348, mspe:20.268978118896484, r2:0.634264349937439, dtw:Not calculated, time:17.70s, train_time:1093.94s, inference_time:0.0332ms/sample (458 samples, 0.0152s total), params:4664, trainable_params:4664, gpu_mem_peak_mb:nan
+
+Generating prediction_curves...
+  pred.shape=(458, 24, 1), true.shape=(458, 24, 1)
+  metrics=[ 0.33794442  0.32645276  0.57136047  1.4021859  20.268978    0.63426435]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_BYD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_prediction_curves.png  (353314 bytes)
+
+Generating error_analysis...
+  pred.shape=(458, 24, 1), true.shape=(458, 24, 1)
+  metrics=[ 0.33794442  0.32645276  0.57136047  1.4021859  20.268978    0.63426435]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_BYD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_error_analysis.png  (96488 bytes)
+
+Generating metrics_radar...
+  pred.shape=(458, 24, 1), true.shape=(458, 24, 1)
+  metrics=[ 0.33794442  0.32645276  0.57136047  1.4021859  20.268978    0.63426435]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_BYD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_metrics_radar.png  (135316 bytes)
+
+Generating error_heatmap...
+  pred.shape=(458, 24, 1), true.shape=(458, 24, 1)
+  metrics=[ 0.33794442  0.32645276  0.57136047  1.4021859  20.268978    0.63426435]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_BYD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_error_heatmap.png  (115172 bytes)
+
+Generating pred_true...
+  pred.shape=(458, 24, 1), true.shape=(458, 24, 1)
+  metrics=[ 0.33794442  0.32645276  0.57136047  1.4021859  20.268978    0.63426435]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_BYD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_pred_true.png  (149606 bytes)
+
+Generating dashboard...
+  pred.shape=(458, 24, 1), true.shape=(458, 24, 1)
+  metrics=[ 0.33794442  0.32645276  0.57136047  1.4021859  20.268978    0.63426435]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_BYD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_dashboard.png  (241709 bytes)
+
+Figures complete: 6/6 -> C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_BYD_96_24_revin-DLinear_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0

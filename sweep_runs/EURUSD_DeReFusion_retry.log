@@ -1,0 +1,184 @@
+Using cpu or mps
+Args in experiment:
+[1mBasic Config[0m
+  Task Name:          long_term_forecast  Is Training:        1                   
+  Model ID:           EURUSD_96_24        Model:              DeReFusion          
+
+[1mData Loader[0m
+  Data:               custom              Root Path:          ./dataset/          
+  Data Path:          EURUSD-2016-2025.csvFeatures:           MS                  
+  Target:             Close               Freq:               b                   
+  Checkpoints:        ./checkpoints/      
+
+[1mForecasting Task[0m
+  Seq Len:            96                  Label Len:          48                  
+  Pred Len:           24                  Seasonal Patterns:  Monthly             
+  Inverse:            0                   
+
+[1mModel Parameters[0m
+  Top k:              5                   Num Kernels:        6                   
+  Enc In:             4                   Dec In:             4                   
+  C Out:              1                   d model:            32                  
+  n heads:            8                   e layers:           2                   
+  d layers:           1                   d FF:               2048                
+  Moving Avg:         25                  Factor:             1                   
+  Distil:             1                   Dropout:            0.1                 
+  Embed:              timeF               Activation:         gelu                
+
+[1mRun Parameters[0m
+  Num Workers:        10                  Itr:                1                   
+  Train Epochs:       30                  Batch Size:         32                  
+  Patience:           5                   Learning Rate:      0.0001              
+  Des:                test                Loss:               MSE                 
+  Lradj:              cosine              Use Amp:            0                   
+
+[1mGPU[0m
+  Use GPU:            0                   GPU:                0                   
+  Use Multi GPU:      0                   Devices:            0,1,2,3             
+
+[1mDe-stationary Projector Params[0m
+  P Hidden Dims:      128, 128            P Hidden Layers:    2                   
+
+Use CPU
+[Lazy Loading] DeReFusion ...
+>>>>>>>start training : long_term_forecast_EURUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 1702
+val 238
+test 497
+Epoch: 1 cost time: 42.69630575180054
+Epoch: 1, Steps: 54 | Train Loss: 0.3492622 Vali Loss: 0.2246323 Test Loss: 0.2750033
+Validation loss decreased (inf --> 0.224632).  Saving model ...
+Updating learning rate to 9.972609476841367e-05
+Epoch: 2 cost time: 44.87256407737732
+Epoch: 2, Steps: 54 | Train Loss: 0.2392376 Vali Loss: 0.1985653 Test Loss: 0.1987634
+Validation loss decreased (0.224632 --> 0.198565).  Saving model ...
+Updating learning rate to 9.890738003669029e-05
+Epoch: 3 cost time: 44.85754156112671
+Epoch: 3, Steps: 54 | Train Loss: 0.1917128 Vali Loss: 0.1765756 Test Loss: 0.1648127
+Validation loss decreased (0.198565 --> 0.176576).  Saving model ...
+Updating learning rate to 9.755282581475769e-05
+Epoch: 4 cost time: 41.07593083381653
+Epoch: 4, Steps: 54 | Train Loss: 0.1717006 Vali Loss: 0.1699282 Test Loss: 0.1486049
+Validation loss decreased (0.176576 --> 0.169928).  Saving model ...
+Updating learning rate to 9.567727288213005e-05
+Epoch: 5 cost time: 39.33840727806091
+Epoch: 5, Steps: 54 | Train Loss: 0.1560972 Vali Loss: 0.1631788 Test Loss: 0.1348091
+Validation loss decreased (0.169928 --> 0.163179).  Saving model ...
+Updating learning rate to 9.330127018922194e-05
+Epoch: 6 cost time: 38.85484313964844
+Epoch: 6, Steps: 54 | Train Loss: 0.1466002 Vali Loss: 0.1620517 Test Loss: 0.1255540
+Validation loss decreased (0.163179 --> 0.162052).  Saving model ...
+Updating learning rate to 9.045084971874738e-05
+Epoch: 7 cost time: 39.02633190155029
+Epoch: 7, Steps: 54 | Train Loss: 0.1368804 Vali Loss: 0.1586662 Test Loss: 0.1178701
+Validation loss decreased (0.162052 --> 0.158666).  Saving model ...
+Updating learning rate to 8.715724127386972e-05
+Epoch: 8 cost time: 37.040740966796875
+Epoch: 8, Steps: 54 | Train Loss: 0.1337001 Vali Loss: 0.1569784 Test Loss: 0.1130344
+Validation loss decreased (0.158666 --> 0.156978).  Saving model ...
+Updating learning rate to 8.345653031794292e-05
+Epoch: 9 cost time: 37.3573784828186
+Epoch: 9, Steps: 54 | Train Loss: 0.1284071 Vali Loss: 0.1516962 Test Loss: 0.1083223
+Validation loss decreased (0.156978 --> 0.151696).  Saving model ...
+Updating learning rate to 7.938926261462366e-05
+Epoch: 10 cost time: 37.5035400390625
+Epoch: 10, Steps: 54 | Train Loss: 0.1231786 Vali Loss: 0.1460955 Test Loss: 0.1044668
+Validation loss decreased (0.151696 --> 0.146096).  Saving model ...
+Updating learning rate to 7.500000000000001e-05
+Epoch: 11 cost time: 37.51340937614441
+Epoch: 11, Steps: 54 | Train Loss: 0.1225392 Vali Loss: 0.1463390 Test Loss: 0.1030546
+EarlyStopping counter: 1 out of 5
+Updating learning rate to 7.033683215379002e-05
+Epoch: 12 cost time: 35.447898149490356
+Epoch: 12, Steps: 54 | Train Loss: 0.1179149 Vali Loss: 0.1496964 Test Loss: 0.1048307
+EarlyStopping counter: 2 out of 5
+Updating learning rate to 6.545084971874738e-05
+Epoch: 13 cost time: 33.50438976287842
+Epoch: 13, Steps: 54 | Train Loss: 0.1176560 Vali Loss: 0.1425110 Test Loss: 0.1008123
+Validation loss decreased (0.146096 --> 0.142511).  Saving model ...
+Updating learning rate to 6.0395584540887963e-05
+Epoch: 14 cost time: 34.87360072135925
+Epoch: 14, Steps: 54 | Train Loss: 0.1144917 Vali Loss: 0.1413178 Test Loss: 0.1005206
+Validation loss decreased (0.142511 --> 0.141318).  Saving model ...
+Updating learning rate to 5.522642316338268e-05
+Epoch: 15 cost time: 34.322476863861084
+Epoch: 15, Steps: 54 | Train Loss: 0.1117154 Vali Loss: 0.1418535 Test Loss: 0.0988847
+EarlyStopping counter: 1 out of 5
+Updating learning rate to 5e-05
+Epoch: 16 cost time: 34.76808214187622
+Epoch: 16, Steps: 54 | Train Loss: 0.1106282 Vali Loss: 0.1396443 Test Loss: 0.0999158
+Validation loss decreased (0.141318 --> 0.139644).  Saving model ...
+Updating learning rate to 4.477357683661734e-05
+Epoch: 17 cost time: 34.90676760673523
+Epoch: 17, Steps: 54 | Train Loss: 0.1098904 Vali Loss: 0.1361241 Test Loss: 0.0975989
+Validation loss decreased (0.139644 --> 0.136124).  Saving model ...
+Updating learning rate to 3.960441545911204e-05
+Epoch: 18 cost time: 34.89075827598572
+Epoch: 18, Steps: 54 | Train Loss: 0.1087910 Vali Loss: 0.1358811 Test Loss: 0.0978976
+Validation loss decreased (0.136124 --> 0.135881).  Saving model ...
+Updating learning rate to 3.4549150281252636e-05
+Epoch: 19 cost time: 32.835476875305176
+Epoch: 19, Steps: 54 | Train Loss: 0.1108867 Vali Loss: 0.1358128 Test Loss: 0.0967403
+Validation loss decreased (0.135881 --> 0.135813).  Saving model ...
+Updating learning rate to 2.9663167846209994e-05
+Epoch: 20 cost time: 35.28486943244934
+Epoch: 20, Steps: 54 | Train Loss: 0.1072926 Vali Loss: 0.1341675 Test Loss: 0.0962588
+Validation loss decreased (0.135813 --> 0.134168).  Saving model ...
+Updating learning rate to 2.500000000000001e-05
+Epoch: 21 cost time: 35.63972568511963
+Epoch: 21, Steps: 54 | Train Loss: 0.1064882 Vali Loss: 0.1361207 Test Loss: 0.0962552
+EarlyStopping counter: 1 out of 5
+Updating learning rate to 2.061073738537635e-05
+Epoch: 22 cost time: 36.076355934143066
+Epoch: 22, Steps: 54 | Train Loss: 0.1062247 Vali Loss: 0.1353062 Test Loss: 0.0959701
+EarlyStopping counter: 2 out of 5
+Updating learning rate to 1.6543469682057106e-05
+Epoch: 23 cost time: 36.45662498474121
+Epoch: 23, Steps: 54 | Train Loss: 0.1045752 Vali Loss: 0.1362984 Test Loss: 0.0956097
+EarlyStopping counter: 3 out of 5
+Updating learning rate to 1.2842758726130283e-05
+Epoch: 24 cost time: 35.35042476654053
+Epoch: 24, Steps: 54 | Train Loss: 0.1045401 Vali Loss: 0.1344090 Test Loss: 0.0958221
+EarlyStopping counter: 4 out of 5
+Updating learning rate to 9.549150281252633e-06
+Epoch: 25 cost time: 36.33832764625549
+Epoch: 25, Steps: 54 | Train Loss: 0.1049412 Vali Loss: 0.1352944 Test Loss: 0.0955986
+EarlyStopping counter: 5 out of 5
+Early stopping
+>>>>>>>testing : long_term_forecast_EURUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 497
+test shape: (497, 24, 1) (497, 24, 1)
+test shape: (497, 24, 1) (497, 24, 1)
+mse:0.09753905236721039, mae:0.2408246248960495, rmse:0.31231242418289185, mape:0.8946834206581116, mspe:19.749605178833008, r2:0.8385299444198608, dtw:Not calculated, time:19.06s, train_time:1836.48s, inference_time:0.2601ms/sample (497 samples, 0.1293s total), params:28436, trainable_params:28436, gpu_mem_peak_mb:nan
+
+Generating prediction_curves...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[ 0.24082462  0.09753905  0.31231242  0.8946834  19.749605    0.83852994]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_EURUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_prediction_curves.png  (361078 bytes)
+
+Generating error_analysis...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[ 0.24082462  0.09753905  0.31231242  0.8946834  19.749605    0.83852994]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_EURUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_error_analysis.png  (102924 bytes)
+
+Generating metrics_radar...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[ 0.24082462  0.09753905  0.31231242  0.8946834  19.749605    0.83852994]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_EURUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_metrics_radar.png  (140633 bytes)
+
+Generating error_heatmap...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[ 0.24082462  0.09753905  0.31231242  0.8946834  19.749605    0.83852994]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_EURUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_error_heatmap.png  (128384 bytes)
+
+Generating pred_true...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[ 0.24082462  0.09753905  0.31231242  0.8946834  19.749605    0.83852994]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_EURUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_pred_true.png  (190400 bytes)
+
+Generating dashboard...
+  pred.shape=(497, 24, 1), true.shape=(497, 24, 1)
+  metrics=[ 0.24082462  0.09753905  0.31231242  0.8946834  19.749605    0.83852994]
+  Saved: C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_EURUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0\fig_dashboard.png  (265640 bytes)
+
+Figures complete: 6/6 -> C:\Users\26843\Desktop\project\repos\DeReFusion\test_results\long_term_forecast_EURUSD_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2021_0

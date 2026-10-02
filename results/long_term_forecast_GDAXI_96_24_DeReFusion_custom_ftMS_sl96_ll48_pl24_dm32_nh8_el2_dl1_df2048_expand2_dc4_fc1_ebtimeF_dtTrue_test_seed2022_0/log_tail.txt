@@ -1,0 +1,30 @@
+﻿  pred.shape=(484, 24, 1), true.shape=(484, 24, 1)
+  metrics=[0.32366562 0.20589238 0.45375365 0.06723598 0.00836468 0.9157673 ]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_GDAXI_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0\fig_prediction_curves.png  (424131 bytes)
+
+Generating error_analysis...
+  pred.shape=(484, 24, 1), true.shape=(484, 24, 1)
+  metrics=[0.32366562 0.20589238 0.45375365 0.06723598 0.00836468 0.9157673 ]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_GDAXI_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0\fig_error_analysis.png  (95176 bytes)
+
+Generating metrics_radar...
+  pred.shape=(484, 24, 1), true.shape=(484, 24, 1)
+  metrics=[0.32366562 0.20589238 0.45375365 0.06723598 0.00836468 0.9157673 ]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_GDAXI_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0\fig_metrics_radar.png  (149068 bytes)
+
+Generating error_heatmap...
+  pred.shape=(484, 24, 1), true.shape=(484, 24, 1)
+  metrics=[0.32366562 0.20589238 0.45375365 0.06723598 0.00836468 0.9157673 ]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_GDAXI_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0\fig_error_heatmap.png  (122532 bytes)
+
+Generating pred_true...
+  pred.shape=(484, 24, 1), true.shape=(484, 24, 1)
+  metrics=[0.32366562 0.20589238 0.45375365 0.06723598 0.00836468 0.9157673 ]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_GDAXI_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0\fig_pred_true.png  (168561 bytes)
+
+Generating dashboard...
+  pred.shape=(484, 24, 1), true.shape=(484, 24, 1)
+  metrics=[0.32366562 0.20589238 0.45375365 0.06723598 0.00836468 0.9157673 ]
+  Saved: C:\Users\geng\DeReFusion\test_results\long_term_forecast_GDAXI_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0\fig_dashboard.png  (258830 bytes)
+
+Figures complete: 6/6 -> C:\Users\geng\DeReFusion\test_results\long_term_forecast_GDAXI_96_24_DeReFusion_custom_ftMS_sl96_ll48_pl24_dm32_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_test_seed2022_0

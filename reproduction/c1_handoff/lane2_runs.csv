@@ -1,0 +1,2 @@
+tag,model,seed,status,wall_clock_min,metrics_mse,metrics_mae,metrics_mspe,pred_sha256,true_sha256,dir,ingested_orphan
+GBPUSD,DeReFusion,2021,stall,39.3,,,,,,,0
